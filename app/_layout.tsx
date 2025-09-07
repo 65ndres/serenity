@@ -1,38 +1,46 @@
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useFonts } from 'expo-font';
-import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { StyleSheet, View } from 'react-native';
 import 'react-native-reanimated';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
+import HomeScreen from './Home'; // Your current screen with the button
+import RandomScreen from './Random'; // Your destination screen
 const Separator = () => <View style={styles.separator} />;
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+const Stack = createStackNavigator();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+export default function RootLayout() {
+  
 
   return (
-  <SafeAreaProvider>
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
-        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
-          <Text style={styles.text}>His will</Text>
-        </TouchableOpacity>
-        <Separator />
-        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
-          <Text style={styles.text}>Your choice</Text>
-        </TouchableOpacity>
-      </ImageBackground>
-    </SafeAreaView>
-  </SafeAreaProvider>
+
+
+      <Stack.Navigator initialRouteName="Home"
+        screenOptions={{
+          
+    headerStyle: {
+      backgroundColor: 'rgba(241, 11, 11, 0)',
+      elevation: 0,
+      shadowOpacity: 0,
+      opacity: 0,
+      
+    },
+    headerTransparent: true,
+    headerTitleStyle: {
+      color: 'white',
+      fontSize: 18,
+    },
+    headerTintColor: 'white',
+  }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Random" component={RandomScreen} />
+      </Stack.Navigator>
+
+
   );
 }
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
