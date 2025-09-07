@@ -1,26 +1,13 @@
-import { AntDesign } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
-import { Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import type { ICarouselInstance } from 'react-native-reanimated-carousel';
-import Carousel from 'react-native-reanimated-carousel';
+import * as React from "react";
+import { Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import Carousel, {
+  ICarouselInstance
+} from "react-native-reanimated-carousel";
 
-interface BibleVerse {
-  book: string;
-  chapter: number;
-  verse: number;
-  liked: boolean;
-  favorited: boolean;
-  text: string;
-}
-
-interface Props {
-  data: BibleVerse[];
-  width: number;
-  ref: React.RefObject<ICarouselInstance>;
-}
-
-
+// this data could be its own type where
 
 const data = [
   {
@@ -104,41 +91,29 @@ const data = [
     text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will."
   }
 ];
-
 const width = Dimensions.get("window").width;
 
-
 const QuotePresenter: React.FC = () => {
-  // State to manage favorited verses
-  const [verses, setVerses] = useState<BibleVerse[]>(data);
+  const ref = React.useRef<ICarouselInstance>(null);
+    const [loaded] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  });
 
-    const ref = React.useRef<ICarouselInstance>(null);
-      const [loaded] = useFonts({
-      SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    });
-  
-
-  // Function to toggle the favorited state
-  const toggleFavorite = (index: number) => {
-    setVerses((prev) =>
-      prev.map((verse, i) =>
-        i === index ? { ...verse, favorited: !verse.favorited } : verse
-      )
-    );
-  };
+  if (!loaded) {
+    // Async font loading only occurs in development.
+    return null;
+  }
 
   return (
-     <View style={{flex: 1, justifyContent: 'center'}}>
-    <Carousel
-      ref={ref}
-      width={width}
-      height={width} // Adjust height as needed for your layout
-      data={verses}
-      loop={true} // Enable infinite scrolling
-      autoPlay={false} // Set to true if you want auto-scrolling
-      
-      style={{ width: '100%' }}
-        renderItem={({ item, index }) => (
+
+      <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
+      <View style={styles.main}>
+      <Carousel
+        ref={ref}
+        width={width}
+        height={width}
+        data={data}
+        renderItem={({ item }) => (
           <View>
             <ScrollView
               style={{
@@ -157,25 +132,54 @@ const QuotePresenter: React.FC = () => {
                 <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
               </View>
               <View>
-                <TouchableOpacity
-                  onPress={() => toggleFavorite(index)}
-                  style={{ padding: 5 }}
-                  accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
-                  accessibilityRole="button"
-                >
-                  <AntDesign
-                    name={item.favorited ? 'heart' : 'hearto'}
-                    size={30}
-                    color="white"
-                  />
+                <TouchableOpacity onPress={() => console.log("yeah")} style={{ padding: 5 }}>
+                  { item.liked ? <AntDesign name="hearto" size={30} color="white" /> : <AntDesign name="hearto" size={30} color="white" />}
+                  
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         )}
-    />
-    </View>
+      />
+      </View>
+      </ImageBackground>
+
   );
-};
+}
+
+
+function toggleLike() {
+  // here I have to call the API and cha
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  main:{
+    
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 44,
+    lineHeight: 84,
+    fontWeight: 'light',
+    textAlign: 'center',
+  },
+  separator: {
+    marginVertical: 8,
+    width:"80%",
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
+
+
 
 export default QuotePresenter;
