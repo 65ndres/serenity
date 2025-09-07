@@ -13,9 +13,8 @@ export default function RootLayout() {
   return (
 
 
-      <Stack.Navigator initialRouteName="Home"
+      <Stack.Navigator  initialRouteName="Home"
         screenOptions={{
-          
     headerStyle: {
       backgroundColor: 'rgba(241, 11, 11, 0)',
       elevation: 0,

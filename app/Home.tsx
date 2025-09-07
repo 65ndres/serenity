@@ -1,11 +1,14 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import React, { useState } from 'react';
 import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import 'react-native-reanimated';
+import QuotePresenter from './QuotePresenter';
 const Separator = () => <View style={styles.separator} />;
 
-export default function RootLayout() {
+export default function Home() {
+   const [showComponent, setShowComponent] = useState(false); // State to toggle component
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -20,19 +23,25 @@ export default function RootLayout() {
   return (
 
       <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
-        <TouchableOpacity onPress={() => navigation.navigate("Random")}>
+        
+        {!showComponent &&
+        <>
+        <TouchableOpacity onPress={() => setShowComponent(!showComponent)}>
           <Text style={styles.text}>His will</Text>
         </TouchableOpacity>
         <Separator />
         <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
           <Text style={styles.text}>Your choice</Text>
         </TouchableOpacity>
+        </> 
+      }
+        
+
+        {showComponent && <QuotePresenter />}
       </ImageBackground>
 
   );
 }
-
-
 
 
 const styles = StyleSheet.create({
