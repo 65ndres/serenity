@@ -1,8 +1,10 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useFonts } from 'expo-font';
-import { ImageBackground, StyleSheet, Text } from 'react-native';
+import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+const Separator = () => <View style={styles.separator} />;
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -19,8 +21,13 @@ export default function RootLayout() {
   <SafeAreaProvider>
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
-        <Text style={styles.text}>Random</Text>
-        <Text style={styles.text}>By Category</Text>
+        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
+          <Text style={styles.text}>His will</Text>
+        </TouchableOpacity>
+        <Separator />
+        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
+          <Text style={styles.text}>Your choice</Text>
+        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   </SafeAreaProvider>
@@ -39,10 +46,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 44,
     lineHeight: 84,
-    fontWeight: 'bold',
+    fontWeight: 'light',
     textAlign: 'center',
-    backgroundColor: '#000000c0',
+  },
+  separator: {
+    marginVertical: 8,
+    width:"80%",
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 });
+
 
 
