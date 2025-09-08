@@ -6,7 +6,7 @@ const BackButton: React.FC = () => {
   return (
     <TouchableOpacity
       onPress={() => console.log("lol")}
-      style={{ padding: 5 }}
+      style={{ padding: 5, marginLeft: 15 }}
       accessibilityRole="button"
     >
       <Ionicons name="arrow-back-sharp" size={25} color="white" />

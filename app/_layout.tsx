@@ -1,4 +1,3 @@
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text } from 'react-native';
 import 'react-native-reanimated';
@@ -34,31 +33,15 @@ export default function RootLayout() {
 }
 
 
-<FontAwesome5 name="list-ul" size={24} color="black" />
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   text: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'light',
     textAlign: 'center',
-  },
-  separator: {
-    marginVertical: 8,
-    width:"80%",
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
+  }
 });
 
 

@@ -8,7 +8,7 @@ import VerseModule from './VerseModule/VerseModule';
 const Separator = () => <View style={styles.separator} />;
 
 export default function Home() {
-   const [showComponent, setShowComponent] = useState(false); // State to toggle component
+   const [ShowVerseModule, setShowVerseModule] = useState(false); // State to toggle component
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -24,9 +24,9 @@ export default function Home() {
 
       <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
         
-        {!showComponent &&
+        {!ShowVerseModule &&
         <>
-        <TouchableOpacity onPress={() => setShowComponent(!showComponent)}>
+        <TouchableOpacity onPress={() => setShowVerseModule(!ShowVerseModule)}>
           <Text style={styles.text}>His will</Text>
         </TouchableOpacity>
         <Separator />
@@ -37,7 +37,7 @@ export default function Home() {
       }
         
 
-        {showComponent && <VerseModule />}
+        {ShowVerseModule && <VerseModule />}
       </ImageBackground>
 
   );
