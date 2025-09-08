@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import 'react-native-reanimated';
-import QuotePresenter from './QuotePresenter';
+import VerseModule from './VerseModule/VerseModule';
 const Separator = () => <View style={styles.separator} />;
 
 export default function Home() {
@@ -37,7 +37,7 @@ export default function Home() {
       }
         
 
-        {showComponent && <QuotePresenter />}
+        {showComponent && <VerseModule />}
       </ImageBackground>
 
   );

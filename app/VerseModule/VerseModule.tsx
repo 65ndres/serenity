@@ -21,7 +21,6 @@ interface Props {
 }
 
 
-
 const data = [
   {
     book: "Proverbs",
@@ -108,17 +107,14 @@ const data = [
 const width = Dimensions.get("window").width;
 
 
-const QuotePresenter: React.FC = () => {
-  // State to manage favorited verses
+const VerseModule: React.FC = () => {
   const [verses, setVerses] = useState<BibleVerse[]>(data);
 
-    const ref = React.useRef<ICarouselInstance>(null);
-      const [loaded] = useFonts({
-      SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    });
+  const ref = React.useRef<ICarouselInstance>(null);
+    const [loaded] = useFonts({
+    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
+  });
   
-
-  // Function to toggle the favorited state
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
       prev.map((verse, i) =>
@@ -128,54 +124,55 @@ const QuotePresenter: React.FC = () => {
   };
 
   return (
-     <View style={{flex: 1, justifyContent: 'center'}}>
-    <Carousel
-      ref={ref}
-      width={width}
-      height={width} // Adjust height as needed for your layout
-      data={verses}
-      loop={true} // Enable infinite scrolling
-      autoPlay={false} // Set to true if you want auto-scrolling
-      
-      style={{ width: '100%' }}
-        renderItem={({ item, index }) => (
-          <View>
-            <ScrollView
-              style={{
-                  paddingHorizontal: 50,
-                  borderWidth: 1,
-                  height: width - 100
-              }}
-            >
-              <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
+    <>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+      <Carousel
+        ref={ref}
+        width={width}
+        height={width}
+        data={verses}
+        loop={true}
+        autoPlay={false} // Set to true if you want auto-scrolling
+        
+        style={{ width: '100%' }}
+          renderItem={({ item, index }) => (
+            <View>
+              <ScrollView
+                style={{
+                    paddingHorizontal: 50,
+                    borderWidth: 1,
+                    height: width - 100
+                }}
+              >
+                <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
 
-            </ScrollView>
-            <View style={{ flexDirection: 'row', justifyContent: "space-around", paddingTop: 40 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
-                <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
-                <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
-              </View>
-              <View>
-                <TouchableOpacity
-                  onPress={() => toggleFavorite(index)}
-                  style={{ padding: 5 }}
-                  accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
-                  accessibilityRole="button"
-                >
-                  <AntDesign
-                    name={item.favorited ? 'heart' : 'hearto'}
-                    size={30}
-                    color="white"
-                  />
-                </TouchableOpacity>
+              </ScrollView>
+              <View style={{ flexDirection: 'row', justifyContent: "space-around", paddingTop: 40 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
+                  <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
+                  <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    onPress={() => toggleFavorite(index)}
+                    style={{ padding: 5 }}
+                    accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
+                    accessibilityRole="button"
+                  >
+                    <AntDesign
+                      name={item.favorited ? 'heart' : 'hearto'}
+                      size={30}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        )}
-    />
+          )}
+      />
     </View>
-  );
+  </>);
 };
 
-export default QuotePresenter;
+export default VerseModule;
