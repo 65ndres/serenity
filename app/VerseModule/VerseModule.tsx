@@ -140,14 +140,14 @@ const VerseModule: React.FC = () => {
               <ScrollView
                 style={{
                     paddingHorizontal: 15,
-                    height: width - 100,
+                    height: width - 200,
                 }}
               >
                 <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
 
               </ScrollView>
-              <View style={{ flexDirection: 'row', justifyContent: "space-between", paddingTop: 40 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+              <View style={{display: "flex", alignItems: 'center', paddingTop: 40 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 20}}>
                   <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
                   <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
                   <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
@@ -155,7 +155,7 @@ const VerseModule: React.FC = () => {
                 <View>
                   <TouchableOpacity
                     onPress={() => toggleFavorite(index)}
-                    style={{ padding: 5, paddingRight: 20 }}
+                    style={{ padding: 5}}
                     accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
                     accessibilityRole="button"
                   >
