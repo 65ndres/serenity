@@ -1,14 +1,13 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
+import React from 'react';
 import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import 'react-native-reanimated';
-import VerseModule from './VerseModule/VerseModule';
 const Separator = () => <View style={styles.separator} />;
 
 export default function Home() {
-   const [ShowVerseModule, setShowVerseModule] = useState(false); // State to toggle component
+  //  const [ShowVerseModule, setShowVerseModule] = useState(false); // State to toggle component
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -24,9 +23,9 @@ export default function Home() {
 
       <ImageBackground source={require("../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
         
-        {!ShowVerseModule &&
+
         <>
-        <TouchableOpacity onPress={() => setShowVerseModule(!ShowVerseModule)}>
+        <TouchableOpacity onPress={() => navigation.navigate("VerseModule")}>
           <Text style={styles.text}>His will</Text>
         </TouchableOpacity>
         <Separator />
@@ -34,10 +33,8 @@ export default function Home() {
           <Text style={styles.text}>Your choice</Text>
         </TouchableOpacity>
         </> 
-      }
-        
 
-        {ShowVerseModule && <VerseModule />}
+    
       </ImageBackground>
 
   );

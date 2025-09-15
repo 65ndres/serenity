@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
 
@@ -124,7 +124,7 @@ const VerseModule: React.FC = () => {
   };
 
   return (
-    <>
+    <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
       <View style={{flex: 1, justifyContent: 'center'}}>
       <Carousel
         ref={ref}
@@ -171,7 +171,37 @@ const VerseModule: React.FC = () => {
           )}
       />
     </View>
-  </>);
+  </ImageBackground>);
+  
 };
 
 export default VerseModule;
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 44,
+    lineHeight: 84,
+    fontWeight: 'light',
+    textAlign: 'center',
+  },
+  separator: {
+    marginVertical: 8,
+    width:"80%",
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
+
+
