@@ -3,7 +3,8 @@ import { StyleSheet, Text } from 'react-native';
 import 'react-native-reanimated';
 import HomeScreen from './Home'; // Your current screen with the button
 // import RandomScreen from './Random'; // Your destination screen
-import BackButton from './VerseModule/BackButton';
+import LikedScreen from './Liked';
+import BackButton from './VerseModule/BackButton'; // this needs to be removed from this folder
 import LikesButton from './VerseModule/LikesButton';
 import VerseModule from './VerseModule/VerseModule';
 
@@ -31,7 +32,10 @@ export default function RootLayout() {
           headerRight: () => <LikesButton/>,
           headerLeft: () => <BackButton/>,
         }}/>
-
+      <Stack.Screen name="Liked" component={LikedScreen} options={{
+          headerTitle: () => <Text style={styles.text}>{"Liked"}</Text>,
+          headerLeft: () => <BackButton/>,
+        }}/>
     </Stack.Navigator>
   );
 }

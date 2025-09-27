@@ -21,7 +21,7 @@ interface Props {
 }
 
 
-const data = [
+const datas = [
   {
     book: "Proverbs",
     chapter: 16,
@@ -106,9 +106,22 @@ const data = [
 
 const width = Dimensions.get("window").width;
 
+interface Verse {
+  book: string;
+  chapter: number;
+  verse: number;
+  text: string;
+  liked?: boolean;
+  favorited?: boolean;
+}
 
-const VerseModule: React.FC = () => {
-  const [verses, setVerses] = useState<BibleVerse[]>(data);
+interface VerseModuleProps {
+  data: Verse[];
+  active: number;
+}
+
+const VerseModule: React.FC<VerseModuleProps> = ({ data, active }) => {
+  const [verses, setVerses] = useState<BibleVerse[]>(datas);
 
   const ref = React.useRef<ICarouselInstance>(null);
     const [loaded] = useFonts({
