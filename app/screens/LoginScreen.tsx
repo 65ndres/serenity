@@ -1,10 +1,12 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Input } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React from 'react';
 import {
   Alert,
+  Dimensions,
   StyleSheet,
   Text,
   TextStyle,
@@ -13,6 +15,8 @@ import {
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
+// import { ScreenContainer } from 'react-native-screens';
+import ScreenComponent from '../sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -20,7 +24,7 @@ type RootStackParamList = {
   VerseModule: undefined;
 };
 
-
+const width = Dimensions.get("window").width;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Separator: React.FC = () => <View style={styles.separator} />;
@@ -33,24 +37,34 @@ const LoginScreen: React.FC = () => {
   });
 
   return (
-    <View style={styles.screenContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
-        <Text style={styles.text}>Welcome to </Text>
-      </TouchableOpacity>
-      <Separator />
-      <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
-        <Text style={styles.text}>Your choice</Text>
-      </TouchableOpacity>
-      </View>
+    <ScreenComponent>
+      <Input
+        cursorColor={"#ffffff"}
+        selectionColor={'white'}
+        placeholderTextColor={'white'}
+        leftIcon={{ type: 'ionicons', name: 'person-outline', color: 'white', size: 30 }}
+        inputStyle={{color: 'white', fontSize: 22}}
+        labelStyle={{color: 'white'}}
+        inputContainerStyle={{borderBottomColor: 'white'}}
+      />
+
+      <Input
+        placeholder='INPUT WITH ICON'
+        placeholderTextColor={'white'}
+        leftIcon={{ name: 'account-outline', color: 'white' }}
+        inputStyle={{color: 'white'}}
+        labelStyle={{color: 'white'}}
+        inputContainerStyle={{borderBottomColor: 'white'}}
+
+      />
+        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
+          <Text style={styles.text}>Your choice</Text>
+        </TouchableOpacity>
+    </ScreenComponent>
   );
 };
 
 const styles = StyleSheet.create({
-  screenContainer: {
-    height:'100%',
-    justifyContent: 'center',
-    flex: 1
-  },
   container: {
     flex: 1,
   } as ViewStyle,

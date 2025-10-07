@@ -27,7 +27,13 @@ export default function RootLayout() {
             color: 'white',
             fontSize: 18,
           },
-        cardStyle: { flexDirection: 'column', backgroundColor: 'transparent', display: 'flex', flex: 1, alignItems: 'center'}
+        cardStyle: { 
+          flexDirection: 'column',
+          backgroundColor: 'transparent', 
+          display: 'flex', 
+          flex: 1, 
+          alignItems: 'center',
+        }
         }}
       >
       <Stack.Screen name="Login" component={LoginScreen} options={{
