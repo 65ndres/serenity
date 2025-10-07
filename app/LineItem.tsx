@@ -30,6 +30,7 @@ const LineItem: React.FC<LineItemProps> = ({ book, chapter, verse, text }) => {
   const truncatedText = text.length > 30 ? `${text.substring(0, 20)}...` : text;
 
   return (
+    // I need to be able to pass the argumetn selected and how the correct the module
     <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
       <View style={styles.container}>
         <Text style={styles.text}>

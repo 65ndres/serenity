@@ -120,7 +120,16 @@ interface VerseModuleProps {
   active: number;
 }
 
+// this shoulkd receive an filter object 
+// filter = {screen: "Liked", active: id}
+//{}
+
+/// Even better we are gonna have require q search prop and and optional 'active' which is gonna be
+// the first verse is gonna show when it renders
+
+
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active }) => {
+  // here we are gonna see if we neeed
   const [verses, setVerses] = useState<BibleVerse[]>(datas);
 
   const ref = React.useRef<ICarouselInstance>(null);

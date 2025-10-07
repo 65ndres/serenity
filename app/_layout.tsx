@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text } from 'react-native';
+import { ImageBackground, StyleSheet, Text } from 'react-native';
 import 'react-native-reanimated';
 import HomeScreen from './Home'; // Your current screen with the button
 // import RandomScreen from './Random'; // Your destination screen
@@ -14,6 +14,11 @@ export default function RootLayout() {
   
 
   return (
+        <ImageBackground
+          source={require('../assets/images/bg.jpg')}
+          resizeMode="cover"
+          style={styles.image}
+        >
     <Stack.Navigator 
       initialRouteName="Home"
       screenOptions={{
@@ -37,6 +42,7 @@ export default function RootLayout() {
           headerLeft: () => <BackButton/>,
         }}/>
     </Stack.Navigator>
+    </ImageBackground>
   );
 }
 
@@ -49,7 +55,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'light',
     textAlign: 'center',
-  }
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
 });
 
 

@@ -5,13 +5,12 @@ import { useFonts } from 'expo-font';
 import React from 'react';
 import {
   Alert,
-  ImageBackground,
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
 
@@ -41,11 +40,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <ImageBackground
-      source={require('../assets/images/bg.jpg')}
-      resizeMode="cover"
-      style={styles.image}
-    >
+    <>
       <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
         <Text style={styles.text}>His will</Text>
       </TouchableOpacity>
@@ -53,7 +48,7 @@ const Home: React.FC = () => {
       <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
         <Text style={styles.text}>Your choice</Text>
       </TouchableOpacity>
-    </ImageBackground>
+      </>
   );
 };
 
