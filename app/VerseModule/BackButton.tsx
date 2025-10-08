@@ -1,18 +1,25 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-// import { NavigationAction } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { Text } from '@rneui/themed';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
-const BackButton: React.FC = () => {
+interface BackButtonProps {
+  text: string;
+}
+
+const BackButton: React.FC<BackButtonProps> = ({ text }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-    onPress={() => navigation.goBack()}
+      onPress={() => navigation.goBack()}
       style={{ padding: 5, marginLeft: 15 }}
       accessibilityRole="button"
     >
-      <Ionicons name="arrow-back-sharp" size={25} color="white" />
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <Ionicons name="arrow-back-sharp" size={25} color="white" />
+        <Text style={{ color: 'white', paddingLeft: 10, fontSize: 20 }}>{text}</Text>
+      </View>
     </TouchableOpacity>
   );
 };

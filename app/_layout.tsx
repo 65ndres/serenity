@@ -7,6 +7,8 @@ import BackButton from './VerseModule/BackButton'; // this needs to be removed f
 import LikesButton from './VerseModule/LikesButton';
 import VerseModule from './VerseModule/VerseModule';
 import LoginScreen from './screens/LoginScreen';
+import PasswordResetScreen from './screens/PasswordResetScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -37,17 +39,25 @@ export default function RootLayout() {
       <Stack.Screen name="Login" component={LoginScreen} options={{
           headerTitle: () => <Text style={{color: 'transparent'}}>{"HOME"}</Text>
         }}/>
+
+      <Stack.Screen name="PasswordReset" component={PasswordResetScreen} options={{
+          headerLeft: () => <BackButton text={"Login"}/>,
+          headerTitle: () => <Text style={{color: 'transparent'}}>{"HOME"}</Text>
+        }}/>
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{
+        headerLeft: () => <BackButton text={"Login"}/>,
+          headerTitle: () => <Text style={{color: 'transparent'}}>{"HOME"}</Text>
+                    
+        }}/>
       <Stack.Screen name="Home" component={HomeScreen} options={{
           headerTitle: () => <Text style={styles.text}>{"HOME"}</Text>
         }}/>
       <Stack.Screen name="VerseModule" component={VerseModule} options={{
           headerTitle: () => <Text style={styles.text}>{"HIS WILL"}</Text>,
           headerRight: () => <LikesButton/>,
-          headerLeft: () => <BackButton/>,
         }}/>
       <Stack.Screen name="Liked" component={LikedScreen} options={{
           headerTitle: () => <Text style={styles.text}>{"Liked"}</Text>,
-          headerLeft: () => <BackButton/>,
         }}/>
     </Stack.Navigator>
     </ImageBackground>

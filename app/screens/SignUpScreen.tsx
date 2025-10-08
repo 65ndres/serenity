@@ -17,8 +17,8 @@ import ScreenComponent from '../sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
 type RootStackParamList = {
-  SignUp: undefined;
-  PasswordReset: undefined;
+  Home: undefined;
+  VerseModule: undefined;
 };
 
 const width = Dimensions.get("window").width;
@@ -26,7 +26,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Separator: React.FC = () => <View style={styles.separator} />;
 
-const LoginScreen: React.FC = () => {
+const SignUpScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -36,7 +36,7 @@ const LoginScreen: React.FC = () => {
   return (
     <ScreenComponent>
       <View style={{paddingBottom: 40}}>
-        <Text h2 style={{color: 'white', textAlign: 'center'}}>WELCOME BACK</Text>
+        <Text h2 style={{color: 'white', textAlign: 'center'}}>WELCOME</Text>
       </View>
       <View style={{paddingBottom: 5}}>
         <Input
@@ -61,8 +61,18 @@ const LoginScreen: React.FC = () => {
         labelStyle={{color: 'white'}}
         inputContainerStyle={{borderBottomColor: 'white'}}
       />
+      <Input
+        cursorColor={"#ffffff"}
+        placeholder='**********'
+        selectionColor={'white'}
+        placeholderTextColor={'#d8d8d8ff'}
+        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+        inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
+        labelStyle={{color: 'white'}}
+        inputContainerStyle={{borderBottomColor: 'white'}}
+      />
       <Button
-        title="LOG IN"
+        title="CREATE ACCOUNT"
         buttonStyle={{
           backgroundColor: 'white',
           borderWidth: 2,
@@ -75,25 +85,6 @@ const LoginScreen: React.FC = () => {
         }}
         titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
       />
-      <View>
-        <Button
-          containerStyle={{
-            marginVertical: 10,
-          }}
-          title="Sign up"
-          type="clear"
-          titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-          onPress={() => navigation.navigate('SignUp')}
-        />
-      </View>
-      <View>
-        <Button
-          title="Password Reset"
-          type="clear"
-          titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-          onPress={() => navigation.navigate('PasswordReset')}
-        />
-      </View>
     </ScreenComponent>
   );
 };
@@ -123,4 +114,4 @@ const styles = StyleSheet.create({
   } as ViewStyle,
 });
 
-export default LoginScreen;
+export default SignUpScreen;
