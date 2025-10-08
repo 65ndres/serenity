@@ -1,16 +1,13 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Input } from '@rneui/themed';
+import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React from 'react';
 import {
-  Alert,
   Dimensions,
   StyleSheet,
-  Text,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native';
@@ -38,28 +35,63 @@ const LoginScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
+      <View style={{paddingBottom: 40}}>
+        <Text h2 style={{color: 'white', textAlign: 'center'}}>WELCOME BACK</Text>
+      </View>
+      <View style={{paddingBottom: 5}}>
+        <Input
+          cursorColor={"#ffffff"}
+          placeholder='user@email.com'
+          selectionColor={'white'}
+          placeholderTextColor={'#d8d8d8ff'}
+          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+          inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
+          labelStyle={{color: 'white'}}
+          inputContainerStyle={{borderBottomColor: 'white'}}
+        />
+      </View>
+
       <Input
         cursorColor={"#ffffff"}
+        placeholder='**********'
         selectionColor={'white'}
-        placeholderTextColor={'white'}
-        leftIcon={{ type: 'ionicons', name: 'person-outline', color: 'white', size: 30 }}
-        inputStyle={{color: 'white', fontSize: 22}}
+        placeholderTextColor={'#d8d8d8ff'}
+        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+        inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
         labelStyle={{color: 'white'}}
         inputContainerStyle={{borderBottomColor: 'white'}}
       />
-
-      <Input
-        placeholder='INPUT WITH ICON'
-        placeholderTextColor={'white'}
-        leftIcon={{ name: 'account-outline', color: 'white' }}
-        inputStyle={{color: 'white'}}
-        labelStyle={{color: 'white'}}
-        inputContainerStyle={{borderBottomColor: 'white'}}
-
+      <Button
+        title="LOG IN"
+        buttonStyle={{
+          backgroundColor: 'white',
+          borderWidth: 2,
+          borderColor: 'white',
+          borderRadius: 30,
+        }}
+        containerStyle={{
+          marginHorizontal: 50,
+          marginVertical: 10,
+        }}
+        titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
       />
-        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
-          <Text style={styles.text}>Your choice</Text>
-        </TouchableOpacity>
+      <View>
+        <Button
+          containerStyle={{
+            marginVertical: 10,
+          }}
+          title="Sign up"
+          type="clear"
+          titleStyle={{ color: '#fff', fontWeight: 'bold' }}
+        />
+      </View>
+      <View>
+        <Button
+          title="Forgot Password"
+          type="clear"
+          titleStyle={{ color: '#fff', fontWeight: 'bold' }}
+        />
+      </View>
     </ScreenComponent>
   );
 };

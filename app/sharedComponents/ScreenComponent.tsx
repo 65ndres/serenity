@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     width: width,
-    padding: 20}
+    paddingLeft: 40,
+    paddingRight: 40,
+    maxWidth: 400
+  }
   })
 export default ScreenComponent;

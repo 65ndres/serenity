@@ -11,9 +11,7 @@ import LoginScreen from './screens/LoginScreen';
 const Stack = createStackNavigator();
 
 export default function RootLayout() {
-  
   return (
-    
     <ImageBackground
       source={require('../assets/images/bg.jpg')}
       resizeMode="cover"
@@ -27,17 +25,17 @@ export default function RootLayout() {
             color: 'white',
             fontSize: 18,
           },
-        cardStyle: { 
-          flexDirection: 'column',
-          backgroundColor: 'transparent', 
-          display: 'flex', 
-          flex: 1, 
-          alignItems: 'center',
-        }
+          cardStyle: { 
+            flexDirection: 'column',
+            backgroundColor: 'transparent', 
+            display: 'flex', 
+            flex: 1, 
+            alignItems: 'center',
+          }
         }}
       >
       <Stack.Screen name="Login" component={LoginScreen} options={{
-          headerTitle: () => <Text style={styles.text}>{"HOME"}</Text>
+          headerTitle: () => <Text style={{color: 'transparent'}}>{"HOME"}</Text>
         }}/>
       <Stack.Screen name="Home" component={HomeScreen} options={{
           headerTitle: () => <Text style={styles.text}>{"HOME"}</Text>
