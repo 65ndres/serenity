@@ -2,10 +2,10 @@
 import { useColorScheme } from '@/hooks/useColorScheme'; // Adjust path if needed
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Input } from '@rneui/themed';
+import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { Alert, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
@@ -100,7 +100,6 @@ const LoginScreen: React.FC = () => {
         disabled={isLoading}
         loading={isLoading}
       />
-      <Separator />
       <View>
         <Button
           containerStyle={{
