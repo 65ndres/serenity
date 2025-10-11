@@ -9,6 +9,7 @@ import LikedScreen from './Liked';
 import LoginScreen from './screens/LoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import BackButton from './VerseModule/BackButton';
 import VerseModuleScreen from './VerseModule/VerseModule';
 
 type RootDrawerParamList = {
@@ -70,8 +71,13 @@ const AuthenticatedNavigator: React.FC = () => {
         drawerLabelStyle: {
           color: 'white', // Updated from 'blue' to match theme
           fontSize: 26,
-          fontWeight: '300'
+          fontWeight: '300',
+          textAlign: 'center'
           
+        },
+        drawerItemStyle: {
+          borderBottomColor: 'white',
+          borderBottomWidth: 1
         },
         headerStyle: {
           backgroundColor: 'transparent',
@@ -112,7 +118,9 @@ const UnauthenticatedNavigator: React.FC = () => {
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: { color: 'white', fontSize: 18 },
-        cardStyle: { backgroundColor: 'transparent', flex: 1, alignItems: 'center' },
+        cardStyle: { backgroundColor: 'transparent', flex: 1 },
+        headerTintColor: 'white',
+        
       }}
     >
       <Stack.Screen
@@ -124,6 +132,7 @@ const UnauthenticatedNavigator: React.FC = () => {
         name="SignUp"
         component={SignUpScreen}
         options={{
+          headerLeft: () => <BackButton text="Login" />,
           headerTitle: () => <Text style={{ color: 'transparent' }}>HOME</Text>,
         }}
       />
@@ -160,17 +169,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    
   } as ViewStyle,
   drawerContent: {
     flex: 1,
     fontWeight: '900',
     color: 'blue',
+    paddingTop: 150,
     backgroundColor: 'rgba(0, 0, 0, 0.50)', // Overlay for readability
     
   } as ViewStyle,
   logoutLabel: {
-    color: '#ac8861ff',
-    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 300,
     fontSize: 26,
   },
 });

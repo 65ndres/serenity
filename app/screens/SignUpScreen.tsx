@@ -125,19 +125,6 @@ const SignUpScreen: React.FC = () => {
         disabled={isLoading}
         loading={isLoading}
       />
-      <Separator />
-      <View>
-        <Button
-          containerStyle={{
-            marginVertical: 10,
-          }}
-          title="Back to Login"
-          type="clear"
-          titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-          onPress={() => navigation.navigate('Login')}
-          disabled={isLoading}
-        />
-      </View>
     </ScreenComponent>
   );
 };

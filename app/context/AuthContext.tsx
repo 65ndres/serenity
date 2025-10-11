@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async (): Promise<void> => {
     try {
       const token = await AsyncStorage.getItem('token');
-      console.log('Logout token:', token); // Debug
+      // console.log('Logout token:', token); // Debug
       if (token) {
         await axios.delete(`${API_URL}/auth/logout`, { headers: { Authorization: `Bearer ${token}` } });
       }
