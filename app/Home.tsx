@@ -13,6 +13,7 @@ import {
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
+import ScreenComponent from './sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -40,7 +41,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <>
+    <ScreenComponent>
       <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
         <Text style={styles.text}>His will</Text>
       </TouchableOpacity>
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
       <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
         <Text style={styles.text}>Your choice</Text>
       </TouchableOpacity>
-      </>
+    </ScreenComponent>
   );
 };
 

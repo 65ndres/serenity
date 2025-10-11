@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   Dimensions,
+  ImageBackground,
   StyleSheet,
-  View,
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
@@ -17,16 +17,20 @@ type RootStackParamList = {
 // Type the navigation prop
 
 // Type the Home component
-interface ScreenContainerProps {
-  children?: React.ReactNode; // Allows any valid React node (components, text, etc.)
-  style?: ViewStyle; // Optional style prop for View
+interface ScreenComponentProps {
+  children?: React.ReactNode;
+  style?: ViewStyle;
 }
 
-const ScreenComponent: React.FC<ScreenContainerProps> = ({ children, style }) => {
+const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) => {
   return (
-    <View style={[styles.screenContainer, style]}>
+    <ImageBackground
+      source={require('../../assets/images/bg.jpg')}
+      resizeMode="cover"
+      style={[styles.screenContainer, style]}
+    >
       {children}
-    </View>
+    </ImageBackground>
   );
 };
 
