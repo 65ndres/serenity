@@ -40,9 +40,7 @@ const LoginScreen: React.FC = () => {
     setIsLoading(true);
     const success = await login(email, password);
     setIsLoading(false);
-    if (success) {
-      navigation.navigate('Home');
-    } else {
+    if (!success) {
       Alert.alert('Error', 'Invalid email or password');
     }
   };

@@ -2,7 +2,7 @@
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { ImageBackground, StyleSheet, Text } from 'react-native';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
@@ -31,17 +31,23 @@ const CustomDrawerContent: React.FC = (props) => {
   const { logout } = useAuth();
 
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem
-        label="Logout"
-        onPress={async () => {
-          await logout();
-          // Redirect handled by RootLayout
-        }}
-        labelStyle={{ color: '#ac8861ff', fontWeight: 'bold' }}
-      />
-    </DrawerContentScrollView>
+    <ImageBackground
+      source={require('../assets/images/bg.jpg')}
+      resizeMode="cover"
+      style={styles.drawerBackground}
+    >
+      <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
+        <DrawerItemList {...props} />
+        <DrawerItem
+          label="Logout"
+          onPress={async () => {
+            await logout();
+            // Redirect handled by RootLayout
+          }}
+          labelStyle={styles.logoutLabel}
+        />
+      </DrawerContentScrollView>
+    </ImageBackground>
   );
 };
 
@@ -51,12 +57,13 @@ const AuthenticatedNavigator: React.FC = () => {
       initialRouteName="Home"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
+        headerTransparent: true,
         drawerStyle: {
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'transparent', // Transparent to show ImageBackground
           width: 250,
         },
         drawerLabelStyle: {
-          color: 'white',
+          color: 'white', // Updated from 'blue' to match theme
           fontSize: 16,
         },
         headerStyle: {
@@ -111,7 +118,6 @@ const UnauthenticatedNavigator: React.FC = () => {
         name="SignUp"
         component={SignUpScreen}
         options={{
-          headerLeft: () => <BackButton text="Login" />,
           headerTitle: () => <Text style={{ color: 'transparent' }}>HOME</Text>,
         }}
       />
@@ -144,12 +150,28 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     textAlign: 'center',
   },
+  drawerBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  } as ViewStyle,
+  drawerContent: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.52)', // Overlay for readability
+  } as ViewStyle,
+  logoutLabel: {
+    color: '#ac8861ff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default function Layout() {
   return (
     <AuthProvider>
+      {/* <NavigationContainer> */}
         <RootLayout />
+      {/* </NavigationContainer> */}
     </AuthProvider>
   );
 }

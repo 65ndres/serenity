@@ -1,7 +1,18 @@
 // src/context/AuthContext.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios, { AxiosError } from 'axios';
+import { useNavigation } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+
+type RootStackParamList = {
+  Home: undefined;
+  VerseModule: undefined;
+  Login: undefined; // Added to allow navigation back to Login
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface User {
   token: string;
@@ -29,6 +40,7 @@ interface Verse {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigation = useNavigation<NavigationProp>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -88,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async (): Promise<void> => {
     try {
       const token = await AsyncStorage.getItem('token');
+      console.log('Logout token:', token); // Debug
       if (token) {
         await axios.delete(`${API_URL}/auth/logout`, { headers: { Authorization: `Bearer ${token}` } });
       }
@@ -95,7 +108,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       delete axios.defaults.headers.common['Authorization'];
       setUser(null);
     } catch (e: unknown) {
-      console.error('Logout failed', e);
+      const error = e as AxiosError<{ error?: string }>;
+      console.error('Logout failed', error);
+      if (error.response?.status === 401 && error.response?.data?.error?.includes('expired')) {
+        await AsyncStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        setUser(null); // Navigate to Login on expired token
+      } else {
+        Alert.alert('Error', error.response?.data?.error || 'Logout failed. Please try again.');
+      }
     }
   };
 
