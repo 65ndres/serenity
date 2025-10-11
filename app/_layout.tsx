@@ -32,13 +32,15 @@ const CustomDrawerContent: React.FC = (props) => {
 
   return (
     <ImageBackground
-      source={require('../assets/images/bg.jpg')}
+      source={require('../assets/images/bgrd.jpg')}
       resizeMode="cover"
+      
       style={styles.drawerBackground}
     >
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
         <DrawerItemList {...props} />
         <DrawerItem
+        labelStyle
           label="Logout"
           onPress={async () => {
             await logout();
@@ -55,8 +57,11 @@ const AuthenticatedNavigator: React.FC = () => {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
+
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
+        drawerPosition: 'right',
+        drawerActiveBackgroundColor:'transparent',
         headerTransparent: true,
         drawerStyle: {
           backgroundColor: 'transparent', // Transparent to show ImageBackground
@@ -64,7 +69,9 @@ const AuthenticatedNavigator: React.FC = () => {
         },
         drawerLabelStyle: {
           color: 'white', // Updated from 'blue' to match theme
-          fontSize: 16,
+          fontSize: 26,
+          fontWeight: '300'
+          
         },
         headerStyle: {
           backgroundColor: 'transparent',
@@ -79,7 +86,7 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="Home"
         component={Home}
-        options={{ drawerLabel: 'Home', headerTitle: () => <Text style={styles.text}>HOME</Text> }}
+        options={{ drawerLabel: 'Home', headerTitle: () => <Text style={styles.text}></Text> }}
       />
       <Drawer.Screen
         name="VerseModule"
@@ -87,7 +94,6 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{
           drawerLabel: 'Verse Module',
           headerTitle: () => <Text style={styles.text}>HIS WILL</Text>,
-          headerRight: () => <LikesButton />,
         }}
       />
       <Drawer.Screen
@@ -157,12 +163,15 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   drawerContent: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.52)', // Overlay for readability
+    fontWeight: '900',
+    color: 'blue',
+    backgroundColor: 'rgba(0, 0, 0, 0.50)', // Overlay for readability
+    
   } as ViewStyle,
   logoutLabel: {
     color: '#ac8861ff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 26,
   },
 });
 
