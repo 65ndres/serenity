@@ -1,27 +1,21 @@
-import { useColorScheme } from '@/hooks/useColorScheme';
+// src/screens/LoginScreen.tsx
+import { useColorScheme } from '@/hooks/useColorScheme'; // Adjust path if needed
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Input, Text } from '@rneui/themed';
+import { Button, Input } from '@rneui/themed';
 import { useFonts } from 'expo-font';
-import React from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle
-} from 'react-native';
-import 'react-native-reanimated';
-// import { ScreenContainer } from 'react-native-screens';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
-// Define the navigation stack param list
+// Define navigation stack types
 type RootStackParamList = {
+  Home: undefined;
   SignUp: undefined;
   PasswordReset: undefined;
 };
 
-const width = Dimensions.get("window").width;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Separator: React.FC = () => <View style={styles.separator} />;
@@ -29,37 +23,67 @@ const Separator: React.FC = () => <View style={styles.separator} />;
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const colorScheme = useColorScheme();
+  const { login } = useAuth();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  if (!loaded) {
+    return <Text>Loading fonts...</Text>;
+  }
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    const success = await login(email, password);
+    setIsLoading(false);
+    if (success) {
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('Error', 'Invalid email or password');
+    }
+  };
+
   return (
     <ScreenComponent>
-      <View style={{paddingBottom: 40}}>
-        <Text h2 style={{color: 'white', textAlign: 'center'}}>WELCOME BACK</Text>
+      <View style={{ paddingBottom: 40 }}>
+        <Text h2 style={styles.welcomeText}>
+          WELCOME BACK
+        </Text>
       </View>
-      <View style={{paddingBottom: 5}}>
+      <View style={{ paddingBottom: 5 }}>
         <Input
-          cursorColor={"#ffffff"}
-          placeholder='user@email.com'
-          selectionColor={'white'}
-          placeholderTextColor={'#d8d8d8ff'}
+          cursorColor="#ffffff"
+          placeholder="user@email.com"
+          selectionColor="white"
+          placeholderTextColor="#d8d8d8ff"
           leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
-          inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
-          labelStyle={{color: 'white'}}
-          inputContainerStyle={{borderBottomColor: 'white'}}
+          inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+          labelStyle={{ color: 'white' }}
+          inputContainerStyle={{ borderBottomColor: 'white' }}
+          value={email}
+          onChangeText={setEmail}
+          accessibilityLabel="Email"
+          disabled={isLoading}
         />
       </View>
-
       <Input
-        cursorColor={"#ffffff"}
-        placeholder='**********'
-        selectionColor={'white'}
-        placeholderTextColor={'#d8d8d8ff'}
+        cursorColor="#ffffff"
+        placeholder="**********"
+        selectionColor="white"
+        placeholderTextColor="#d8d8d8ff"
         leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-        inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
-        labelStyle={{color: 'white'}}
-        inputContainerStyle={{borderBottomColor: 'white'}}
+        inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+        labelStyle={{ color: 'white' }}
+        inputContainerStyle={{ borderBottomColor: 'white' }}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        accessibilityLabel="Password"
+        disabled={isLoading}
       />
       <Button
         title="LOG IN"
@@ -74,7 +98,11 @@ const LoginScreen: React.FC = () => {
           marginVertical: 10,
         }}
         titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+        onPress={handleLogin}
+        disabled={isLoading}
+        loading={isLoading}
       />
+      <Separator />
       <View>
         <Button
           containerStyle={{
@@ -84,6 +112,7 @@ const LoginScreen: React.FC = () => {
           type="clear"
           titleStyle={{ color: '#fff', fontWeight: 'bold' }}
           onPress={() => navigation.navigate('SignUp')}
+          disabled={isLoading}
         />
       </View>
       <View>
@@ -92,6 +121,7 @@ const LoginScreen: React.FC = () => {
           type="clear"
           titleStyle={{ color: '#fff', fontWeight: 'bold' }}
           onPress={() => navigation.navigate('PasswordReset')}
+          disabled={isLoading}
         />
       </View>
     </ScreenComponent>
@@ -99,18 +129,8 @@ const LoginScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  } as ViewStyle,
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  } as ViewStyle,
-  text: {
+  welcomeText: {
     color: 'white',
-    fontSize: 44,
-    lineHeight: 84,
-    fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
     textAlign: 'center',
   } as TextStyle,
   separator: {

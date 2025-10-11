@@ -6,6 +6,7 @@ import LikedScreen from './Liked';
 import BackButton from './VerseModule/BackButton'; // this needs to be removed from this folder
 import LikesButton from './VerseModule/LikesButton';
 import VerseModule from './VerseModule/VerseModule';
+import { AuthProvider } from './context/AuthContext';
 import LoginScreen from './screens/LoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -14,6 +15,7 @@ const Stack = createStackNavigator();
 
 export default function RootLayout() {
   return (
+    <AuthProvider>
     <ImageBackground
       source={require('../assets/images/bg.jpg')}
       resizeMode="cover"
@@ -61,6 +63,7 @@ export default function RootLayout() {
         }}/>
     </Stack.Navigator>
     </ImageBackground>
+    </AuthProvider>
   );
 }
 
