@@ -9,14 +9,19 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.glabs.serenity",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.glabs.serenity"
     },
     "web": {
       "bundler": "metro",
@@ -34,11 +39,28 @@
           "backgroundColor": "#ffffff"
         }
       ],
+      [
+        "react-native-iap",
+        {
+          "ios": {
+            "bundleIdentifier": "com.example.bible"
+          },
+          "android": {
+            "packageName": "com.example.bible"
+          }
+        }
+      ],
       "expo-font",
       "react-native-iap"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a78884f3-50e9-4727-b6aa-9ccf61e147b6"
+      }
     }
   }
 }
