@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import axios, { AxiosError } from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import * as InAppPurchases from 'react-native-iap';
+// import * as InAppPurchases from 'react-native-iap';
 
 interface User {
   token: string;
@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const API_URL = 'http://10.0.2.2:3000/api/v1';
+  const API_URL = 'http://127.0.0.1:3000/api/v1';
 
   useEffect(() => {
     const loadUser = async () => {
@@ -131,14 +131,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (processor === 'apple' || processor === 'google') {
         const plan = await axios.get(`${API_URL}/plans/${planId}`).then(res => res.data);
         const productId = processor === 'apple' ? plan.apple_product_id : plan.google_product_id;
-        await InAppPurchases.initConnection();
-        const products = await InAppPurchases.getProducts([productId]);
+        // await InAppPurchases.initConnection();
+        const products = []//await InAppPurchases.getProducts([productId]);
         if (products.length) {
-          const purchase = await InAppPurchases.requestPurchase(productId);
+          const purchase = ''//await InAppPurchases.requestPurchase(productId);
           await axios.post(`${API_URL}/subscriptions`, {
             plan_id: planId,
             processor,
-            [processor === 'apple' ? 'receipt' : 'purchase_token']: purchase.transactionId || purchase.purchaseToken
+            [processor === 'apple' ? 'receipt' : 'purchase_token']: "purchase.transactionId" || "purchase.purchaseToken"
           });
           const subResponse = await axios.get(`${API_URL}/subscriptions/active`);
           setUser({ ...user!, subscriptionStatus: subResponse.data.status });
@@ -153,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Subscription failed', error);
       Alert.alert('Error', 'Failed to process subscription. Please try again.');
     } finally {
-      await InAppPurchases.endConnection();
+      // await InAppPurchases.endConnection();
     }
   };
 
