@@ -150,7 +150,7 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
 
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [value, setValue] = useState("Item 1");
-
+ 
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
 
   const ref = React.useRef<ICarouselInstance>(null);
@@ -173,29 +173,6 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   return (
     <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
       <View style={{flex: 1, justifyContent: 'center'}}>
-{/* <Picker
-  selectedValue={selectedLanguage}
-  itemStyle={{color: 'white'}}
-
-  
-  onValueChange={(itemValue, itemIndex) =>
-    setSelectedLanguage(itemValue)
-  }>
-  <Picker.Item label="Java" value="java" />
-  <Picker.Item label="JavaScript" value="js" />
-  <Picker.Item label="JavaSc" value="jss" />
-</Picker> */}
-
-
-    {/* <RNPickerSelect
-      onValueChange={(value) => console.log(value)}
-      value={"football"}
-      items={[
-        { label: 'Football', value: 'football' },
-        { label: 'Baseball', value: 'baseball' },
-        { label: 'Hockey', value: 'hockey' },
-      ]}
-    /> */}
       <View style={{height: '20%'}}>
         
         <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
