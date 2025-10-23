@@ -9,6 +9,7 @@ import LikedScreen from './Liked';
 import LoginScreen from './screens/LoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
 import VerseModuleScreen from './VerseModule/VerseModule';
 
@@ -106,6 +107,11 @@ const AuthenticatedNavigator: React.FC = () => {
         name="Liked"
         component={LikedScreen}
         options={{ drawerLabel: 'Liked Verses', headerTitle: () => <Text style={styles.text}>LIKED</Text> }}
+      />
+      <Drawer.Screen
+        name="Your Choice"
+        component={YourChoiceScreen}
+        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={styles.text}>Your Choice</Text> }}
       />
     </Drawer.Navigator>
   );
