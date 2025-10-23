@@ -15,8 +15,8 @@ import {
   ViewStyle,
 } from 'react-native';
 import 'react-native-reanimated';
-import { useAuth } from "../app/context/AuthContext";
-import ScreenComponent from '../app/sharedComponents/ScreenComponent';
+import { useAuth } from '../src/context/AuthContext';
+import ScreenComponent from '../src/sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
 type RootDrawerParamList = {
