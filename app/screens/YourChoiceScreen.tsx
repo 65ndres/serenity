@@ -1,9 +1,26 @@
 import { AntDesign } from '@expo/vector-icons';
+// import { Picker } from '@react-native-picker/picker';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
+// import { Dropdown } from 'react-native-element-dropdown';
+  // import AntDesign from '@expo/vector-icons/AntDesign';
+  // import { Picker } from '@react-native-picker/picker';a
+
+  const datos = [
+    { label: 'Item 1', value: '1' },
+    { label: 'Item 2', value: '2' },
+    { label: 'Item 3', value: '3' },
+    { label: 'Item 4', value: '4' },
+    { label: 'Item 5', value: '5' },
+    { label: 'Item 6', value: '6' },
+    { label: 'Item 7', value: '7' },
+    { label: 'Item 8', value: '8' },
+  ];
+
 
 interface BibleVerse {
   book: string;
@@ -127,10 +144,14 @@ interface VerseModuleProps {
 /// Even better we are gonna have require q search prop and and optional 'active' which is gonna be
 // the first verse is gonna show when it renders
 
-
 const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   // here we are gonna see if we neeed
   const [verses, setVerses] = useState<BibleVerse[]>(datas);
+
+  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [value, setValue] = useState("Item 1");
+
+  const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
 
   const ref = React.useRef<ICarouselInstance>(null);
     const [loaded] = useFonts({
@@ -145,10 +166,69 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
     );
   };
 
+  const toggleVerseComponent = () => {
+    setVerseComponentVisibility(!verseComponentVisibility)
+  }
+
   return (
     <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
       <View style={{flex: 1, justifyContent: 'center'}}>
-      <Carousel
+{/* <Picker
+  selectedValue={selectedLanguage}
+  itemStyle={{color: 'white'}}
+
+  
+  onValueChange={(itemValue, itemIndex) =>
+    setSelectedLanguage(itemValue)
+  }>
+  <Picker.Item label="Java" value="java" />
+  <Picker.Item label="JavaScript" value="js" />
+  <Picker.Item label="JavaSc" value="jss" />
+</Picker> */}
+
+
+    {/* <RNPickerSelect
+      onValueChange={(value) => console.log(value)}
+      value={"football"}
+      items={[
+        { label: 'Football', value: 'football' },
+        { label: 'Baseball', value: 'baseball' },
+        { label: 'Hockey', value: 'hockey' },
+      ]}
+    /> */}
+      <View style={{height: '20%'}}>
+        
+        <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          itemTextStyle={{color: 'white', textAlign: 'center', fontSize: 20}}
+          data={datos}
+          maxHeight={300}
+          autoScroll={false}
+          activeColor="transparent"
+          labelField="label"
+          valueField="value"
+          placeholder="Select item"
+          searchPlaceholder="Search..."
+          containerStyle={styles.containerss}
+          onFocus={toggleVerseComponent}
+          onBlur={toggleVerseComponent}
+          iconColor={'transparent'}
+          value={value}
+          onChange={item => {
+            setValue(item.value);
+          }}
+        /> 
+      </View>
+      </View>
+      <View style={{height: '60%'}}>
+      {verseComponentVisibility &&
+      
+        <Carousel
         ref={ref}
         width={width}
         height={width}
@@ -191,7 +271,7 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
               </View>
             </View>
           )}
-      />
+      />}</View>
     </View>
   </ImageBackground>);
   
@@ -224,6 +304,36 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+    dropdown: {
+      margin: 16,
+      height: 50,
+      backgroundColor: 'transparent',
+      textAlign: 'center',
+      borderWidth: 0
+    },
+    icon: {
+      marginRight: 5,
+    },
+    placeholderStyle: {
+      fontSize: 16,
+    },
+    selectedTextStyle: {
+      fontSize: 25,
+      color: 'white',
+      textAlign: 'center'
+    },
+    iconStyle: {
+      color: 'transparent',
+      display: 'none'
+    },
+    inputSearchStyle: {
+      height: 40,
+      fontSize: 16,
+    },
+    containerss: {
+      backgroundColor: 'transparent',
+      borderWidth: 0
+    }
 });
 
 
