@@ -1,8 +1,6 @@
-// app/home.tsx
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from '@rneui/themed';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import React from 'react';
 import {
@@ -12,22 +10,19 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
-import { useAuth } from '../src/context/AuthContext';
-import ScreenComponent from '../src/sharedComponents/ScreenComponent';
+import ScreenComponent from './sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
-type RootDrawerParamList = {
+type RootStackParamList = {
   Home: undefined;
-  Search: undefined;
   VerseModule: undefined;
-  Liked: undefined;
 };
 
 // Type the navigation prop
-type NavigationProp = DrawerNavigationProp<RootDrawerParamList>;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 // Type the Separator component
 const Separator: React.FC = () => <View style={styles.separator} />;
@@ -36,7 +31,6 @@ const Separator: React.FC = () => <View style={styles.separator} />;
 const Home: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const colorScheme = useColorScheme();
-  const { user, subscribe } = useAuth();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -48,37 +42,13 @@ const Home: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <View style={styles.container}>
-        <Text style={styles.welcomeText}>BIBLE APP</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
-          <Text style={styles.text}>His Will</Text>
-        </TouchableOpacity>
-        <Separator />
-        <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
-          <Text style={styles.text}>Your Choice</Text>
-        </TouchableOpacity>
-        <Separator />
-        <Text style={styles.text}>
-          Subscription: {user?.subscriptionStatus || 'none'}
-        </Text>
-        {!user?.subscriptionStatus || user.subscriptionStatus === 'canceled' ? (
-          <Button
-            title="Subscribe to Premium"
-            buttonStyle={{
-              backgroundColor: 'white',
-              borderWidth: 2,
-              borderColor: 'white',
-              borderRadius: 30,
-            }}
-            containerStyle={{
-              marginHorizontal: 50,
-              marginVertical: 10,
-            }}
-            titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-            onPress={() => subscribe('premium_plan_id', 'apple')} // Replace with actual plan ID
-          />
-        ) : null}
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
+        <Text style={styles.text}>His will</Text>
+      </TouchableOpacity>
+      <Separator />
+      <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
+        <Text style={styles.text}>Your choice</Text>
+      </TouchableOpacity>
     </ScreenComponent>
   );
 };
@@ -86,22 +56,16 @@ const Home: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   } as ViewStyle,
-  welcomeText: {
-    color: 'white',
-    fontSize: 44,
-    lineHeight: 84,
-    fontWeight: '300',
-    textAlign: 'center',
-    marginBottom: 20,
-  } as TextStyle,
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  } as ViewStyle,
   text: {
     color: 'white',
     fontSize: 44,
     lineHeight: 84,
-    fontWeight: '300',
+    fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
     textAlign: 'center',
   } as TextStyle,
   separator: {

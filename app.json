@@ -34,8 +34,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-font",
-      "react-native-iap"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
