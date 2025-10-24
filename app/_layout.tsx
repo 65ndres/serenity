@@ -6,19 +6,20 @@ import { ImageBackground, StyleSheet, Text } from 'react-native';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
+import HisWillScreen from './screens/HisWillScreen';
 import LoginScreen from './screens/LoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
-import VerseModuleScreen from './VerseModule/VerseModule';
 
 type RootDrawerParamList = {
   Home: undefined;
   Search: undefined;
   VerseModule: undefined;
   Liked: undefined;
+  HisWillScreen: undefined;
 };
 
 type AuthStackParamList = {
@@ -97,10 +98,10 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{ drawerLabel: 'Home', headerTitle: () => <Text style={styles.text}></Text> }}
       />
       <Drawer.Screen
-        name="VerseModule"
-        component={VerseModuleScreen}
+        name="HisWillScreen"
+        component={HisWillScreen}
         options={{
-          drawerLabel: 'Verse Module',
+          drawerLabel: 'His will',
           headerTitle: () => <Text style={styles.text}>HIS WILL</Text>,
         }}
       />

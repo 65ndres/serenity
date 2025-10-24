@@ -1,6 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
@@ -120,18 +122,13 @@ interface VerseModuleProps {
   active: number;
 }
 
-// this shoulkd receive an filter object 
-// filter = {screen: "Liked", active: id}
-//{}
-
-/// Even better we are gonna have require q search prop and and optional 'active' which is gonna be
-// the first verse is gonna show when it renders
-
 
 const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   // here we are gonna see if we neeed
-  const [verses, setVerses] = useState<BibleVerse[]>(datas);
 
+    const [verses, setVerses] = useState<Verse[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const ref = React.useRef<ICarouselInstance>(null);
     const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
@@ -144,6 +141,30 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       )
     );
   };
+  const API_URL = 'http://127.0.0.1:3000/verses/search?screen=his_will'; 
+
+  useEffect(() => {
+    debugger
+        const fetchVerses = async () => {
+        // setLoading(true);
+        // setError(null);
+        try {
+          const token = await AsyncStorage.getItem('token');
+          // debugger
+          const response = await axios.get(`${API_URL}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          debugger
+          // setVerses(response.data);
+        } catch (e) {
+          console.error('Fetch verses failed', e);
+          // setError('Failed to load verses. Please try again.');
+        } finally {
+          // setLoading(false);
+        }
+      };
+      fetchVerses();
+  })
 
   return (
     <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
