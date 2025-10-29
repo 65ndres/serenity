@@ -4,7 +4,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import React from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   TextStyle,
@@ -42,11 +41,11 @@ const Home: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <TouchableOpacity onPress={() => navigation.navigate('VerseModule')}>
+      <TouchableOpacity onPress={() => navigation.navigate('HisWillScreen')}>
         <Text style={styles.text}>His will</Text>
       </TouchableOpacity>
       <Separator />
-      <TouchableOpacity onPress={() => Alert.alert('Simple Button pressed')}>
+      <TouchableOpacity onPress={() => navigation.navigate('YourChoiceScreen')}>
         <Text style={styles.text}>Your choice</Text>
       </TouchableOpacity>
     </ScreenComponent>

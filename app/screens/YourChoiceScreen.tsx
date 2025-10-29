@@ -1,11 +1,11 @@
-import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 // import { Picker } from '@react-native-picker/picker';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ImageBackground, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
-import Carousel from 'react-native-reanimated-carousel';
+import VerseModule from '../VerseModule/VerseModule';
 // import { Dropdown } from 'react-native-element-dropdown';
   // import AntDesign from '@expo/vector-icons/AntDesign';
   // import { Picker } from '@react-native-picker/picker';a
@@ -19,7 +19,7 @@ import Carousel from 'react-native-reanimated-carousel';
     { label: 'Item 6', value: '6' },
     { label: 'Item 7', value: '7' },
     { label: 'Item 8', value: '8' },
-  ];
+  ]; // This can be store 
 
 
 interface BibleVerse {
@@ -137,21 +137,86 @@ interface VerseModuleProps {
   active: number;
 }
 
-// this shoulkd receive an filter object 
-// filter = {screen: "Liked", active: id}
-//{}
-
-/// Even better we are gonna have require q search prop and and optional 'active' which is gonna be
-// the first verse is gonna show when it renders
+const categories = {
+  "acceptance": "acceptance",
+  "adoption": "adoption",
+  "anxiety": "anxiety",
+  "assurance": "assurance",
+  "belief": "belief",
+  "blessings": "blessings",
+  "boldness": "boldness",
+  "change": "change",
+  "comfort": "comfort",
+  "confidence": "confidence",
+  "contentment": "contentment",
+  "courage": "courage",
+  "delight": "delight",
+  "deliverance": "deliverance",
+  "depression": "depression",
+  "encouragement": "encouragement",
+  "eternity": "eternity",
+  "faith": "faith",
+  "faithfulness": "faithfulness",
+  "fear": "fear",
+  "forgiveness": "forgiveness",
+  "freedom": "freedom",
+  "friendship": "friendship",
+  "generosity": "generosity",
+  "goodness": "goodness",
+  "grace": "grace",
+  "gratitude": "gratitude",
+  "grief": "grief",
+  "guidance": "guidance",
+  "guilt": "guilt",
+  "health": "health",
+  "honesty": "honesty",
+  "hope": "hope",
+  "humility": "humility",
+  "identity": "identity",
+  "inspiration": "inspiration",
+  "joy": "joy",
+  "kindness": "kindness",
+  "loneliness": "loneliness",
+  "love": "love",
+  "patience": "patience",
+  "peace": "peace",
+  "perseverance": "perseverance",
+  "praise": "praise",
+  "prayer": "prayer",
+  "protection": "protection",
+  "provision": "provision",
+  "purpose": "purpose",
+  "relationships": "relationships",
+  "reliability": "reliability",
+  "respect": "respect",
+  "restoration": "restoration",
+  "reward": "reward",
+  "safety": "safety",
+  "salvation": "salvation",
+  "satisfaction": "satisfaction",
+  "serving": "serving",
+  "strength": "strength",
+  "stress": "stress",
+  "support": "support",
+  "sustenance": "sustenance",
+  "trust": "trust",
+  "truth": "truth",
+  "understanding": "understanding",
+  "victory": "victory",
+  "weakness": "weakness",
+  "wisdom": "wisdom",
+  "worry": "worry"
+}
 
 const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   // here we are gonna see if we neeed
   const [verses, setVerses] = useState<BibleVerse[]>(datas);
 
-  const [selectedLanguage, setSelectedLanguage] = useState();
   const [value, setValue] = useState("Item 1");
  
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
+
+  const API_URL = 'http://127.0.0.1:3000/api/v1';
 
   const ref = React.useRef<ICarouselInstance>(null);
     const [loaded] = useFonts({
@@ -169,6 +234,22 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   const toggleVerseComponent = () => {
     setVerseComponentVisibility(!verseComponentVisibility)
   }
+
+    useEffect(() => {
+      // getVerses
+      const fetchVerses = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/verses/search?category=`);
+        debugger
+      } catch (e) {
+        console.error('Fetch verses failed', e);
+        // setError('Failed to load verses. Please try again.');
+      } finally {
+        // setLoading(false);
+      }
+    };
+    fetchVerses();
+    })
 
   return (
     <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
@@ -203,52 +284,8 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       </View>
       </View>
       <View style={{height: '60%'}}>
-      {verseComponentVisibility &&
-      
-        <Carousel
-        ref={ref}
-        width={width}
-        height={width}
-        data={verses}
-        loop={true}
-        autoPlay={false} // Set to true if you want auto-scrolling
-        
-        style={{ width: '100%' }}
-          renderItem={({ item, index }) => (
-            <View>
-              <ScrollView
-                style={{
-                    paddingHorizontal: 15,
-                    height: width - 200,
-                }}
-              >
-                <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
-
-              </ScrollView>
-              <View style={{display: "flex", alignItems: 'center', paddingTop: 40 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 20}}>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => toggleFavorite(index)}
-                    style={{ padding: 5}}
-                    accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
-                    accessibilityRole="button"
-                  >
-                    <AntDesign
-                      name={item.favorited ? 'heart' : 'hearto'}
-                      size={30}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          )}
-      />}</View>
+{verseComponentVisibility && <VerseModule data={[]} active={0}/>}
+</View>
     </View>
   </ImageBackground>);
   

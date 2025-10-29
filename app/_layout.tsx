@@ -111,7 +111,7 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{ drawerLabel: 'Liked Verses', headerTitle: () => <Text style={styles.text}>LIKED</Text> }}
       />
       <Drawer.Screen
-        name="Your Choice"
+        name="YourChoiceScreen"
         component={YourChoiceScreen}
         options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={styles.text}>Your Choice</Text> }}
       />

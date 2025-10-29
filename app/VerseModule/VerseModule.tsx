@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
 
@@ -120,15 +120,8 @@ interface VerseModuleProps {
   active: number;
 }
 
-// this shoulkd receive an filter object 
-// filter = {screen: "Liked", active: id}
-//{}
 
-/// Even better we are gonna have require q search prop and and optional 'active' which is gonna be
-// the first verse is gonna show when it renders
-
-
-const VerseModule: React.FC<VerseModuleProps> = ({ data, active }) => {
+const VerseModule: React.FC<VerseModuleProps> = () => {
   // here we are gonna see if we neeed
   const [verses, setVerses] = useState<BibleVerse[]>(datas);
 
@@ -146,7 +139,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active }) => {
   };
 
   return (
-    <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
       <View style={{flex: 1, justifyContent: 'center'}}>
       <Carousel
         ref={ref}
@@ -192,8 +184,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active }) => {
             </View>
           )}
       />
-    </View>
-  </ImageBackground>);
+    </View>);
   
 };
 
