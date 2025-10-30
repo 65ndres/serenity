@@ -163,16 +163,13 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       let pageNumber = response["data"]["pagination"]["page"];
 
       setVerses(verses);
-      setpageNumber(pageNumber);  // Safe now—no loop!
-
+      setpageNumber(pageNumber);
     } catch (e) {
       console.error('Fetch verses failed', e);  
     }
   };
 
 useEffect(() => {
-
-
   fetchVerses(category);  // Add this if it's missing!
 }, []); 
 
@@ -209,7 +206,7 @@ useEffect(() => {
       </View>
       </View>
       <View style={{height: '60%'}}>
-          {verseComponentVisibility && <VerseModule data={[]} active={0}/>}
+          {verseComponentVisibility && <VerseModule data={verses} url={`${API_URL}/verses/search?category=${category}`}active={0}/>}
       </View>
     </View>
   </ImageBackground>);

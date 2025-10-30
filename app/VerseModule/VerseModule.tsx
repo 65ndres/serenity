@@ -1,110 +1,9 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
-
-interface BibleVerse {
-  book: string;
-  chapter: number;
-  verse: number;
-  liked: boolean;
-  favorited: boolean;
-  text: string;
-}
-
-interface Props {
-  data: BibleVerse[];
-  width: number;
-  ref: React.RefObject<ICarouselInstance>;
-}
-
-
-const datas = [
-  {
-    book: "Proverbs",
-    chapter: 16,
-    verse: 3,
-    liked: false,
-    favorited: false,
-    text: "Commit to the Lord whatever you do, and he will establish your plans."
-  },
-  {
-    book: "Philippians",
-    chapter: 4,
-    verse: 13,
-    liked: false,
-    favorited: false,
-    text: "I can do all this through him who gives me strength."
-  },
-  {
-    book: "James",
-    chapter: 1,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you."
-  },
-  {
-    book: "Colossians",
-    chapter: 3,
-    verse: 23,
-    liked: false,
-    favorited: false,
-    text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
-  },
-  {
-    book: "Ecclesiastes",
-    chapter: 9,
-    verse: 10,
-    liked: false,
-    favorited: false,
-    text: "Whatever your hand finds to do, do it with all your might, for in the realm of the dead, where you are going, there is neither working nor planning nor knowledge nor wisdom."
-  },
-  {
-    book: "Proverbs",
-    chapter: 3,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "Trust in the Lord with all your heart and lean not on your own understanding."
-  },
-  {
-    book: "Galatians",
-    chapter: 6,
-    verse: 9,
-    liked: false,
-    favorited: false,
-    text: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."
-  },
-  {
-    book: "Matthew",
-    chapter: 7,
-    verse: 7,
-    liked: false,
-    favorited: false,
-    text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
-  },
-  {
-    book: "Psalm",
-    chapter: 90,
-    verse: 17,
-    liked: false,
-    favorited: false,
-    text: "May the favor of the Lord our God rest on us; establish the work of our hands for us—yes, establish the work of our hands."
-  },
-  {
-    book: "Romans",
-    chapter: 12,
-    verse: 2,
-    liked: false,
-    favorited: false,
-    text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will."
-  }
-];
-
-const width = Dimensions.get("window").width;
 
 interface Verse {
   book: string;
@@ -118,18 +17,26 @@ interface Verse {
 interface VerseModuleProps {
   data: Verse[];
   active: number;
+  url: string; // New prop: background image URL
 }
 
+const width = Dimensions.get("window").width;
 
-const VerseModule: React.FC<VerseModuleProps> = () => {
-  // here we are gonna see if we neeed
-  const [verses, setVerses] = useState<BibleVerse[]>(datas);
+const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
+  const [verses, setVerses] = useState<Verse[]>(
+    data.map((item) => ({
+      ...item,
+      liked: item.liked ?? false,
+      favorited: item.favorited ?? false,
+    }))
+  );
 
   const ref = React.useRef<ICarouselInstance>(null);
-    const [loaded] = useFonts({
+
+  const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
-  
+
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
       prev.map((verse, i) =>
@@ -139,82 +46,102 @@ const VerseModule: React.FC<VerseModuleProps> = () => {
   };
 
   return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
-      <Carousel
-        ref={ref}
-        width={width}
-        height={width}
-        data={verses}
-        loop={true}
-        autoPlay={false} // Set to true if you want auto-scrolling
-        
-        style={{ width: '100%' }}
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={{ uri: url }}
+        style={{ flex: 1 }}
+        resizeMode="cover"
+      >
+        {/* Optional overlay for better text readability */}
+        <View  />
+
+        <Carousel
+          ref={ref}
+          width={width}
+          height={width}
+          data={verses}
+          loop={true}
+          autoPlay={false}
+          defaultIndex={active}
+          style={{ width: '100%' }}
           renderItem={({ item, index }) => (
-            <View>
+            <View style={styles.card}>
               <ScrollView
                 style={{
-                    paddingHorizontal: 15,
-                    height: width - 200,
+                  paddingHorizontal: 20,
+                  flex: 1,
                 }}
+                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
               >
-                <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
-
+                <Text style={styles.verseText}>{`"${item.text}"`}</Text>
               </ScrollView>
-              <View style={{display: "flex", alignItems: 'center', paddingTop: 40 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 20}}>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
+
+              <View style={styles.footer}>
+                <View style={styles.reference}>
+                  <Text style={styles.bookText}>{item.book}</Text>
+                  <Text style={styles.chapterVerseText}>
+                    {item.chapter}:{item.verse}
+                  </Text>
                 </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => toggleFavorite(index)}
-                    style={{ padding: 5}}
-                    accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
-                    accessibilityRole="button"
-                  >
-                    <AntDesign
-                      name={item.favorited ? 'heart' : 'hearto'}
-                      size={30}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </View>
+
+                <TouchableOpacity
+                  onPress={() => toggleFavorite(index)}
+                  style={styles.favoriteButton}
+                  accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
+                  accessibilityRole="button"
+                >
+                  <AntDesign
+                    name={item.favorited ? 'heart' : 'hearto'}
+                    size={28}
+                    color={item.favorited ? '#ff6b6b' : 'white'}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           )}
-      />
-    </View>);
-  
+        />
+      </ImageBackground>
+    </View>
+  );
 };
 
 export default VerseModule;
 
-
-
 const styles = StyleSheet.create({
-  container: {
+
+  card: {
     flex: 1,
+    padding: 20,
+    justifyContent: 'space-between',
   },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 44,
-    lineHeight: 84,
-    fontWeight: 'light',
+  verseText: {
     textAlign: 'center',
+    fontSize: 28,
+    color: 'white',
+    fontWeight: '300',
+    lineHeight: 38,
   },
-  separator: {
-    marginVertical: 8,
-    width:"80%",
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  reference: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  bookText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: '600',
+    marginRight: 4,
+  },
+  chapterVerseText: {
+    fontSize: 18,
+    color: 'white',
+  },
+  favoriteButton: {
+    padding: 8,
   },
 });
-
-
