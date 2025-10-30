@@ -38,88 +38,6 @@ interface Props {
 }
 
 
-const datas = [
-  {
-    book: "Proverbs",
-    chapter: 16,
-    verse: 3,
-    liked: false,
-    favorited: false,
-    text: "Commit to the Lord whatever you do, and he will establish your plans."
-  },
-  {
-    book: "Philippians",
-    chapter: 4,
-    verse: 13,
-    liked: false,
-    favorited: false,
-    text: "I can do all this through him who gives me strength."
-  },
-  {
-    book: "James",
-    chapter: 1,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you."
-  },
-  {
-    book: "Colossians",
-    chapter: 3,
-    verse: 23,
-    liked: false,
-    favorited: false,
-    text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
-  },
-  {
-    book: "Ecclesiastes",
-    chapter: 9,
-    verse: 10,
-    liked: false,
-    favorited: false,
-    text: "Whatever your hand finds to do, do it with all your might, for in the realm of the dead, where you are going, there is neither working nor planning nor knowledge nor wisdom."
-  },
-  {
-    book: "Proverbs",
-    chapter: 3,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "Trust in the Lord with all your heart and lean not on your own understanding."
-  },
-  {
-    book: "Galatians",
-    chapter: 6,
-    verse: 9,
-    liked: false,
-    favorited: false,
-    text: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."
-  },
-  {
-    book: "Matthew",
-    chapter: 7,
-    verse: 7,
-    liked: false,
-    favorited: false,
-    text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
-  },
-  {
-    book: "Psalm",
-    chapter: 90,
-    verse: 17,
-    liked: false,
-    favorited: false,
-    text: "May the favor of the Lord our God rest on us; establish the work of our hands for us—yes, establish the work of our hands."
-  },
-  {
-    book: "Romans",
-    chapter: 12,
-    verse: 2,
-    liked: false,
-    favorited: false,
-    text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will."
-  }
-];
 
 const width = Dimensions.get("window").width;
 
@@ -137,84 +55,86 @@ interface VerseModuleProps {
   active: number;
 }
 
-const categories = {
-  "acceptance": "acceptance",
-  "adoption": "adoption",
-  "anxiety": "anxiety",
-  "assurance": "assurance",
-  "belief": "belief",
-  "blessings": "blessings",
-  "boldness": "boldness",
-  "change": "change",
-  "comfort": "comfort",
-  "confidence": "confidence",
-  "contentment": "contentment",
-  "courage": "courage",
-  "delight": "delight",
-  "deliverance": "deliverance",
-  "depression": "depression",
-  "encouragement": "encouragement",
-  "eternity": "eternity",
-  "faith": "faith",
-  "faithfulness": "faithfulness",
-  "fear": "fear",
-  "forgiveness": "forgiveness",
-  "freedom": "freedom",
-  "friendship": "friendship",
-  "generosity": "generosity",
-  "goodness": "goodness",
-  "grace": "grace",
-  "gratitude": "gratitude",
-  "grief": "grief",
-  "guidance": "guidance",
-  "guilt": "guilt",
-  "health": "health",
-  "honesty": "honesty",
-  "hope": "hope",
-  "humility": "humility",
-  "identity": "identity",
-  "inspiration": "inspiration",
-  "joy": "joy",
-  "kindness": "kindness",
-  "loneliness": "loneliness",
-  "love": "love",
-  "patience": "patience",
-  "peace": "peace",
-  "perseverance": "perseverance",
-  "praise": "praise",
-  "prayer": "prayer",
-  "protection": "protection",
-  "provision": "provision",
-  "purpose": "purpose",
-  "relationships": "relationships",
-  "reliability": "reliability",
-  "respect": "respect",
-  "restoration": "restoration",
-  "reward": "reward",
-  "safety": "safety",
-  "salvation": "salvation",
-  "satisfaction": "satisfaction",
-  "serving": "serving",
-  "strength": "strength",
-  "stress": "stress",
-  "support": "support",
-  "sustenance": "sustenance",
-  "trust": "trust",
-  "truth": "truth",
-  "understanding": "understanding",
-  "victory": "victory",
-  "weakness": "weakness",
-  "wisdom": "wisdom",
-  "worry": "worry"
-}
+const categoriesToList = [
+  { label: 'acceptance', value: 'acceptance' },
+  { label: 'adoption', value: 'adoption' },
+  { label: 'anxiety', value: 'anxiety' },
+  { label: 'assurance', value: 'assurance' },
+  { label: 'belief', value: 'belief' },
+  { label: 'blessings', value: 'blessings' },
+  { label: 'boldness', value: 'boldness' },
+  { label: 'change', value: 'change' },
+  { label: 'comfort', value: 'comfort' },
+  { label: 'confidence', value: 'confidence' },
+  { label: 'contentment', value: 'contentment' },
+  { label: 'courage', value: 'courage' },
+  { label: 'delight', value: 'delight' },
+  { label: 'deliverance', value: 'deliverance' },
+  { label: 'depression', value: 'depression' },
+  { label: 'encouragement', value: 'encouragement' },
+  { label: 'eternity', value: 'eternity' },
+  { label: 'faith', value: 'faith' },
+  { label: 'faithfulness', value: 'faithfulness' },
+  { label: 'fear', value: 'fear' },
+  { label: 'forgiveness', value: 'forgiveness' },
+  { label: 'freedom', value: 'freedom' },
+  { label: 'friendship', value: 'friendship' },
+  { label: 'generosity', value: 'generosity' },
+  { label: 'goodness', value: 'goodness' },
+  { label: 'grace', value: 'grace' },
+  { label: 'gratitude', value: 'gratitude' },
+  { label: 'grief', value: 'grief' },
+  { label: 'guidance', value: 'guidance' },
+  { label: 'guilt', value: 'guilt' },
+  { label: 'health', value: 'health' },
+  { label: 'honesty', value: 'honesty' },
+  { label: 'hope', value: 'hope' },
+  { label: 'humility', value: 'humility' },
+  { label: 'identity', value: 'identity' },
+  { label: 'inspiration', value: 'inspiration' },
+  { label: 'joy', value: 'joy' },
+  { label: 'kindness', value: 'kindness' },
+  { label: 'loneliness', value: 'loneliness' },
+  { label: 'love', value: 'love' },
+  { label: 'patience', value: 'patience' },
+  { label: 'peace', value: 'peace' },
+  { label: 'perseverance', value: 'perseverance' },
+  { label: 'praise', value: 'praise' },
+  { label: 'prayer', value: 'prayer' },
+  { label: 'protection', value: 'protection' },
+  { label: 'provision', value: 'provision' },
+  { label: 'purpose', value: 'purpose' },
+  { label: 'relationships', value: 'relationships' },
+  { label: 'reliability', value: 'reliability' },
+  { label: 'respect', value: 'respect' },
+  { label: 'restoration', value: 'restoration' },
+  { label: 'reward', value: 'reward' },
+  { label: 'safety', value: 'safety' },
+  { label: 'salvation', value: 'salvation' },
+  { label: 'satisfaction', value: 'satisfaction' },
+  { label: 'serving', value: 'serving' },
+  { label: 'strength', value: 'strength' },
+  { label: 'stress', value: 'stress' },
+  { label: 'support', value: 'support' },
+  { label: 'sustenance', value: 'sustenance' },
+  { label: 'trust', value: 'trust' },
+  { label: 'truth', value: 'truth' },
+  { label: 'understanding', value: 'understanding' },
+  { label: 'victory', value: 'victory' },
+  { label: 'weakness', value: 'weakness' },
+  { label: 'wisdom', value: 'wisdom' },
+  { label: 'worry', value: 'worry' }
+];
 
 const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   // here we are gonna see if we neeed
-  const [verses, setVerses] = useState<BibleVerse[]>(datas);
-
-  const [value, setValue] = useState("Item 1");
+  const [verses, setVerses] = useState<BibleVerse[]>([]);
+  const [categories, setCategories] = useState(categoriesToList);
+  const category = categories[0]["label"]
  
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
+
+  const [pageNumber, setpageNumber] = useState("1");
 
   const API_URL = 'http://127.0.0.1:3000/api/v1';
 
@@ -235,21 +155,26 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
     setVerseComponentVisibility(!verseComponentVisibility)
   }
 
-    useEffect(() => {
-      // getVerses
-      const fetchVerses = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/verses/search?category=`);
-        debugger
-      } catch (e) {
-        console.error('Fetch verses failed', e);
-        // setError('Failed to load verses. Please try again.');
-      } finally {
-        // setLoading(false);
-      }
-    };
-    fetchVerses();
-    })
+  const fetchVerses = async (category: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/verses/search?category=${category}`);
+
+      let verses = response["data"]["verses"];
+      let pageNumber = response["data"]["pagination"]["page"];
+
+      setVerses(verses);
+      setpageNumber(pageNumber);  // Safe now—no loop!
+
+    } catch (e) {
+      console.error('Fetch verses failed', e);  
+    }
+  };
+
+useEffect(() => {
+
+
+  fetchVerses(category);  // Add this if it's missing!
+}, []); 
 
   return (
     <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
@@ -264,7 +189,7 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           itemTextStyle={{color: 'white', textAlign: 'center', fontSize: 20}}
-          data={datos}
+          data={categories}
           maxHeight={300}
           autoScroll={false}
           activeColor="transparent"
@@ -276,16 +201,16 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
           onFocus={toggleVerseComponent}
           onBlur={toggleVerseComponent}
           iconColor={'transparent'}
-          value={value}
+          value={category}
           onChange={item => {
-            setValue(item.value);
+            fetchVerses(item.value);
           }}
         /> 
       </View>
       </View>
       <View style={{height: '60%'}}>
-{verseComponentVisibility && <VerseModule data={[]} active={0}/>}
-</View>
+          {verseComponentVisibility && <VerseModule data={[]} active={0}/>}
+      </View>
     </View>
   </ImageBackground>);
   
