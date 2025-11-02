@@ -30,7 +30,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       favorited: item.favorited ?? false,
     }))
   );
-
+debugger
   const ref = React.useRef<ICarouselInstance>(null);
 
   const [loaded] = useFonts({
@@ -73,7 +73,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                 }}
                 contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
               >
-                <Text style={styles.verseText}>{`"${item.text}"`}</Text>
+                <Text style={styles.verseText}>{`${item.text}`}</Text>
               </ScrollView>
 
               <View style={styles.footer}>

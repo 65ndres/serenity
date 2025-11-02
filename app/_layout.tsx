@@ -113,13 +113,13 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="YourChoiceScreen"
         component={YourChoiceScreen}
-        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={styles.text}>Your Choice</Text> }}
+        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={styles.text}></Text> }}
       />
 
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
-        options={{ drawerLabel: 'Profile', headerTitle: () => <Text style={styles.text}>Profile</Text> }}
+        options={{ drawerLabel: 'Profile', headerTitle: () => <Text style={styles.text}></Text> }}
       />
     </Drawer.Navigator>
   );
