@@ -1,6 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
@@ -11,7 +13,7 @@ interface Verse {
   verse: number;
   text: string;
   liked?: boolean;
-  favorited?: boolean;
+  ['favorited']?: boolean;
 }
 
 interface VerseModuleProps {
@@ -23,14 +25,22 @@ interface VerseModuleProps {
 const width = Dimensions.get("window").width;
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
-  const [verses, setVerses] = useState<Verse[]>(
-    data.map((item) => ({
-      ...item,
-      liked: item.liked ?? false,
-      favorited: item.favorited ?? false,
-    }))
-  );
-debugger
+
+  // if url is empty then show an empty message
+
+  // const [ fetchUrl, setFetchUrl] = useState(url)
+  const [verses, setVerses] = useState([])
+  const [fetchUrl, setFetchUrl] = useState(url)
+
+
+  // const [verses, setVerses] = useState<Verse[]>(
+  //   data.map((item) => ({
+  //     ...item,
+  //     liked: item.liked ?? false,
+  //     ['favorited']: item.['favorited'] ?? false,
+  //   }))
+  // );
+// debugger
   const ref = React.useRef<ICarouselInstance>(null);
 
   const [loaded] = useFonts({
@@ -38,23 +48,51 @@ debugger
   });
 
   const toggleFavorite = (index: number) => {
-    setVerses((prev) =>
-      prev.map((verse, i) =>
-        i === index ? { ...verse, favorited: !verse.favorited } : verse
-      )
-    );
+    // setVerses((prev) =>
+    //   prev.map((verse, i) =>
+    //     i === index ? { ...verse, ['favorited']: !verse.['favorited'] } : verse
+    //   )
+    // );
   };
+
+  const fetchVerses = async () => {
+    debugger
+    // if(fetchUrl.length > 0 ){
+    // try {
+      
+      const token = await AsyncStorage.getItem('token');
+      
+      const response = await axios.get("http://127.0.0.1:3000/api/v1/verses/search?category", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      debugger 
+      // setVerses(response["data"]["verses"])
+    // } catch (e) {
+    //   // debugger
+    //   console.error('Fetch verses failed', e);  
+    // }
+    // }else{
+    //   // setVerses([])
+    // }
+
+  };
+
+  // useEffect
+  useEffect(() => {
+    fetchVerses();
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={{ uri: url }}
+        source={require('../../assets/images/bg.jpg')}
         style={{ flex: 1 }}
         resizeMode="cover"
       >
         {/* Optional overlay for better text readability */}
         <View  />
-
+        {/* conditional display of instructions if verses is empty */}
+ {verses.length > 0 &&
         <Carousel
           ref={ref}
           width={width}
@@ -73,33 +111,34 @@ debugger
                 }}
                 contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
               >
-                <Text style={styles.verseText}>{`${item.text}`}</Text>
+                <Text style={styles.verseText}>{`${item['text']}`}</Text>
               </ScrollView>
 
               <View style={styles.footer}>
                 <View style={styles.reference}>
-                  <Text style={styles.bookText}>{item.book}</Text>
+                  <Text style={styles.bookText}>{item['book']}</Text>
                   <Text style={styles.chapterVerseText}>
-                    {item.chapter}:{item.verse}
+                    {item["chapter"]}:{item["verse"]}
                   </Text>
                 </View>
 
                 <TouchableOpacity
                   onPress={() => toggleFavorite(index)}
                   style={styles.favoriteButton}
-                  accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
+                  accessibilityLabel={item['favorited'] ? 'Unfavorite verse' : 'Favorite verse'}
                   accessibilityRole="button"
                 >
                   <AntDesign
-                    name={item.favorited ? 'heart' : 'hearto'}
+                    name={item['favorited'] ? 'heart' : 'hearto'}
                     size={28}
-                    color={item.favorited ? '#ff6b6b' : 'white'}
+                    color={item['favorited'] ? '#ff6b6b' : 'white'}
                   />
                 </TouchableOpacity>
               </View>
             </View>
           )}
         />
+}
       </ImageBackground>
     </View>
   );

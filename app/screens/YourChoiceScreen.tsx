@@ -2,10 +2,10 @@ import axios from 'axios';
 // import { Picker } from '@react-native-picker/picker';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Dimensions, ImageBackground, StyleSheet, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
-import VerseModule from '../VerseModule/VerseModule';
+import ScreenComponent from '../sharedComponents/ScreenComponent';
+import YourChoiceContent from '../sharedComponents/YourChoiceContent';
 // import { Dropdown } from 'react-native-element-dropdown';
   // import AntDesign from '@expo/vector-icons/AntDesign';
   // import { Picker } from '@react-native-picker/picker';a
@@ -134,28 +134,16 @@ const categoriesToList = [
   { label: 'Courage', value: 'Courage' },
 ]
 
-// anxiety_tag = Tag.find_or_create_by(name: 'Anxiety')
-// acceptance_tag = Tag.find_or_create_by(name: 'Acceptance')
-// belief_tag = Tag.find_or_create_by(name: 'Belief')
-// blessings_tag = Tag.find_or_create_by(name: 'Blessings')
-// confidence_tag = Tag.find_or_create_by(name: 'Confidence')
-// courage_tag = Tag.find_or_create_by(name: 'Courage')
 const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   // here we are gonna see if we neeed
   const [verses, setVerses] = useState<BibleVerse[]>([]);
-  const [categories, setCategories] = useState(categoriesToList);
-  // category should useSTate
-  // const categoryS
-// 
-  // let selecteed = category ? category : categories[0]["label"]
-
-  
+  // const [categories, setCategories] = useState(categoriesToList);
 //  this gets tag one we click bc Im changing the state so it rerenders
 // Bc Im changing the state to hide or show the verse component
 
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
 
-  const [pageNumber, setpageNumber] = useState("1");
+  // const [pageNumber, setpageNumber] = useState("1");
 
   const API_URL = 'http://127.0.0.1:3000/api/v1';
 
@@ -183,50 +171,62 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       let verses = response["data"]["verses"];
       let pageNumber = response["data"]["pagination"]["page"];
 
-      setVerses(verses);
-      setpageNumber(pageNumber);  // Safe now—no loop!
-
     } catch (e) {
       console.error('Fetch verses failed', e);  
     }
   };
 
   return (
-    <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
-      <View style={{height: '20%'}}>
+    // with the values taht we got from the response pass them the component, Dropdown and VerverMuduel
+  //   <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
+  //     <View style={{flex: 1, justifyContent: 'center'}}>
+  //     <View style={{height: '20%'}}>
         
-        <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
-        <Dropdown
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          itemTextStyle={{color: 'white', textAlign: 'center', fontSize: 20}}
-          data={categories}
-          maxHeight={300}
-          autoScroll={false}
-          activeColor="transparent"
-          labelField="label"
-          valueField="value"
-          placeholder="Select item"
-          searchPlaceholder="Search..."
-          containerStyle={styles.containerss}
-          // onFocus={toggleVerseComponent}
-          // onBlur={toggleVerseComponent}
-          iconColor={'transparent'}
-          onChange={item => {
-            fetchVerses(item.value);
-          }}
-        /> 
-      </View>
-      </View>
-      <View style={{height: '60%'}}>
-          {verseComponentVisibility && <VerseModule data={verses} url={"sinevt"} active={0}/>}
-      </View>
-    </View>
-  </ImageBackground>);
+  //       <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
+  //       <Dropdown
+  //         style={styles.dropdown}
+  //         placeholderStyle={styles.placeholderStyle}
+  //         selectedTextStyle={styles.selectedTextStyle}
+  //         inputSearchStyle={styles.inputSearchStyle}
+  //         iconStyle={styles.iconStyle}
+  //         itemTextStyle={{color: 'white', textAlign: 'center', fontSize: 20}}
+  //         data={categories}
+  //         maxHeight={300}
+  //         autoScroll={false}
+  //         activeColor="transparent"
+  //         labelField="label"
+  //         valueField="value"
+  //         placeholder="Select item"
+  //         searchPlaceholder="Search..."
+  //         containerStyle={styles.containerss}
+  //         // onFocus={toggleVerseComponent}
+  //         // onBlur={toggleVerseComponent}
+  //         iconColor={'transparent'}
+  //         onChange={item => {
+  //           fetchVerses(item.value);
+  //         }}
+  //       /> 
+  //     </View>
+  //     </View>
+  //     <View style={{height: '60%'}}>
+  //         {verseComponentVisibility && <VerseModule data={verses} url={"sinevt"} active={0}/>}
+  //     </View>
+  //   </View>
+  // </ImageBackground>
+  <ScreenComponent>
+   <View style={{flex: 1, justifyContent: 'center'}}>
+  <View style={{height: '20%'}}>
+        
+       <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
+        <YourChoiceContent></YourChoiceContent>
+        </View>
+        </View>
+
+  </View>
+    
+  </ScreenComponent>
+  
+);
   
 };
 
