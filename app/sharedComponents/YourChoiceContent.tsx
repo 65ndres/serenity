@@ -21,6 +21,7 @@ const YourChoiceContent: React.FC = () => {
   // const [categories, setCategories] = useState(categoriesToList);
   // const [verses, setVerses] = useState([])
   const [url, setUrl] = useState("")
+  // debugger
 
 
   const updateUrl = (category: string) => {

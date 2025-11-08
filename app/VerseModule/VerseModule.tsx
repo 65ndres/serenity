@@ -25,22 +25,13 @@ interface VerseModuleProps {
 const width = Dimensions.get("window").width;
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
-
+  debugger
   // if url is empty then show an empty message
 
   // const [ fetchUrl, setFetchUrl] = useState(url)
   const [verses, setVerses] = useState([])
   const [fetchUrl, setFetchUrl] = useState(url)
 
-
-  // const [verses, setVerses] = useState<Verse[]>(
-  //   data.map((item) => ({
-  //     ...item,
-  //     liked: item.liked ?? false,
-  //     ['favorited']: item.['favorited'] ?? false,
-  //   }))
-  // );
-// debugger
   const ref = React.useRef<ICarouselInstance>(null);
 
   const [loaded] = useFonts({
@@ -58,29 +49,33 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const fetchVerses = async () => {
     debugger
     // if(fetchUrl.length > 0 ){
-    // try {
+    try {
       
       const token = await AsyncStorage.getItem('token');
       
-      const response = await axios.get("http://127.0.0.1:3000/api/v1/verses/search?category", {
+       const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
+
+      const response = await axios.get(url2, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      debugger 
-      // setVerses(response["data"]["verses"])
-    // } catch (e) {
-    //   // debugger
-    //   console.error('Fetch verses failed', e);  
-    // }
+      // debugger 
+      setVerses(response["data"]["verses"])
+      
+    } catch (e) {
+      // debugger
+      console.error('Fetch verses failed', e);  
+    }
     // }else{
     //   // setVerses([])
     // }
 
   };
 
-  // useEffect
-  useEffect(() => {
-    fetchVerses();
-  }, [])
+  // useEffect maybe this is not getin gtrri
+useEffect(() => {
+  debugger
+  fetchVerses();
+}, [url]);  // Add url as a dependency
 
   return (
     <View style={{ flex: 1 }}>
@@ -92,7 +87,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
         {/* Optional overlay for better text readability */}
         <View  />
         {/* conditional display of instructions if verses is empty */}
- {verses.length > 0 &&
+
         <Carousel
           ref={ref}
           width={width}
@@ -138,7 +133,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             </View>
           )}
         />
-}
+
       </ImageBackground>
     </View>
   );
