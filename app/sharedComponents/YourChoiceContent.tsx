@@ -20,6 +20,7 @@ const YourChoiceContent: React.FC = () => {
   const API_URL = 'http://127.0.0.1:3000/api/v1';
   // const [categories, setCategories] = useState(categoriesToList);
   // const [verses, setVerses] = useState([])
+  const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
   const [url, setUrl] = useState("")
   // debugger
 
@@ -42,8 +43,13 @@ const YourChoiceContent: React.FC = () => {
     // debugger
   };
 
+  const toggleVerseComponent = () => {
+    setVerseComponentVisibility(!verseComponentVisibility)
+  }
+
   return (
-        <><Dropdown
+    <>
+      <Dropdown
       style={styles.dropdown}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
@@ -59,15 +65,15 @@ const YourChoiceContent: React.FC = () => {
       placeholder="Select item"
       searchPlaceholder="Search..."
       containerStyle={styles.containerss}
-      // onFocus={toggleVerseComponent}
-      // onBlur={toggleVerseComponent}
+      onFocus={toggleVerseComponent}
+      onBlur={toggleVerseComponent}
       iconColor={'transparent'}
       onChange={item => {
         updateUrl(item.value);
       } } />
 
-        <VerseModule data={[]} active={4} url={url} />
-      </>
+        {verseComponentVisibility && <VerseModule data={[]} active={4} url={url} />}
+    </>
         // I guess we could call it here and ..... pass the state
   );
 };

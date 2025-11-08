@@ -1,9 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { useFonts } from 'expo-font'; // Remove if not using custom fonts
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
 
@@ -27,10 +26,6 @@ const width = Dimensions.get("window").width;
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
   const ref = React.useRef<ICarouselInstance>(null);
-
-  const [loaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
-  }); // Remove if not applying the font
 
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
@@ -70,11 +65,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground
-        source={require('../../assets/images/bg.jpg')}
-        style={{ flex: 1 }}
-        resizeMode="cover"
-      >
         {verses.length === 0 ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 20 }}>No verses available</Text>
@@ -82,13 +72,13 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
         ) : (
           <Carousel
             ref={ref}
-            width={width}
+            width={width - 80} // is 80 to offset the 40 of each side on the screencomponent
             height={width}
             data={verses}
             loop={true}
             autoPlay={false}
             defaultIndex={safeIndex} // Use clamped index
-            style={{ width: '100%' }}
+            // style={{ width: '100%' }}
             renderItem={({ item, index }) => (
               <View style={styles.card}>
                 <ScrollView
@@ -126,7 +116,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             )}
           />
         )}
-      </ImageBackground>
     </View>
   );
 };
@@ -141,7 +130,7 @@ const styles = StyleSheet.create({
 
   card: {
     flex: 1,
-    padding: 20,
+    // padding: 20,
     justifyContent: 'space-between',
   },
   verseText: {

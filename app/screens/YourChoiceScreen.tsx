@@ -214,13 +214,13 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   //   </View>
   // </ImageBackground>
   <ScreenComponent>
-   <View style={{flex: 1, justifyContent: 'center'}}>
-  <View style={{height: '20%'}}>
+   {/* <View style={{flex: 1, justifyContent: 'center'}}> */}
+  <View style={{height: '80%'}}>
         
-       <View style={{display: 'flex', justifyContent: 'center', height: "100%"}}>
+       <View style={{}}>
         <YourChoiceContent></YourChoiceContent>
         </View>
-        </View>
+        {/* </View> */}
 
   </View>
     
