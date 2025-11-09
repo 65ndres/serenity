@@ -37,39 +37,55 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   };
 
   const fetchVerses = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
-      const response = await axios.get(url2, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setVerses(response.data.verses);
-    } catch (e) {
-      console.error('Fetch verses failed', e);
-    }
+    // maybe here we can do this
+    // if (url.length > 0){
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
+        const response = await axios.get(url2, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setVerses(response.data.verses);
+      } catch (e) {
+        console.error('Fetch verses failed', e);
+      }
+    // } else {
+      // setVerses({}); this might not work bc the 
+      // other options would be to hide the Carrousel and just  
+    
+    // }
+    // debugger
+
   };
 
   useEffect(() => {
     fetchVerses();
-  }, [url]); // Refetch on url change
+  }, [url])
 
-  // Clamp active to a safe index (handles cases where active > new verses.length - 1)
   const safeIndex = verses.length > 0 ? Math.max(0, Math.min(active, verses.length - 1)) : 0;
 
-  // Optional: After verses update, scroll to safe index if needed (for updates, not mounts)
   useEffect(() => {
     if (ref.current && verses.length > 0) {
       ref.current.scrollTo({ index: safeIndex, animated: false });
     }
-  }, [verses, safeIndex]);
+  }, [verses, safeIndex, url]);
 
   return (
-    <View style={{ flex: 1 }}>
-        {verses.length === 0 ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 20 }}>No verses available</Text>
+    
+    <View>
+        {url.length === 0 ? (
+          <View >
+            <ScrollView>
+            <Text style={{ color: 'blue', fontSize: 60 }}>
+              No verses available
+              No verses available
+              No verses available
+              
+            </Text>
+            </ScrollView>
           </View>
         ) : (
+          <View style={{ flex: 1 }}>
           <Carousel
             ref={ref}
             width={width - 80} // is 80 to offset the 40 of each side on the screencomponent
@@ -115,6 +131,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
               </View>
             )}
           />
+          </View>
         )}
     </View>
   );
