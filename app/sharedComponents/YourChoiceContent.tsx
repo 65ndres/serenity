@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
       marginRight: 5,
     },
     placeholderStyle: {
-      fontSize: 16,
+      fontSize: 20,
+      color: 'white',
+      textAlign: 'center'
     },
     selectedTextStyle: {
       fontSize: 25,

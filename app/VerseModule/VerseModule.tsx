@@ -25,6 +25,9 @@ const width = Dimensions.get("window").width;
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
+  const [pagination, setPagination] = useState(1)
+  const [loadMore, setLoadMore] = useState(true)
+
   const ref = React.useRef<ICarouselInstance>(null);
 
   const toggleFavorite = (index: number) => {
@@ -37,8 +40,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   };
 
   const fetchVerses = async () => {
-    // maybe here we can do this
-    // if (url.length > 0){
+    if (url.length > 0){
       try {
         const token = await AsyncStorage.getItem('token');
         const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
@@ -49,13 +51,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       } catch (e) {
         console.error('Fetch verses failed', e);
       }
-    // } else {
-      // setVerses({}); this might not work bc the 
-      // other options would be to hide the Carrousel and just  
-    
-    // }
-    // debugger
-
+    }
   };
 
   useEffect(() => {
@@ -70,20 +66,30 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     }
   }, [verses, safeIndex, url]);
 
+
+  const onChange = (index: any) => {
+    // debugger
+    // conos
+    if((verses.length - index) === 1){ // in three or less left then make the call 
+      console.log("Wogooo")
+    }
+    console.log(verses.length - index)
+  }
+
   return (
     
     <View>
         {url.length === 0 ? (
-          <View >
-            <ScrollView>
-            <Text style={{ color: 'blue', fontSize: 60 }}>
-              No verses available
-              No verses available
-              No verses available
-              
-            </Text>
-            </ScrollView>
-          </View>
+          <View style={{ flex: 1, display: 'flex' }}>
+            <View style={{width: (width - 80), height: width}}>
+              <View style={{display: 'flex', alignItems: 'flex-end'}}>
+
+                  <Text style={{ color: 'white', fontSize: 20, alignSelf: 'center' }}>
+                    Choose a catergory from above
+                  </Text>
+              </View>
+            </View>
+        </View>
         ) : (
           <View style={{ flex: 1 }}>
           <Carousel
@@ -93,6 +99,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             data={verses}
             loop={true}
             autoPlay={false}
+            onScrollEnd={onChange}
             defaultIndex={safeIndex} // Use clamped index
             // style={{ width: '100%' }}
             renderItem={({ item, index }) => (
