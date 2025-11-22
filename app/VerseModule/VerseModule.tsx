@@ -27,6 +27,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
   const [pagination, setPagination] = useState(1)
   const [loadMore, setLoadMore] = useState(true)
+  const [originUrl, setOriginUrl] = useState(url)
 
   const ref = React.useRef<ICarouselInstance>(null);
 
@@ -39,14 +40,18 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     // TODO: Persist via API or AsyncStorage if needed
   };
 
-  const fetchVerses = async () => {
-    if (url.length > 0){
+  const fetchVerses = async (fetchUrl: string, page: number) => {
+    // cound this be updated to get the url 
+    debugger
+    if (fetchUrl.length > 0){
       try {
         const token = await AsyncStorage.getItem('token');
         const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
         const response = await axios.get(url2, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        // I have to find a way to debugger
+        debugger
         setVerses(response.data.verses);
       } catch (e) {
         console.error('Fetch verses failed', e);
@@ -55,7 +60,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   };
 
   useEffect(() => {
-    fetchVerses();
+    fetchVerses(url, 1);
   }, [url])
 
   const safeIndex = verses.length > 0 ? Math.max(0, Math.min(active, verses.length - 1)) : 0;
@@ -70,8 +75,8 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const onChange = (index: any) => {
     // debugger
     // conos
-    if((verses.length - index) === 1){ // in three or less left then make the call 
-      console.log("Wogooo")
+    if((verses.length - index) === 2){ // in three or less left then make the call 
+      fetchVerses
     }
     console.log(verses.length - index)
   }

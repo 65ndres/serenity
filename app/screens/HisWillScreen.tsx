@@ -1,11 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { useFonts } from 'expo-font';
-import React, { useEffect, useState } from 'react';
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
-import Carousel from 'react-native-reanimated-carousel';
+import VerseModule from '../VerseModule/VerseModule';
+import ScreenComponent from '../sharedComponents/ScreenComponent';
 
 interface BibleVerse {
   book: string;
@@ -21,90 +18,6 @@ interface Props {
   width: number;
   ref: React.RefObject<ICarouselInstance>;
 }
-
-
-const datas = [
-  {
-    book: "Proverbs",
-    chapter: 16,
-    verse: 3,
-    liked: false,
-    favorited: false,
-    text: "Commit to the Lord whatever you do, and he will establish your plans."
-  },
-  {
-    book: "Philippians",
-    chapter: 4,
-    verse: 13,
-    liked: false,
-    favorited: false,
-    text: "I can do all this through him who gives me strength."
-  },
-  {
-    book: "James",
-    chapter: 1,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you."
-  },
-  {
-    book: "Colossians",
-    chapter: 3,
-    verse: 23,
-    liked: false,
-    favorited: false,
-    text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
-  },
-  {
-    book: "Ecclesiastes",
-    chapter: 9,
-    verse: 10,
-    liked: false,
-    favorited: false,
-    text: "Whatever your hand finds to do, do it with all your might, for in the realm of the dead, where you are going, there is neither working nor planning nor knowledge nor wisdom."
-  },
-  {
-    book: "Proverbs",
-    chapter: 3,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "Trust in the Lord with all your heart and lean not on your own understanding."
-  },
-  {
-    book: "Galatians",
-    chapter: 6,
-    verse: 9,
-    liked: false,
-    favorited: false,
-    text: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."
-  },
-  {
-    book: "Matthew",
-    chapter: 7,
-    verse: 7,
-    liked: false,
-    favorited: false,
-    text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
-  },
-  {
-    book: "Psalm",
-    chapter: 90,
-    verse: 17,
-    liked: false,
-    favorited: false,
-    text: "May the favor of the Lord our God rest on us; establish the work of our hands for us—yes, establish the work of our hands."
-  },
-  {
-    book: "Romans",
-    chapter: 12,
-    verse: 2,
-    liked: false,
-    favorited: false,
-    text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will."
-  }
-];
 
 const width = Dimensions.get("window").width;
 
@@ -124,15 +37,8 @@ interface VerseModuleProps {
 
 
 const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
-  // here we are gonna see if we neeed
 
-    const [verses, setVerses] = useState<Verse[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const ref = React.useRef<ICarouselInstance>(null);
-    const [loaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [verses, setVerses] = useState<Verse[]>([]);
   
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
@@ -141,85 +47,20 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       )
     );
   };
-  const API_URL = 'http://127.0.0.1:3000/verses/search?screen=his_will'; 
-
-  useEffect(() => {
-    debugger
-        const fetchVerses = async () => {
-        // setLoading(true);
-        // setError(null);
-        try {
-          const token = await AsyncStorage.getItem('token');
-          // debugger
-          const response = await axios.get(`${API_URL}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          debugger
-          // setVerses(response.data);
-        } catch (e) {
-          console.error('Fetch verses failed', e);
-          // setError('Failed to load verses. Please try again.');
-        } finally {
-          // setLoading(false);
-        }
-      };
-      fetchVerses();
-  })
+  const API_URL = 'http://127.0.0.1:3000/api/v1/verses/search?category=his_will'; 
 
   return (
-    <ImageBackground source={require("../../assets/images/bg.jpg")} resizeMode="cover" style={styles.image}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
-      <Carousel
-        ref={ref}
-        width={width}
-        height={width}
-        data={verses}
-        loop={true}
-        autoPlay={false} // Set to true if you want auto-scrolling
-        
-        style={{ width: '100%' }}
-          renderItem={({ item, index }) => (
-            <View>
-              <ScrollView
-                style={{
-                    paddingHorizontal: 15,
-                    height: width - 200,
-                }}
-              >
-                <Text style={{ textAlign: "center", fontSize: 30, color: 'white' }}>{`"${item.text}"`}</Text>
-
-              </ScrollView>
-              <View style={{display: "flex", alignItems: 'center', paddingTop: 40 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 20}}>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.book} </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.chapter} : </Text>
-                  <Text style={{ fontSize: 20, color: 'white' }}>{item.verse}</Text>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => toggleFavorite(index)}
-                    style={{ padding: 5}}
-                    accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
-                    accessibilityRole="button"
-                  >
-                    <AntDesign
-                      name={item.favorited ? 'heart' : 'hearto'}
-                      size={30}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          )}
-      />
+    <ScreenComponent>
+    <View style={{height: '80%'}}>
+      <View style={styles.filter}> </View>       
+        <VerseModule data={[]} active={4} url={API_URL} />
     </View>
-  </ImageBackground>);
-  
+  </ScreenComponent>
+    
+  );
 };
 
 export default HisWillScreen;
-
 
 
 const styles = StyleSheet.create({
@@ -245,6 +86,14 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+
+  filter: {
+    margin: 16,
+    height: 50,
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    borderWidth: 0
+  }
 });
 
 

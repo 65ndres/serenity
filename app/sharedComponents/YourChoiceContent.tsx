@@ -16,31 +16,13 @@ const categoriesToList = [
 ]
 
 const YourChoiceContent: React.FC = () => {
-  // let verses = any[]
+  
   const API_URL = 'http://127.0.0.1:3000/api/v1';
-  // const [categories, setCategories] = useState(categoriesToList);
-  // const [verses, setVerses] = useState([])
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
   const [url, setUrl] = useState("")
-  // debugger
-
 
   const updateUrl = (category: string) => {
-    // const url = `${API_URL}/verses/search?category=${category}`
-
     setUrl(`${API_URL}/verses/search?category=${category}`)
-    // maybe I just need to pass the url and set it
-    // try {
-    //   const response = await axios.get(url);
-    //   debugger
-    //   verses = response["data"]["verses"];
-    //   let pageNumber = response["data"]["pagination"]["page"];
-    //   // How are we gonna set the verses of the verses module component to here ? 
-
-    // } catch (e) {
-    //   console.error('Fetch verses failed', e);  
-    // }
-    // debugger
   };
 
   const toggleVerseComponent = () => {
@@ -74,7 +56,6 @@ const YourChoiceContent: React.FC = () => {
 
         {verseComponentVisibility && <VerseModule data={[]} active={4} url={url} />}
     </>
-        // I guess we could call it here and ..... pass the state
   );
 };
 
