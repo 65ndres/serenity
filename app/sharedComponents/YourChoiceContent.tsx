@@ -84,38 +84,38 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
-    dropdown: {
-      margin: 16,
-      height: 50,
-      backgroundColor: 'transparent',
-      textAlign: 'center',
-      borderWidth: 0
-    },
-    icon: {
-      marginRight: 5,
-    },
-    placeholderStyle: {
-      fontSize: 20,
-      color: 'white',
-      textAlign: 'center'
-    },
-    selectedTextStyle: {
-      fontSize: 25,
-      color: 'white',
-      textAlign: 'center'
-    },
-    iconStyle: {
-      color: 'transparent',
-      display: 'none'
-    },
-    inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
-    },
-    containerss: {
-      backgroundColor: 'transparent',
-      borderWidth: 0
-    }
+  dropdown: {
+    margin: 16,
+    height: 50,
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    borderWidth: 0
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 20,
+    color: 'white',
+    textAlign: 'center'
+  },
+  selectedTextStyle: {
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center'
+  },
+  iconStyle: {
+    color: 'transparent',
+    display: 'none'
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  containerss: {
+    backgroundColor: 'transparent',
+    borderWidth: 0
+  }
 });
 
 // MVP: make sure it renders

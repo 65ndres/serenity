@@ -15,6 +15,16 @@ interface Verse {
   favorited?: boolean; // Fixed key name for consistency
 }
 
+interface PaginationMetadata {
+  page: number;
+  pages: number;
+  next?: number | null;
+  prev?: number | null;
+  count: number;
+  items: number;
+  last: number;
+}
+
 interface VerseModuleProps {
   data: Verse[]; // Unused? Consider removing if always fetching
   active: number;
@@ -25,9 +35,9 @@ const width = Dimensions.get("window").width;
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
-  const [pagination, setPagination] = useState(1)
-  const [loadMore, setLoadMore] = useState(true)
-  const [originUrl, setOriginUrl] = useState(url)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pagination, setPagination] = useState<PaginationMetadata | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const ref = React.useRef<ICarouselInstance>(null);
 
@@ -40,27 +50,50 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     // TODO: Persist via API or AsyncStorage if needed
   };
 
-  const fetchVerses = async (fetchUrl: string, page: number) => {
-    // cound this be updated to get the url 
-    debugger
-    if (fetchUrl.length > 0){
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const url2 = url.length > 0 ? url : "http://127.0.0.1:3000/api/v1/verses/search?category";
-        const response = await axios.get(url2, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        // I have to find a way to debugger
-        debugger
-        setVerses(response.data.verses);
-      } catch (e) {
-        console.error('Fetch verses failed', e);
+  const fetchVerses = async (fetchUrl: string, page: number, append: boolean = false) => {
+    if (fetchUrl.length === 0) return;
+
+    if (loading) return; // Prevent multiple simultaneous requests
+
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('token');
+      
+      // Add page parameter to URL (handle both cases: with or without existing query params)
+      const separator = fetchUrl.includes('?') ? '&' : '?';
+      const urlWithPage = `${fetchUrl}${separator}page=${page}`;
+      
+      const response = await axios.get(urlWithPage, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.verses && response.data.pagination) {
+        if (append) {
+          // Append new verses when loading more pages
+          setVerses((prev) => [...prev, ...response.data.verses]);
+        } else {
+          // Replace verses when loading first page or new category
+          setVerses(response.data.verses);
+        }
+        
+        setPagination(response.data.pagination);
+        setCurrentPage(page);
       }
+    } catch (e) {
+      console.error('Fetch verses failed', e);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Reset and fetch first page when URL changes
   useEffect(() => {
-    fetchVerses(url, 1);
+    if (url.length > 0) {
+      setVerses([]);
+      setCurrentPage(1);
+      setPagination(null);
+      fetchVerses(url, 1, false);
+    }
   }, [url])
 
   const safeIndex = verses.length > 0 ? Math.max(0, Math.min(active, verses.length - 1)) : 0;
@@ -71,14 +104,16 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     }
   }, [verses, safeIndex, url]);
 
-
-  const onChange = (index: any) => {
-    // debugger
-    // conos
-    if((verses.length - index) === 2){ // in three or less left then make the call 
-      fetchVerses
+  const onChange = (index: number) => {
+    // Load more when user is 5 items away from the end
+    console.log(index)
+    const itemsLeft = verses.length - (index + 1);
+    if (itemsLeft <= 5 && pagination && pagination.next) {
+      // Check if there's a next page and we're not already loading
+      if (!loading && currentPage < pagination.pages) {
+        fetchVerses(url, pagination.next, true);
+      }
     }
-    console.log(verses.length - index)
   }
 
   return (
@@ -106,7 +141,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             autoPlay={false}
             onScrollEnd={onChange}
             defaultIndex={safeIndex} // Use clamped index
-            // style={{ width: '100%' }}
             renderItem={({ item, index }) => (
               <View style={styles.card}>
                 <ScrollView
