@@ -1,11 +1,15 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
+  ActivityIndicator,
   ImageBackground,
   StyleSheet,
+  Text,
   View,
   ViewStyle
 } from 'react-native';
@@ -22,98 +26,57 @@ type RootStackParamList = {
 // Type the navigation prop
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-// Type the Separator component
-const Separator: React.FC = () => <View style={styles.separator} />;
-const data = [
-  {
-    book: "Proverbs",
-    chapter: 16,
-    verse: 3,
-    liked: false,
-    favorited: false,
-    text: "Commit to the Lord whatever you do, and he will establish your plans."
-  },
-  {
-    book: "Philippians",
-    chapter: 4,
-    verse: 13,
-    liked: false,
-    favorited: false,
-    text: "I can do all this through him who gives me strength."
-  },
-  {
-    book: "James",
-    chapter: 1,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you."
-  },
-  {
-    book: "Colossians",
-    chapter: 3,
-    verse: 23,
-    liked: false,
-    favorited: false,
-    text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
-  },
-  {
-    book: "Ecclesiastes",
-    chapter: 9,
-    verse: 10,
-    liked: false,
-    favorited: false,
-    text: "Whatever your hand finds to do, do it with all your might, for in the realm of the dead, where you are going, there is neither working nor planning nor knowledge nor wisdom."
-  },
-  {
-    book: "Proverbs",
-    chapter: 3,
-    verse: 5,
-    liked: false,
-    favorited: false,
-    text: "Trust in the Lord with all your heart and lean not on your own understanding."
-  },
-  {
-    book: "Galatians",
-    chapter: 6,
-    verse: 9,
-    liked: false,
-    favorited: false,
-    text: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."
-  },
-  {
-    book: "Matthew",
-    chapter: 7,
-    verse: 7,
-    liked: false,
-    favorited: false,
-    text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
-  },
-  {
-    book: "Psalm",
-    chapter: 90,
-    verse: 17,
-    liked: false,
-    favorited: false,
-    text: "May the favor of the Lord our God rest on us; establish the work of our hands for us—yes, establish the work of our hands."
-  },
-  {
-    book: "Romans",
-    chapter: 12,
-    verse: 2,
-    liked: false,
-    favorited: false,
-    text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will."
-  }
-];
+interface Verse {
+  id: number;
+  book: string;
+  chapter: number;
+  verse: number;
+  text: string;
+  liked?: boolean;
+}
 
-// Type the Home component
+// Type the Liked component
 const Liked: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [verses, setVerses] = useState<Verse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchLikedVerses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = await AsyncStorage.getItem('token');
+      const API_URL = 'http://127.0.0.1:3000/api/v1';
+      
+      const response = await axios.get(`${API_URL}/liked`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data) {
+        // Handle both array response and object with verses property
+        const versesData = Array.isArray(response.data) 
+          ? response.data 
+          : response.data.verses || [];
+        setVerses(versesData);
+      }
+    } catch (e) {
+      console.error('Fetch liked verses failed', e);
+      setError('Failed to load liked verses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLikedVerses();
+    }, [])
+  );
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -127,14 +90,35 @@ const Liked: React.FC = () => {
       style={styles.image}
     >
       <ScrollView
-                      style={{
-                    height: 500,
-                }}
+        style={{
+          height: 500,
+        }}
       >
-        <View style={styles.container} >
-          {data.map((item) => (
-            <LineItem key={Math.random()} chapter={item.chapter} verse={item.verse} text={item.text} book={item.book}></LineItem>
-          ))}
+        <View style={styles.container}>
+          {loading ? (
+            <View style={styles.centerContainer}>
+              <ActivityIndicator size="large" color="white" />
+            </View>
+          ) : error ? (
+            <View style={styles.centerContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          ) : verses.length === 0 ? (
+            <View style={styles.centerContainer}>
+              <Text style={styles.emptyText}>No liked verses yet</Text>
+            </View>
+          ) : (
+            verses.map((item) => (
+              <LineItem
+                key={item.id}
+                chapter={item.chapter}
+                verse={item.verse}
+                text={item.text}
+                book={item.book}
+                liked={item.liked}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
     </ImageBackground>
@@ -152,14 +136,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     paddingTop: 150,
-    paddingLeft: 30 ,
+    paddingLeft: 30,
     paddingRight: 30
   } as ViewStyle,
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 50,
+  } as ViewStyle,
+  errorText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  emptyText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
   image: {
     flex: 1,
     justifyContent: 'center',
   } as ViewStyle,
-
 });
 
 export default Liked;
