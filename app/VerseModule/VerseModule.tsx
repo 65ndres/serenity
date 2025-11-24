@@ -38,6 +38,8 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pagination, setPagination] = useState<PaginationMetadata | null>(null)
   const [loading, setLoading] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0) // Track current carousel index
+  const [isInitialLoad, setIsInitialLoad] = useState(true) // Track if this is the first load
 
   const ref = React.useRef<ICarouselInstance>(null);
 
@@ -94,10 +96,17 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       if (response.data.verses && response.data.pagination) {
         if (append) {
           // Append new verses when loading more pages
+          // Don't change currentIndex - maintain user's position
           setVerses((prev) => [...prev, ...response.data.verses]);
         } else {
           // Replace verses when loading first page or new category
           setVerses(response.data.verses);
+          // Reset to initial active index when loading new category
+          const initialIndex = response.data.verses.length > 0 
+            ? Math.max(0, Math.min(active, response.data.verses.length - 1)) 
+            : 0;
+          setCurrentIndex(initialIndex);
+          setIsInitialLoad(true);
         }
         
         setPagination(response.data.pagination);
@@ -116,21 +125,26 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       setVerses([]);
       setCurrentPage(1);
       setPagination(null);
+      setCurrentIndex(0);
+      setIsInitialLoad(true);
       fetchVerses(url, 1, false);
     }
   }, [url])
 
-  const safeIndex = verses.length > 0 ? Math.max(0, Math.min(active, verses.length - 1)) : 0;
-
+  // Scroll to initial index only on first load or URL change
   useEffect(() => {
-    if (ref.current && verses.length > 0) {
+    if (ref.current && verses.length > 0 && isInitialLoad) {
+      const safeIndex = Math.max(0, Math.min(currentIndex, verses.length - 1));
       ref.current.scrollTo({ index: safeIndex, animated: false });
+      setIsInitialLoad(false);
     }
-  }, [verses, safeIndex, url]);
+  }, [verses, currentIndex, isInitialLoad]);
 
   const onChange = (index: number) => {
-    // Load more when user is 5 items away from the end
-    console.log(index)
+    // Update current index as user scrolls
+    setCurrentIndex(index);
+    
+    // Load more when user is 2 items away from the end
     const itemsLeft = verses.length - (index + 1);
     if (itemsLeft <= 2 && pagination && pagination.next) {
       // Check if there's a next page and we're not already loading
@@ -164,7 +178,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             loop={true}
             autoPlay={false}
             onScrollEnd={onChange}
-            defaultIndex={safeIndex} // Use clamped index
+            defaultIndex={currentIndex} // Use current tracked index
             renderItem={({ item, index }) => (
               <View style={styles.card}>
                 <ScrollView
