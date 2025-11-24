@@ -7,12 +7,12 @@ import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
 
 interface Verse {
+  id: number;
   book: string;
   chapter: number;
   verse: number;
   text: string;
   liked?: boolean;
-  favorited?: boolean; // Fixed key name for consistency
 }
 
 interface PaginationMetadata {
@@ -41,13 +41,37 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
 
   const ref = React.useRef<ICarouselInstance>(null);
 
-  const toggleFavorite = (index: number) => {
+  const toggleLike = async (index: number) => {
+    const verse = verses[index];
+    if (!verse || !verse.id) return;
+
+    // Optimistically update the UI
+    const previousLikedState = verse.liked;
     setVerses((prev) =>
-      prev.map((verse, i) =>
-        i === index ? { ...verse, favorited: !verse.favorited } : verse
+      prev.map((v, i) =>
+        i === index ? { ...v, liked: !v.liked } : v
       )
     );
-    // TODO: Persist via API or AsyncStorage if needed
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const API_URL = 'http://127.0.0.1:3000/api/v1';
+      await axios.post(
+        `${API_URL}/verses/${verse.id}/toggle_like`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (e) {
+      // Revert on error
+      console.error('Toggle like failed', e);
+      setVerses((prev) =>
+        prev.map((v, i) =>
+          i === index ? { ...v, liked: previousLikedState } : v
+        )
+      );
+    }
   };
 
   const fetchVerses = async (fetchUrl: string, page: number, append: boolean = false) => {
@@ -108,7 +132,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     // Load more when user is 5 items away from the end
     console.log(index)
     const itemsLeft = verses.length - (index + 1);
-    if (itemsLeft <= 5 && pagination && pagination.next) {
+    if (itemsLeft <= 2 && pagination && pagination.next) {
       // Check if there's a next page and we're not already loading
       if (!loading && currentPage < pagination.pages) {
         fetchVerses(url, pagination.next, true);
@@ -162,15 +186,15 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                   </View>
 
                   <TouchableOpacity
-                    onPress={() => toggleFavorite(index)}
+                    onPress={() => toggleLike(index)}
                     style={styles.favoriteButton}
-                    accessibilityLabel={item.favorited ? 'Unfavorite verse' : 'Favorite verse'}
+                    accessibilityLabel={item.liked ? 'Unlike verse' : 'Like verse'}
                     accessibilityRole="button"
                   >
                     <AntDesign
-                      name={item.favorited ? 'heart' : 'hearto'}
+                      name={item.liked ? 'heart' : 'hearto'}
                       size={28}
-                      color={item.favorited ? '#ff6b6b' : 'white'}
+                      color={item.liked ? 'white' : 'white'}
                     />
                   </TouchableOpacity>
                 </View>
