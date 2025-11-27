@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -17,6 +17,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 import ScreenComponent from './sharedComponents/ScreenComponent';
+import BackButton from './VerseModule/BackButton';
 import VerseModule from './VerseModule/VerseModule';
 
 // Define the navigation stack param list
@@ -117,6 +118,30 @@ const Liked: React.FC = () => {
       console.warn('Verse not found with id:', verseId);
     }
   };
+
+  const handleBackPress = () => {
+    if (listComponentVisibility) {
+      // If showing the list, navigate back to previous screen
+      navigation.goBack();
+    } else {
+      // If showing the module, go back to the list
+      setModuleComponentVisibility(false);
+      setListComponentVisibility(true);
+      setSelectedVerse(null);
+    }
+  };
+
+  // Set header options dynamically based on listComponentVisibility
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <BackButton 
+          text={""} 
+          onPress={handleBackPress}
+        />
+      ),
+    });
+  }, [listComponentVisibility, navigation]);
 
   return (
     // Im gonna return the modele only 

@@ -6,13 +6,23 @@ import { TouchableOpacity, View } from 'react-native';
 
 interface BackButtonProps {
   text: string;
+  onPress?: () => void; // Optional custom onPress handler
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ text }) => {
+const BackButton: React.FC<BackButtonProps> = ({ text, onPress }) => {
   const navigation = useNavigation();
+  
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      navigation.goBack();
+    }
+  };
+
   return (
     <TouchableOpacity
-      onPress={() => navigation.goBack()}
+      onPress={handlePress}
       style={{ padding: 5, marginLeft: 15 }}
       accessibilityRole="button"
     >
