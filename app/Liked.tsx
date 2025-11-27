@@ -1,21 +1,23 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  ImageBackground,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
-import LineItem from './LineItem';
+
+import ScreenComponent from './sharedComponents/ScreenComponent';
+import VerseModule from './VerseModule/VerseModule';
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -42,9 +44,13 @@ const Liked: React.FC = () => {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
   const [verses, setVerses] = useState<Verse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); 
+  const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
+  const [listComponentVisibility, setListComponentVisibility] = useState(true);
+  const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
 
   const fetchLikedVerses = async () => {
     try {
@@ -72,29 +78,55 @@ const Liked: React.FC = () => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     debugger
+  //     if (listComponentVisibility) {
+  //       fetchLikedVerses();
+  //     } else {
+        
+  //       // setVerses
+  //     }
+  //   }, [listComponentVisibility])
+  // );
+
+  useEffect(() => {
+    // debugger
+    if (listComponentVisibility) {
+      debugger
       fetchLikedVerses();
-    }, [])
-  );
+    }
+  }, [listComponentVisibility]);
 
   if (!loaded) {
     // Async font loading only occurs in development.
     return null;
   }
 
+  const showModule = (verseId: number) => {
+    console.log('Selected verse id:', verseId);
+    
+    // Find the verse based on the id
+    const foundVerse = verses.find(verse => verse.id === verseId);
+    
+    if (foundVerse) {
+      setSelectedVerse(foundVerse);
+      setModuleComponentVisibility(true);
+      setListComponentVisibility(false);
+    } else {
+      console.warn('Verse not found with id:', verseId);
+    }
+  };
+
   return (
-    <ImageBackground
-      source={require('../assets/images/bg.jpg')}
-      resizeMode="cover"
-      style={styles.image}
-    >
+    // Im gonna return the modele only 
+    <ScreenComponent>
       <ScrollView
         style={{
           height: 500,
         }}
       >
-        <View style={styles.container}>
+        {listComponentVisibility && <View style={styles.container}>
           {loading ? (
             <View style={styles.centerContainer}>
               <ActivityIndicator size="large" color="white" />
@@ -109,19 +141,29 @@ const Liked: React.FC = () => {
             </View>
           ) : (
             verses.map((item) => (
-              <LineItem
+              <TouchableOpacity 
                 key={item.id}
-                chapter={item.chapter}
-                verse={item.verse}
-                text={item.text}
-                book={item.book}
-                liked={item.liked}
-              />
+                onPress={() => showModule(item.id)}
+              >
+                <View style={styles.lineItemContainer}>
+                  <Text style={styles.lineItem}>
+                    {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
+                  </Text>
+                  <Text style={styles.lineItem}>
+                    {item.text
+                      ? item.text.length > 30
+                        ? item.text.slice(0, 30) + '...'
+                        : item.text
+                      : ''}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ))
           )}
-        </View>
+        </View>}
+        {moduleComponentVisibility && selectedVerse && <VerseModule data={[selectedVerse]} active={4} url={''} />}
       </ScrollView>
-    </ImageBackground>
+    </ScreenComponent>
   );
 };
 
@@ -154,6 +196,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
+  },
+  lineItemContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: 'white',
+    paddingBottom: 20,
+    paddingTop: 20,
   },
   image: {
     flex: 1,

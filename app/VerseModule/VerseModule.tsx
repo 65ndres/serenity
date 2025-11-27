@@ -137,6 +137,10 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       setCurrentIndex(0);
       setIsInitialLoad(true);
       fetchVerses(url, 1, false);
+    } else if (data.length > 0) {
+      setVerses(data);
+      setCurrentIndex(0);
+      // setIsInitialLoad(true);
     }
   }, [url])
 
@@ -157,7 +161,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   return (
     
     <View>
-        {url.length === 0 ? (
+        {url.length === 0 && verses.length === 0 ? (
           <View style={{ flex: 1, display: 'flex' }}>
             <View style={{width: (width - 80), height: width}}>
               <View style={{display: 'flex', alignItems: 'flex-end'}}>
