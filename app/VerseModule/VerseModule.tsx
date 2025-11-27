@@ -107,6 +107,15 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             : 0;
           setCurrentIndex(initialIndex);
           setIsInitialLoad(true);
+          
+          // Scroll to initial index after verses are set (use setTimeout to ensure carousel is rendered)
+          setTimeout(() => {
+            if (ref.current && response.data.verses.length > 0) {
+              const safeIndex = Math.max(0, Math.min(initialIndex, response.data.verses.length - 1));
+              ref.current.scrollTo({ index: safeIndex, animated: false });
+              setIsInitialLoad(false);
+            }
+          }, 0);
         }
         
         setPagination(response.data.pagination);
@@ -130,15 +139,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
       fetchVerses(url, 1, false);
     }
   }, [url])
-
-  // Scroll to initial index only on first load or URL change
-  useEffect(() => {
-    if (ref.current && verses.length > 0 && isInitialLoad) {
-      const safeIndex = Math.max(0, Math.min(currentIndex, verses.length - 1));
-      ref.current.scrollTo({ index: safeIndex, animated: false });
-      setIsInitialLoad(false);
-    }
-  }, [verses, currentIndex, isInitialLoad]);
 
   const onChange = (index: number) => {
     // Update current index as user scrolls
