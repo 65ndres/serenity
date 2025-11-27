@@ -1,10 +1,10 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -79,25 +79,13 @@ const Liked: React.FC = () => {
     }
   };
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     debugger
-  //     if (listComponentVisibility) {
-  //       fetchLikedVerses();
-  //     } else {
-        
-  //       // setVerses
-  //     }
-  //   }, [listComponentVisibility])
-  // );
-
-  useEffect(() => {
-    // debugger
-    if (listComponentVisibility) {
-      debugger
-      fetchLikedVerses();
-    }
-  }, [listComponentVisibility]);
+  useFocusEffect(
+    useCallback(() => {
+      if (listComponentVisibility) {
+        fetchLikedVerses();
+      }
+    }, [listComponentVisibility])
+  );
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -171,10 +159,10 @@ const Liked: React.FC = () => {
                 onPress={() => showModule(item.id)}
               >
                 <View style={styles.lineItemContainer}>
-                  <Text style={styles.lineItem}>
+                  <Text style={styles.lineItemText}>
                     {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
                   </Text>
-                  <Text style={styles.lineItem}>
+                  <Text style={{color: 'white', fontSize: 16}}>
                     {item.text
                       ? item.text.length > 30
                         ? item.text.slice(0, 30) + '...'
@@ -203,8 +191,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     paddingTop: 150,
-    paddingLeft: 30,
-    paddingRight: 30
   } as ViewStyle,
   centerContainer: {
     flex: 1,
@@ -231,6 +217,10 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     paddingBottom: 20,
     paddingTop: 20,
+  },
+  lineItemText: {
+    color: 'white', // Adjust text color as needed
+    fontSize: 16,   // Adjust font size as needed
   },
   image: {
     flex: 1,
