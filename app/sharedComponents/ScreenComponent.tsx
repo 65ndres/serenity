@@ -26,13 +26,53 @@ interface ScreenComponentProps {
 const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) => {
   // Helper function to wrap string/number children in Text component
   const processChildren = (children: React.ReactNode): React.ReactNode => {
-    return React.Children.map(children, (child) => {
-      // If child is a string or number, wrap it in Text component (React Native requirement)
-      if (typeof child === 'string' || typeof child === 'number') {
-        return <Text>{child}</Text>;
+    // Handle null, undefined, or boolean
+    if (children == null || typeof children === 'boolean') {
+      return null;
+    }
+
+    // If children is a single string or number, wrap it directly
+    if (typeof children === 'string' || typeof children === 'number') {
+      return <Text>{children}</Text>;
+    }
+
+    // If children is an array, process each child
+    if (Array.isArray(children)) {
+      return children.map((child, index) => {
+        if (child == null || typeof child === 'boolean') {
+          return null;
+        }
+        if (typeof child === 'string' || typeof child === 'number') {
+          return <Text key={index}>{child}</Text>;
+        }
+        // If it's a valid React element, recursively process its children if needed
+        if (React.isValidElement(child)) {
+          const props = child.props as { children?: React.ReactNode };
+          if (props.children) {
+            return React.cloneElement(child, {
+              ...props,
+              key: child.key || index,
+              children: processChildren(props.children),
+            } as any);
+          }
+        }
+        return child;
+      });
+    }
+
+    // If it's a valid React element with children, recursively process
+    if (React.isValidElement(children)) {
+      const props = children.props as { children?: React.ReactNode };
+      if (props.children) {
+        return React.cloneElement(children, {
+          ...props,
+          children: processChildren(props.children),
+        } as any);
       }
-      return child;
-    });
+    }
+
+    // Return as-is for other cases
+    return children;
   };
 
   return (

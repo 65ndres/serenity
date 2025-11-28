@@ -1,13 +1,14 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
+  Animated,
+  Pressable,
   StyleSheet,
   Text,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native';
@@ -18,6 +19,8 @@ import ScreenComponent from './sharedComponents/ScreenComponent';
 type RootStackParamList = {
   Home: undefined;
   VerseModule: undefined;
+  HisWillScreen: undefined;
+  YourChoiceScreen: undefined;
 };
 
 // Type the navigation prop
@@ -30,9 +33,42 @@ const Separator: React.FC = () => <View style={styles.separator} />;
 const Home: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const colorScheme = useColorScheme();
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  // Fade-in animation on component mount
+  // useFocusEffect(() => {
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 1,
+  //     duration: 500, // Animation duration in milliseconds
+  //     useNativeDriver: true, // Use native driver for better performance
+  //   }).start();
+  // }, [fadeAnim]);
+
+
+  useFocusEffect(
+    useCallback(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500, // Animation duration in milliseconds
+        useNativeDriver: true, // Use native driver for better performance
+      }).start();
+    }, [fadeAnim])
+  );
+
+  // Reusable function to fade out and navigate
+  const navigateWithFadeOut = (screenName: keyof RootStackParamList) => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true,
+    }).start(() => {
+      // Navigate after fade-out completes
+      navigation.navigate(screenName);
+    });
+  };
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -41,13 +77,15 @@ const Home: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <TouchableOpacity onPress={() => navigation.navigate('HisWillScreen')}>
-        <Text style={styles.text}>His will</Text>
-      </TouchableOpacity>
-      <Separator />
-      <TouchableOpacity onPress={() => navigation.navigate('YourChoiceScreen')}>
-        <Text style={styles.text}>Your choice</Text>
-      </TouchableOpacity>
+      <Animated.View style={{ opacity: fadeAnim }}>
+        <Pressable onPress={() => navigateWithFadeOut('HisWillScreen')}>
+          <Text style={styles.text}>His will</Text>
+        </Pressable>
+        <Separator />
+        <Pressable onPress={() => navigateWithFadeOut('YourChoiceScreen')}>
+          <Text style={styles.text}>Your choice</Text>
+        </Pressable>
+      </Animated.View>
     </ScreenComponent>
   );
 };

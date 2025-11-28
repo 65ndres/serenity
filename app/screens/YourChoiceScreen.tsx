@@ -1,6 +1,6 @@
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 import YourChoiceContent from '../sharedComponents/YourChoiceContent';
@@ -50,6 +50,7 @@ const categoriesToList = [
 const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   const [verses, setVerses] = useState<BibleVerse[]>([]);
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
 
   // const [pageNumber, setpageNumber] = useState("1");
 
@@ -59,6 +60,15 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
     const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  // Fade-in animation on component mount
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [fadeAnim]);
   
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
@@ -75,9 +85,11 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
 
   return (
     <ScreenComponent>
-      <View style={{height: '80%'}}>        
-        <YourChoiceContent></YourChoiceContent>
-      </View>
+      <Animated.View style={{opacity: fadeAnim }}>
+        <View style={{height: '80%'}}>        
+          <YourChoiceContent></YourChoiceContent>
+        </View>
+      </Animated.View>
     </ScreenComponent>
   
 );

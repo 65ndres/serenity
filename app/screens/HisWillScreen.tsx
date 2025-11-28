@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import VerseModule from '../VerseModule/VerseModule';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
@@ -39,6 +39,7 @@ interface VerseModuleProps {
 const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
 
   const [verses, setVerses] = useState<Verse[]>([]);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
   
   const toggleFavorite = (index: number) => {
     setVerses((prev) =>
@@ -49,14 +50,24 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   };
   const API_URL = 'http://127.0.0.1:3000/api/v1/verses/search?category=his_will'; 
 
+  // Fade-in animation on component mount
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [fadeAnim]);
+
   return (
     <ScreenComponent>
-    <View style={{height: '80%'}}>
-      <View style={styles.filter}> </View>       
-        <VerseModule data={[]} active={4} url={API_URL} />
-    </View>
-  </ScreenComponent>
-    
+      <Animated.View style={{opacity: fadeAnim }}>
+        <View style={{height: '80%'}}>
+          <View style={styles.filter}> </View>       
+          <VerseModule data={[]} active={4} url={API_URL} />
+        </View>
+      </Animated.View>
+    </ScreenComponent>
   );
 };
 
