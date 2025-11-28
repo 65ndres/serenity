@@ -33,14 +33,6 @@ const LoginScreen: React.FC = () => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // Fade-in animation on component mount
-  // useEffect(() => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 500, // Animation duration in milliseconds
-  //     useNativeDriver: true, // Use native driver for better performance
-  //   }).start();
-  // }, [fadeAnim]);
   
   useFocusEffect(
     useCallback(() => {
@@ -70,6 +62,18 @@ const LoginScreen: React.FC = () => {
     }).start(() => {
       // Navigate after fade-out completes
       navigation.navigate('SignUp');
+    });
+  };
+
+  const handleNavigateToPasswordReset = () => {
+    // Fade out the component
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true,
+    }).start(() => {
+      // Navigate after fade-out completes
+      navigation.navigate('PasswordReset');
     });
   };
 
@@ -146,7 +150,7 @@ const LoginScreen: React.FC = () => {
             title="Password Reset"
             type="clear"
             titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-            onPress={() => navigation.navigate('PasswordReset')}
+            onPress={handleNavigateToPasswordReset}
             disabled={isLoading}
           />
         </View>
