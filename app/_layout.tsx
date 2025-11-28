@@ -2,7 +2,7 @@
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { ImageBackground, StyleSheet, Text } from 'react-native';
+import { ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
@@ -201,14 +201,25 @@ const styles = StyleSheet.create({
     fontWeight: 300,
     fontSize: 26,
   },
+  appBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  } as ViewStyle,
 });
 
 export default function Layout() {
   return (
     <AuthProvider>
-      {/* <NavigationContainer> */}
-        <RootLayout />
-      {/* </NavigationContainer> */}
+      <ImageBackground
+        source={require('../assets/images/bg.jpg')}
+        resizeMode="cover"
+        style={styles.appBackground}
+      >
+        {/* <NavigationContainer> */}
+          <RootLayout />
+        {/* </NavigationContainer> */}
+      </ImageBackground>
     </AuthProvider>
   );
 }

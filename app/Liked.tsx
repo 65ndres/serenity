@@ -4,9 +4,10 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -52,6 +53,7 @@ const Liked: React.FC = () => {
   const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
   const [listComponentVisibility, setListComponentVisibility] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
 
   const fetchLikedVerses = async () => {
     try {
@@ -86,6 +88,15 @@ const Liked: React.FC = () => {
       }
     }, [listComponentVisibility])
   );
+
+  // Fade-in animation on component mount
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [fadeAnim]);
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -131,12 +142,13 @@ const Liked: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <ScrollView
-        style={{
-          height: 500,
-        }}
-      >
-        {listComponentVisibility && <View style={styles.container}>
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <ScrollView
+          style={{
+            height: 500,
+          }}
+        >
+          {listComponentVisibility && <View style={styles.container}>
           {loading ? (
             <View style={styles.centerContainer}>
               <ActivityIndicator size="large" color="white" />
@@ -180,7 +192,8 @@ const Liked: React.FC = () => {
           </View>
         </View>
         }
-      </ScrollView>
+        </ScrollView>
+      </Animated.View>
     </ScreenComponent>
   );
 };

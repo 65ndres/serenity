@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
-import { Alert, Dimensions, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Animated, Dimensions, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import 'react-native-reanimated';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
@@ -31,10 +31,20 @@ const SignUpScreen: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
 
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  // Fade-in animation on component mount
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500, // Animation duration in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [fadeAnim]);
 
   if (!loaded) {
     return <Text>Loading fonts...</Text>;
@@ -57,74 +67,76 @@ const SignUpScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <View style={{ paddingBottom: 40 }}>
-        <Text h2 style={styles.welcomeText}>
-          WELCOME
-        </Text>
-      </View>
-      <View style={{ paddingBottom: 5 }}>
+      <Animated.View style={{opacity: fadeAnim }}>
+        <View style={{ paddingBottom: 40 }}>
+          <Text h2 style={styles.welcomeText}>
+            WELCOME
+          </Text>
+        </View>
+        <View style={{ paddingBottom: 5 }}>
+          <Input
+            cursorColor="#ffffff"
+            placeholder="user@email.com"
+            selectionColor="white"
+            placeholderTextColor="#d8d8d8ff"
+            leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+            inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+            labelStyle={{ color: 'white' }}
+            inputContainerStyle={{ borderBottomColor: 'white' }}
+            value={email}
+            onChangeText={setEmail}
+            accessibilityLabel="Email"
+            disabled={isLoading}
+          />
+        </View>
         <Input
           cursorColor="#ffffff"
-          placeholder="user@email.com"
+          placeholder="**********"
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
           inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
           labelStyle={{ color: 'white' }}
           inputContainerStyle={{ borderBottomColor: 'white' }}
-          value={email}
-          onChangeText={setEmail}
-          accessibilityLabel="Email"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          accessibilityLabel="Password"
           disabled={isLoading}
         />
-      </View>
-      <Input
-        cursorColor="#ffffff"
-        placeholder="**********"
-        selectionColor="white"
-        placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-        inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-        labelStyle={{ color: 'white' }}
-        inputContainerStyle={{ borderBottomColor: 'white' }}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        accessibilityLabel="Password"
-        disabled={isLoading}
-      />
-      <Input
-        cursorColor="#ffffff"
-        placeholder="Confirm Password"
-        selectionColor="white"
-        placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-        inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-        labelStyle={{ color: 'white' }}
-        inputContainerStyle={{ borderBottomColor: 'white' }}
-        value={passwordConfirmation}
-        onChangeText={setPasswordConfirmation}
-        secureTextEntry
-        accessibilityLabel="Confirm Password"
-        disabled={isLoading}
-      />
-      <Button
-        title="CREATE ACCOUNT"
-        buttonStyle={{
-          backgroundColor: 'white',
-          borderWidth: 2,
-          borderColor: 'white',
-          borderRadius: 30,
-        }}
-        containerStyle={{
-          marginHorizontal: 50,
-          marginVertical: 10,
-        }}
-        titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-        onPress={handleSignup}
-        disabled={isLoading}
-        loading={isLoading}
-      />
+        <Input
+          cursorColor="#ffffff"
+          placeholder="Confirm Password"
+          selectionColor="white"
+          placeholderTextColor="#d8d8d8ff"
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+          inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+          labelStyle={{ color: 'white' }}
+          inputContainerStyle={{ borderBottomColor: 'white' }}
+          value={passwordConfirmation}
+          onChangeText={setPasswordConfirmation}
+          secureTextEntry
+          accessibilityLabel="Confirm Password"
+          disabled={isLoading}
+        />
+        <Button
+          title="CREATE ACCOUNT"
+          buttonStyle={{
+            backgroundColor: 'white',
+            borderWidth: 2,
+            borderColor: 'white',
+            borderRadius: 30,
+          }}
+          containerStyle={{
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+          titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+          onPress={handleSignup}
+          disabled={isLoading}
+          loading={isLoading}
+        />
+      </Animated.View>
     </ScreenComponent>
   );
 };
