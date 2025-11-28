@@ -93,8 +93,6 @@ const Liked: React.FC = () => {
   }
 
   const showModule = (verseId: number) => {
-    console.log('Selected verse id:', verseId);
-    
     // Find the verse based on the id
     const foundVerse = verses.find(verse => verse.id === verseId);
     
@@ -132,7 +130,6 @@ const Liked: React.FC = () => {
   }, [listComponentVisibility, navigation]);
 
   return (
-    // Im gonna return the modele only 
     <ScreenComponent>
       <ScrollView
         style={{
@@ -174,7 +171,15 @@ const Liked: React.FC = () => {
             ))
           )}
         </View>}
-        {moduleComponentVisibility && selectedVerse && <VerseModule data={[selectedVerse]} active={4} url={''} />}
+        {moduleComponentVisibility && selectedVerse && 
+        <View style={{ height: "100%" }}>
+          <View style={{ height: "20%" }}>
+          </View>
+          <View style={{ height: "60%" }}>
+            <VerseModule data={[selectedVerse]} active={4} url={''} />
+          </View>
+        </View>
+        }
       </ScrollView>
     </ScreenComponent>
   );
