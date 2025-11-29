@@ -17,6 +17,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
+import { API_URL } from '../constants/Config';
 import ScreenComponent from './sharedComponents/ScreenComponent';
 import BackButton from './VerseModule/BackButton';
 import VerseModule from './VerseModule/VerseModule';
@@ -60,7 +61,6 @@ const Liked: React.FC = () => {
       setLoading(true);
       setError(null);
       const token = await AsyncStorage.getItem('token');
-      const API_URL = 'http://127.0.0.1:3000/api/v1';
       
       const response = await axios.get(`${API_URL}/liked`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -145,7 +145,7 @@ const Liked: React.FC = () => {
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         <ScrollView
           style={{
-            height: 500,
+            height: 800,
           }}
         >
           {listComponentVisibility && <View style={styles.container}>
@@ -185,7 +185,7 @@ const Liked: React.FC = () => {
         </View>}
         {moduleComponentVisibility && selectedVerse && 
         <View style={{ height: "100%" }}>
-          <View style={{ height: "20%" }}>
+          <View style={{ height: "40%" }}>
           </View>
           <View style={{ height: "60%" }}>
             <VerseModule data={[selectedVerse]} active={4} url={''} />

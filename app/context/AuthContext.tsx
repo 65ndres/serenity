@@ -5,6 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { useNavigation } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import { API_URL } from '../../constants/Config';
 
 type RootStackParamList = {
   Home: undefined;
@@ -43,8 +44,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigation = useNavigation<NavigationProp>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const API_URL = 'http://127.0.0.1:3000/api/v1'; // Adjust for your environment
 
   useEffect(() => {
     const loadUser = async () => {

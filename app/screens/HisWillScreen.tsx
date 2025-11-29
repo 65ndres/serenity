@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
-import VerseModule from '../VerseModule/VerseModule';
+import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
+import VerseModule from '../VerseModule/VerseModule';
 
 interface BibleVerse {
   book: string;
@@ -48,7 +49,7 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       )
     );
   };
-  const API_URL = 'http://127.0.0.1:3000/api/v1/verses/search?category=his_will'; 
+  const API_URL_HIS_WILL = `${API_URL}/verses/search?category=his_will`; 
 
   // Fade-in animation on component mount
   useEffect(() => {
@@ -64,7 +65,7 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       <Animated.View style={{opacity: fadeAnim }}>
         <View style={{height: '80%'}}>
           <View style={styles.filter}> </View>       
-          <VerseModule data={[]} active={4} url={API_URL} />
+          <VerseModule data={[]} active={4} url={API_URL_HIS_WILL} />
         </View>
       </Animated.View>
     </ScreenComponent>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
+import { API_URL } from '../../constants/Config';
 
 interface Verse {
   id: number;
@@ -57,7 +58,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const API_URL = 'http://127.0.0.1:3000/api/v1';
       await axios.post(
         `${API_URL}/verses/${verse.id}/toggle_like`,
         {},

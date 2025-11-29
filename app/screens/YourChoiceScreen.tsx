@@ -54,8 +54,6 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
 
   // const [pageNumber, setpageNumber] = useState("1");
 
-  const API_URL = 'http://127.0.0.1:3000/api/v1';
-
   const ref = React.useRef<ICarouselInstance>(null);
     const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),

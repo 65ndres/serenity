@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { API_URL } from '../../constants/Config';
 import VerseModule from '../VerseModule/VerseModule';
 
 // interface BackButtonProps {
@@ -17,7 +18,6 @@ const categoriesToList = [
 
 const YourChoiceContent: React.FC = () => {
   
-  const API_URL = 'http://127.0.0.1:3000/api/v1';
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
   const [url, setUrl] = useState("")
 
