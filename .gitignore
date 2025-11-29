@@ -38,6 +38,7 @@ yarn-error.*
 
 app-example
 
-
-ios/
-android/
+# Note: ios/ and android/ are needed for EAS Build with bare workflow
+# Uncomment these lines if you want to use managed workflow with prebuild:
+# ios/
+# android/

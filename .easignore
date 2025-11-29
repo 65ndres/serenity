@@ -1,0 +1,31 @@
+# EAS Build ignore file
+# Files and directories listed here will not be uploaded to EAS Build servers
+
+# Dependencies (will be installed on build server)
+node_modules/
+
+# Build artifacts
+.expo/
+dist/
+web-build/
+*.log
+
+# Local development files
+.env*.local
+*.pem
+*.key
+*.p8
+*.p12
+*.mobileprovision
+*.jks
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+

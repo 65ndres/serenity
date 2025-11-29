@@ -8,6 +8,11 @@
     "scheme": "serenityv1",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "a78884f3-50e9-4727-b6aa-9ccf61e147b6"
+      }
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.afre92.serenityv1"
@@ -40,6 +45,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "afre92"
   }
 }
