@@ -44,9 +44,9 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "your-apple-id@example.com",
-        "ascAppId": "your-app-store-connect-app-id",
-        "appleTeamId": "your-apple-team-id"
+        "appleId": "afre92@gmail.com",
+        "ascAppId": "6755903369",
+        "appleTeamId": "NQ6AG8RHP3"
       },
       "android": {
         "serviceAccountKeyPath": "./path/to/api-key.json",
