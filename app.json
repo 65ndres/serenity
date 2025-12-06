@@ -2,7 +2,7 @@
   "expo": {
     "name": "serenity-v1",
     "slug": "serenity-v1",
-    "version": "1.1.0",
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "serenityv1",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.afre92.serenityv1",
-      "buildNumber": "2"
+      "buildNumber": "2.1.0"
     },
     "android": {
       "adaptiveIcon": {
