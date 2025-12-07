@@ -138,7 +138,7 @@ Update the version in `app.json`:
 ```json
 {
   "expo": {
-    "version": "1.0.0"
+    "version": "2.0.0"
   }
 }
 ```
@@ -148,7 +148,7 @@ For iOS, also update the build number in `app.json`:
 {
   "expo": {
     "ios": {
-      "buildNumber": "1"
+      "buildNumber": "2"
     }
   }
 }

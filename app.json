@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "serenity-v1",
-    "slug": "serenity-v1",
+    "name": "Promesas",
+    "slug": "promesas",
     "version": "6",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "serenityv1",
+    "scheme": "promesas",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {

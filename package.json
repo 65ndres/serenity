@@ -1,5 +1,5 @@
 {
-  "name": "serenity-v1",
+  "name": "promesas",
   "main": "expo-router/entry",
   "version": "2.1.0",
   "scripts": {
