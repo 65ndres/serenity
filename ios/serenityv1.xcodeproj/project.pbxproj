@@ -14,6 +14,7 @@
 		AB29312E95B2D2C7564BB472 /* libPods-serenityv1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BFA897CBADCBD2C09D90168 /* libPods-serenityv1.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		C15CB7E45CFE4C6FA7EB012F /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B922E64A603460F85B29C87 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = serenityv1/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* serenityv1-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "serenityv1-Bridging-Header.h"; path = "serenityv1/serenityv1-Bridging-Header.h"; sourceTree = "<group>"; };
+		3B922E64A603460F85B29C87 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "serenityv1/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				6B641499238E9DC8F8C443F3 /* PrivacyInfo.xcprivacy */,
+				3B922E64A603460F85B29C87 /* noop-file.swift */,
 			);
 			name = serenityv1;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				45C024F013D31A6F51805360 /* ExpoModulesProvider.swift in Sources */,
+				C15CB7E45CFE4C6FA7EB012F /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,7 +399,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.afre92.serenityv1;
-				PRODUCT_NAME = serenityv1;
+				PRODUCT_NAME = "Promesas";
 				SWIFT_OBJC_BRIDGING_HEADER = "serenityv1/serenityv1-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -426,7 +430,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.afre92.serenityv1;
-				PRODUCT_NAME = serenityv1;
+				PRODUCT_NAME = "Promesas";
 				SWIFT_OBJC_BRIDGING_HEADER = "serenityv1/serenityv1-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -1,6 +1,7 @@
 // app/_layout.tsx
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -13,6 +14,12 @@ import SignUpScreen from './screens/SignUpScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
+
+// Set the animation options. This is optional.
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 type RootDrawerParamList = {
   Home: undefined;
