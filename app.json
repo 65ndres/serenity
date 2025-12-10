@@ -8,6 +8,11 @@
     "scheme": "promesas",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#6E9AB1"
+    },
     "extra": {
       "eas": {
         "projectId": "a78884f3-50e9-4727-b6aa-9ccf61e147b6"
@@ -33,18 +38,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#DFA192",
-          "image": "./assets/images/splash-icon.png",
-          "dark": {
-            "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#6E9AB1"
-          },
-          "imageWidth": 200
-        }
-      ],
       "expo-font"
     ],
     "experiments": {
