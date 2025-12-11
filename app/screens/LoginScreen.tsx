@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert, Animated, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { Alert, Animated, StyleSheet, View, type TextStyle, type ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 

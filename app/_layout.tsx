@@ -1,7 +1,6 @@
 // app/_layout.tsx
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -16,10 +15,6 @@ import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
 
 // Set the animation options. This is optional.
-SplashScreen.setOptions({
-  duration: 1000,
-  fade: true,
-});
 
 type RootDrawerParamList = {
   Home: undefined;
@@ -27,6 +22,8 @@ type RootDrawerParamList = {
   VerseModule: undefined;
   Liked: undefined;
   HisWillScreen: undefined;
+  YourChoiceScreen: undefined;
+  Profile: undefined;
 };
 
 type AuthStackParamList = {
@@ -38,7 +35,7 @@ type AuthStackParamList = {
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 const Stack = createStackNavigator<AuthStackParamList>();
 
-const CustomDrawerContent: React.FC = (props) => {
+const CustomDrawerContent: React.FC<any> = (props) => {
   const { logout } = useAuth();
 
   return (
@@ -51,7 +48,6 @@ const CustomDrawerContent: React.FC = (props) => {
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
         <DrawerItemList {...props} />
         <DrawerItem
-        labelStyle
           label="Logout"
           onPress={async () => {
             await logout();

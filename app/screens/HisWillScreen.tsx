@@ -32,8 +32,8 @@ interface Verse {
 }
 
 interface VerseModuleProps {
-  data: Verse[];
-  active: number;
+  data?: Verse[];
+  active?: number;
 }
 
 
