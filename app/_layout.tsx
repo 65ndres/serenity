@@ -152,8 +152,8 @@ const UnauthenticatedNavigator: React.FC = () => {
         name="SignUp"
         component={SignUpScreen}
         options={{
-          headerLeft: () => <BackButton text="Login" />,
-          headerTitle: () => <Text style={{ color: 'transparent' }}>HOME</Text>,
+          headerLeft: () => <BackButton text="" />,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>Promesas</Text>,
         }}
       />
       <Stack.Screen

@@ -1,20 +1,19 @@
-// src/screens/SignUpScreen.tsx
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Animated, Dimensions, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { Alert, Animated, Dimensions, Image, ImageStyle, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import 'react-native-reanimated';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
-// Define navigation stack types
+
 type RootStackParamList = {
   Home: undefined;
   VerseModule: undefined;
-  Login: undefined; // Added to allow navigation back to Login
+  Login: undefined;
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -34,18 +33,17 @@ const SignUpScreen: React.FC = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [passwordConfirmationError, setPasswordConfirmationError] = useState<string>('');
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // Fade-in animation on component mount
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 500, // Animation duration in milliseconds
-      useNativeDriver: true, // Use native driver for better performance
+      duration: 500,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
@@ -54,7 +52,6 @@ const SignUpScreen: React.FC = () => {
   }
 
   const handleSignup = async () => {
-    // Reset errors
     setEmailError('');
     setPasswordError('');
     setPasswordConfirmationError('');
@@ -94,49 +91,51 @@ const SignUpScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <Animated.View style={{opacity: fadeAnim }}>
-        <View style={{ paddingBottom: 40 }}>
+      <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
+        <View style={styles.topSection}>
+          <View style={styles.topSectionInner}>
           <Text h2 style={styles.welcomeText}>
             WELCOME
           </Text>
+          </View>
         </View>
-        <View style={{ paddingBottom: 5 }}>
+        <View style={styles.middleSection}>
+          <View style={styles.middleSectionInner}>
           <Input
             cursorColor="#ffffff"
             placeholder="user@email.com"
             selectionColor="white"
             placeholderTextColor="#d8d8d8ff"
             leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
-            inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-            labelStyle={{ color: 'white' }}
-            inputContainerStyle={{ borderBottomColor: 'white' }}
+            inputStyle={styles.inputStyle}
+            labelStyle={styles.labelStyle}
+            inputContainerStyle={styles.inputContainerStyle}
             value={email}
             onChangeText={(text) => {
               setEmail(text.toLowerCase());
               if (emailError) setEmailError('');
             }}
             errorMessage={emailError}
-            errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
+            errorStyle={styles.errorStyle}
             accessibilityLabel="Email"
             disabled={isLoading}
           />
-        </View>
         <Input
           cursorColor="#ffffff"
-          placeholder="**********"
+          placeholder="password"
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
           leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-          inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-          labelStyle={{ color: 'white' }}
-          inputContainerStyle={{ borderBottomColor: 'white' }}
+          inputStyle={styles.inputStyle}
+          labelStyle={styles.labelStyle}
+          inputContainerStyle={styles.inputContainerStyle}
           value={password}
           onChangeText={(text) => {
             setPassword(text);
             if (passwordError) setPasswordError('');
           }}
           errorMessage={passwordError}
-          errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
+          errorStyle={styles.errorStyle}
           secureTextEntry
           accessibilityLabel="Password"
           disabled={isLoading}
@@ -147,46 +146,98 @@ const SignUpScreen: React.FC = () => {
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
           leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-          inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-          labelStyle={{ color: 'white' }}
-          inputContainerStyle={{ borderBottomColor: 'white' }}
+          inputStyle={styles.inputStyle}
+          labelStyle={styles.labelStyle}
+          inputContainerStyle={styles.inputContainerStyle}
           value={passwordConfirmation}
           onChangeText={(text) => {
             setPasswordConfirmation(text);
             if (passwordConfirmationError) setPasswordConfirmationError('');
           }}
           errorMessage={passwordConfirmationError}
-          errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
+          errorStyle={styles.errorStyle}
           secureTextEntry
           accessibilityLabel="Confirm Password"
           disabled={isLoading}
         />
         <Button
           title="CREATE ACCOUNT"
-          buttonStyle={{
-            backgroundColor: 'white',
-            borderWidth: 2,
-            borderColor: 'white',
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
-          titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+          buttonStyle={styles.signupButton}
+          containerStyle={styles.signupButtonContainer}
+          titleStyle={styles.signupButtonTitle}
           onPress={handleSignup}
           disabled={isLoading}
           loading={isLoading}
         />
+        </View>
+        </View>
+        <View style={styles.bottomSection}>
+          <View style={styles.bottomSectionInner}>
+          <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
+          </View>
+        </View>
       </Animated.View>
     </ScreenComponent>
   );
 };
 
 const styles = StyleSheet.create({
+  animatedView: {
+    flex: 1,
+  } as ViewStyle,
+  topSection: {
+    height: '20%',
+  } as ViewStyle,
+  topSectionInner: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  } as ViewStyle,
+  middleSection: {
+    height: '60%',
+  } as ViewStyle,
+  middleSectionInner: {
+    flex: 1,
+    justifyContent: 'center',
+  } as ViewStyle,
+  bottomSection: {
+    height: '20%',
+  } as ViewStyle,
+  bottomSectionInner: {
+    flex: 1,
+    justifyContent: 'center',
+  } as ViewStyle,
   welcomeText: {
     color: 'white',
     textAlign: 'center',
+  } as TextStyle,
+  inputStyle: {
+    color: 'white',
+    fontSize: 22,
+    paddingLeft: 20,
+  } as TextStyle,
+  labelStyle: {
+    color: 'white',
+  } as TextStyle,
+  inputContainerStyle: {
+    borderBottomColor: 'white',
+  } as ViewStyle,
+  errorStyle: {
+    color: '#ff6b6b',
+    fontSize: 14,
+  } as TextStyle,
+  signupButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 30,
+  } as ViewStyle,
+  signupButtonContainer: {
+    marginHorizontal: 50,
+    marginVertical: 10,
+  } as ViewStyle,
+  signupButtonTitle: {
+    fontWeight: 'bold',
+    color: '#ac8861ff',
   } as TextStyle,
   separator: {
     marginVertical: 8,
@@ -196,6 +247,11 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   } as ViewStyle,
+  logoImage: {
+    height: 60,
+    width: 60,
+    alignSelf: 'center',
+  } as ImageStyle,
 });
 
 export default SignUpScreen;
