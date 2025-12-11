@@ -7,6 +7,7 @@ import {
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -77,6 +78,7 @@ const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) =>
   };
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ImageBackground
       source={require('../../assets/images/bg.jpg')}
       resizeMode="cover"
@@ -84,6 +86,7 @@ const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) =>
     >
       {processChildren(children)}
     </ImageBackground>
+    </SafeAreaView>
   );
 };
 
@@ -97,6 +100,10 @@ const styles = StyleSheet.create({
     paddingRight: 40,
     maxWidth: 400,
     maxHeight: height
+  }, 
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'transparent',
   }
   })
 export default ScreenComponent;

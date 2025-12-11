@@ -31,6 +31,9 @@ const SignUpScreen: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState<string>('');
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
 
   const [loaded] = useFonts({
@@ -51,6 +54,30 @@ const SignUpScreen: React.FC = () => {
   }
 
   const handleSignup = async () => {
+    // Reset errors
+    setEmailError('');
+    setPasswordError('');
+    setPasswordConfirmationError('');
+    
+    // Validate required fields
+    let hasError = false;
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      hasError = true;
+    }
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      hasError = true;
+    }
+    if (!passwordConfirmation.trim()) {
+      setPasswordConfirmationError('Password confirmation is required');
+      hasError = true;
+    }
+    
+    if (hasError) {
+      return;
+    }
+    
     if (password !== passwordConfirmation) {
       Alert.alert('Error', 'Passwords do not match');
       return;
@@ -84,7 +111,12 @@ const SignUpScreen: React.FC = () => {
             labelStyle={{ color: 'white' }}
             inputContainerStyle={{ borderBottomColor: 'white' }}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => {
+              setEmail(text.toLowerCase());
+              if (emailError) setEmailError('');
+            }}
+            errorMessage={emailError}
+            errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
             accessibilityLabel="Email"
             disabled={isLoading}
           />
@@ -99,7 +131,12 @@ const SignUpScreen: React.FC = () => {
           labelStyle={{ color: 'white' }}
           inputContainerStyle={{ borderBottomColor: 'white' }}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(text) => {
+            setPassword(text);
+            if (passwordError) setPasswordError('');
+          }}
+          errorMessage={passwordError}
+          errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
           secureTextEntry
           accessibilityLabel="Password"
           disabled={isLoading}
@@ -114,7 +151,12 @@ const SignUpScreen: React.FC = () => {
           labelStyle={{ color: 'white' }}
           inputContainerStyle={{ borderBottomColor: 'white' }}
           value={passwordConfirmation}
-          onChangeText={setPasswordConfirmation}
+          onChangeText={(text) => {
+            setPasswordConfirmation(text);
+            if (passwordConfirmationError) setPasswordConfirmationError('');
+          }}
+          errorMessage={passwordConfirmationError}
+          errorStyle={{ color: '#ff6b6b', fontSize: 14 }}
           secureTextEntry
           accessibilityLabel="Confirm Password"
           disabled={isLoading}

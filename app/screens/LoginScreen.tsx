@@ -5,14 +5,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert, Animated, Image, StyleSheet, View, type TextStyle } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, Animated, Image, StyleSheet, View, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
-
-
-// Define navigation stack types
 type RootStackParamList = {
   Home: undefined;
   SignUp: undefined;
@@ -29,24 +25,44 @@ const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  
   useFocusEffect(
     useCallback(() => {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 500, // Animation duration in milliseconds
-        useNativeDriver: true, // Use native driver for better performance
+        duration: 500,
+        useNativeDriver: true,
       }).start();
     }, [fadeAnim])
   );
 
   const handleLogin = async () => {
+    // Reset errors
+    setEmailError('');
+    setPasswordError('');
+    
+    // Validate required fields
+    let hasError = false;
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      hasError = true;
+    }
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      hasError = true;
+    }
+    
+    if (hasError) {
+      return;
+    }
+    
     setIsLoading(true);
     const success = await login(email, password);
     setIsLoading(false);
@@ -56,139 +72,196 @@ const LoginScreen: React.FC = () => {
   };
 
   const handleNavigateToSignUp = () => {
-    // Fade out the component
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500, // Animation duration in milliseconds
+      duration: 500,
       useNativeDriver: true,
     }).start(() => {
-      // Navigate after fade-out completes
       navigation.navigate('SignUp');
     });
   };
 
   const handleNavigateToPasswordReset = () => {
-    // Fade out the component
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500, // Animation duration in milliseconds
+      duration: 500,
       useNativeDriver: true,
     }).start(() => {
-      // Navigate after fade-out completes
       navigation.navigate('PasswordReset');
     });
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-    <ScreenComponent>
-      <Animated.View style={{opacity: fadeAnim}}>
-        <View style={styles.entirePage}>
-          <View style={{height: '20%'}}>
-            <View style={{flex: 1, justifyContent: 'flex-end'}}>
-              <Text style={styles.welcomeText}>
-                WELCOME BACK
-              </Text>
+    
+      <ScreenComponent>
+        <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
+          <View style={styles.entirePage}>
+            <View style={styles.topSection}>
+              <View style={styles.topSectionInner}>
+                <Text style={styles.welcomeText}>
+                  WELCOME BACK
+                </Text>
+              </View>
+            </View>
+            <View style={styles.middleSection}>
+              <View style={styles.middleSectionInner}>
+                <View>
+                  <Input
+                    cursorColor="#ffffff"
+                    placeholder="user@email.com"
+                    selectionColor="white"
+                    placeholderTextColor="#d8d8d8ff"
+                    leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+                    inputStyle={styles.inputStyle}
+                    labelStyle={styles.labelStyle}
+                    inputContainerStyle={styles.inputContainerStyle}
+                    value={email}
+                    onChangeText={(text) => {
+                      setEmail(text.toLowerCase());
+                      if (emailError) setEmailError('');
+                    }}
+                    errorMessage={emailError}
+                    errorStyle={styles.errorStyle}
+                    accessibilityLabel="Email"
+                    disabled={isLoading}
+                  />
+                </View>
+                <Input
+                  cursorColor="#ffffff"
+                  placeholder="password"
+                  selectionColor="white"
+                  placeholderTextColor="#d8d8d8ff"
+                  leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+                  inputStyle={styles.inputStyle}
+                  labelStyle={styles.labelStyle}
+                  inputContainerStyle={styles.inputContainerStyle}
+                  value={password}
+                  onChangeText={(text) => {
+                    setPassword(text);
+                    if (passwordError) setPasswordError('');
+                  }}
+                  errorMessage={passwordError}
+                  errorStyle={styles.errorStyle}
+                  secureTextEntry
+                  accessibilityLabel="Password"
+                  disabled={isLoading}
+                />
+                <Button
+                  title="LOG IN"
+                  buttonStyle={styles.loginButton}
+                  containerStyle={styles.loginButtonContainer}
+                  titleStyle={styles.loginButtonTitle}
+                  onPress={handleLogin}
+                  disabled={isLoading}
+                  loading={isLoading}
+                />
+                <View>
+                  <Button
+                    containerStyle={styles.secondaryButtonContainer}
+                    title="Sign up"
+                    type="clear"
+                    titleStyle={styles.secondaryButtonTitle}
+                    onPress={handleNavigateToSignUp}
+                    disabled={isLoading}
+                  />
+                </View>
+                <View>
+                  <Button
+                    title="Password Reset"
+                    type="clear"
+                    titleStyle={styles.secondaryButtonTitle}
+                    onPress={handleNavigateToPasswordReset}
+                    disabled={isLoading}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={styles.bottomSection}>
+              <View style={styles.bottomSectionInner}>
+                <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
+              </View>
             </View>
           </View>
-          <View style={{height: '60%', overflow: 'hidden'}}>
-            <View style={{flex: 1, justifyContent: 'center'}}>
-              <View>
-              <Input
-                cursorColor="#ffffff"
-                placeholder="user@email.com"
-                selectionColor="white"
-                placeholderTextColor="#d8d8d8ff"
-                leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
-                inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-                labelStyle={{ color: 'white' }}
-                inputContainerStyle={{ borderBottomColor: 'white' }}
-                value={email}
-                onChangeText={setEmail}
-                accessibilityLabel="Email"
-                disabled={isLoading}
-              />
-            </View>
-            <Input
-              cursorColor="#ffffff"
-              placeholder="**********"
-              selectionColor="white"
-              placeholderTextColor="#d8d8d8ff"
-              leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-              inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-              labelStyle={{ color: 'white' }}
-              inputContainerStyle={{ borderBottomColor: 'white' }}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              accessibilityLabel="Password"
-              disabled={isLoading}
-            />
-            <Button
-              title="LOG IN"
-              buttonStyle={{
-                backgroundColor: 'white',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-              onPress={handleLogin}
-              disabled={isLoading}
-              loading={isLoading}
-            />
-            <View>
-              <Button
-                containerStyle={{
-                  marginVertical: 10,
-                }}
-                title="Sign up"
-                type="clear"
-                titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-                onPress={handleNavigateToSignUp}
-                disabled={isLoading}
-              />
-            </View>
-            <View>
-              <Button
-                title="Password Reset"
-                type="clear"
-                titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-                onPress={handleNavigateToPasswordReset}
-                disabled={isLoading}
-              />
-            </View>
-            </View>
-          </View>
-          <View style={{height: '20%'}}>
-            <View style={{flex: 1, justifyContent: 'flex-end'}}>
-              <Image source={require('../../assets/images/splash-icon.png')} style={{height: 60, width: 60, alignSelf: 'center'}} />
-            </View>
-          </View>
-        </View>
-      </Animated.View>
-    </ScreenComponent>
-    </SafeAreaView>
+        </Animated.View>
+      </ScreenComponent>
   );
 };
 
 const styles = StyleSheet.create({
-  name: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 15,
-    // paddingBottom: 40,
-    fontWeight: '500',
-    // textDecorationLine: 'underline',
-  } as TextStyle,
+
+  animatedView: {
+    flex: 1,
+  } as ViewStyle,
+  entirePage: {
+    flex: 1,
+  } as ViewStyle,
+  topSection: {
+    height: '20%',
+  } as ViewStyle,
+  topSectionInner: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  } as ViewStyle,
+  middleSection: {
+    height: '60%',
+    overflow: 'hidden',
+  } as ViewStyle,
+  middleSectionInner: {
+    flex: 1,
+    justifyContent: 'center',
+  } as ViewStyle,
+  bottomSection: {
+    height: '20%',
+  } as ViewStyle,
+  bottomSectionInner: {
+    flex: 1,
+    justifyContent: 'center',
+  } as ViewStyle,
   welcomeText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 30,
+  } as TextStyle,
+  inputStyle: {
+    color: 'white',
+    fontSize: 22,
+    paddingLeft: 20,
+  } as TextStyle,
+  labelStyle: {
+    color: 'white',
+  } as TextStyle,
+  inputContainerStyle: {
+    borderBottomColor: 'white',
+  } as ViewStyle,
+  loginButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 30,
+  } as ViewStyle,
+  loginButtonContainer: {
+    marginHorizontal: 50,
+    marginVertical: 10,
+  } as ViewStyle,
+  loginButtonTitle: {
+    fontWeight: 'bold',
+    color: '#ac8861ff',
+  } as TextStyle,
+  secondaryButtonContainer: {
+    marginVertical: 10,
+  } as ViewStyle,
+  secondaryButtonTitle: {
+    color: '#fff',
+    fontWeight: 'bold',
+  } as TextStyle,
+  logoImage: {
+    height: 60,
+    width: 60,
+    alignSelf: 'center',
+  } as ImageStyle,
+  errorStyle: {
+    color: '#ff6b6b',
+    fontSize: 14,
   } as TextStyle,
 });
 
