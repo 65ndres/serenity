@@ -142,7 +142,7 @@ const SignUpScreen: React.FC = () => {
         />
         <Input
           cursorColor="#ffffff"
-          placeholder="Confirm Password"
+          placeholder="confirm password"
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
           leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   bottomSectionInner: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   } as ViewStyle,
   welcomeText: {
     color: 'white',

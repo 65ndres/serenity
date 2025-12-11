@@ -4,6 +4,7 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  View,
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
@@ -78,19 +79,26 @@ const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) =>
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
     <ImageBackground
       source={require('../../assets/images/bg.jpg')}
       resizeMode="cover"
-      style={[styles.screenContainer, style]}
+      style={styles.backgroundImage}
     >
-      {processChildren(children)}
+      <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.screenContainer, style]}>
+          {processChildren(children)}
+        </View>
+      </SafeAreaView>
     </ImageBackground>
-    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  } as ViewStyle,
   screenContainer: {
     height:'100%',
     justifyContent: 'center',
@@ -100,10 +108,10 @@ const styles = StyleSheet.create({
     paddingRight: 40,
     maxWidth: 400,
     maxHeight: height
-  }, 
+  } as ViewStyle, 
   safeArea: {
     flex: 1,
     backgroundColor: 'transparent',
-  }
+  } as ViewStyle,
   })
 export default ScreenComponent;

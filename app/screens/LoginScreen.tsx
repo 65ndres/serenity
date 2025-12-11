@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert, Animated, Image, StyleSheet, View, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
+import { Alert, Animated, Dimensions, Image, StyleSheet, View, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
@@ -17,6 +17,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -111,7 +112,7 @@ const LoginScreen: React.FC = () => {
                     placeholder="user@email.com"
                     selectionColor="white"
                     placeholderTextColor="#d8d8d8ff"
-                    leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+                    leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: screenWidth * 0.08 }}
                     inputStyle={styles.inputStyle}
                     labelStyle={styles.labelStyle}
                     inputContainerStyle={styles.inputContainerStyle}
@@ -131,7 +132,7 @@ const LoginScreen: React.FC = () => {
                   placeholder="password"
                   selectionColor="white"
                   placeholderTextColor="#d8d8d8ff"
-                  leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+                  leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: screenWidth * 0.08 }}
                   inputStyle={styles.inputStyle}
                   labelStyle={styles.labelStyle}
                   inputContainerStyle={styles.inputContainerStyle}
@@ -188,7 +189,6 @@ const LoginScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-
   animatedView: {
     flex: 1,
   } as ViewStyle,
@@ -215,17 +215,17 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   bottomSectionInner: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   } as ViewStyle,
   welcomeText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: screenWidth * 0.08,
   } as TextStyle,
   inputStyle: {
     color: 'white',
-    fontSize: 22,
-    paddingLeft: 20,
+    fontSize: screenWidth * 0.06,
+    paddingLeft: screenWidth * 0.05,
   } as TextStyle,
   labelStyle: {
     color: 'white',
@@ -237,31 +237,33 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: 'white',
-    borderRadius: 30,
+    borderRadius: screenWidth * 0.08,
   } as ViewStyle,
   loginButtonContainer: {
-    marginHorizontal: 50,
-    marginVertical: 10,
+    marginHorizontal: screenWidth * 0.13,
+    marginVertical: screenHeight * 0.012,
   } as ViewStyle,
   loginButtonTitle: {
     fontWeight: 'bold',
     color: '#ac8861ff',
+    fontSize: screenWidth * 0.045,
   } as TextStyle,
   secondaryButtonContainer: {
-    marginVertical: 10,
+    marginVertical: screenHeight * 0.012,
   } as ViewStyle,
   secondaryButtonTitle: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: screenWidth * 0.04,
   } as TextStyle,
   logoImage: {
-    height: 60,
-    width: 60,
+    height: screenWidth * 0.16,
+    width: screenWidth * 0.16,
     alignSelf: 'center',
   } as ImageStyle,
   errorStyle: {
     color: '#ff6b6b',
-    fontSize: 14,
+    fontSize: screenWidth * 0.037,
   } as TextStyle,
 });
 
