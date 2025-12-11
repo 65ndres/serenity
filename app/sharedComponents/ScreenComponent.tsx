@@ -9,6 +9,7 @@ import {
 import 'react-native-reanimated';
 
 const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 // Define the navigation stack param list
 type RootStackParamList = {
   Home: undefined;
@@ -94,7 +95,8 @@ const styles = StyleSheet.create({
     width: width,
     paddingLeft: 40,
     paddingRight: 40,
-    maxWidth: 400
+    maxWidth: 400,
+    maxHeight: height
   }
   })
 export default ScreenComponent;

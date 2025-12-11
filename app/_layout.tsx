@@ -3,6 +3,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemL
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
@@ -13,7 +14,6 @@ import SignUpScreen from './screens/SignUpScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
-
 // Set the animation options. This is optional.
 
 type RootDrawerParamList = {
@@ -132,6 +132,7 @@ const AuthenticatedNavigator: React.FC = () => {
 
 const UnauthenticatedNavigator: React.FC = () => {
   return (
+    <SafeAreaProvider>  
     <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{
@@ -145,7 +146,7 @@ const UnauthenticatedNavigator: React.FC = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerTitle: () => <Text style={{ color: 'transparent' }}>HOME</Text> }}
+        options={{ headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>Promesas</Text> }}
       />
       <Stack.Screen
         name="SignUp"
@@ -164,7 +165,9 @@ const UnauthenticatedNavigator: React.FC = () => {
         }}
       />
     </Stack.Navigator>
+    </SafeAreaProvider>
   );
+  
 };
 
 const RootLayout: React.FC = () => {

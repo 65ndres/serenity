@@ -5,9 +5,12 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, Input, Text } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert, Animated, StyleSheet, View, type TextStyle, type ViewStyle } from 'react-native';
+import { Alert, Animated, Image, StyleSheet, View, type TextStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
+
+
 
 // Define navigation stack types
 type RootStackParamList = {
@@ -18,7 +21,6 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const Separator: React.FC = () => <View style={styles.separator} />;
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -78,100 +80,116 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
     <ScreenComponent>
-      <Animated.View style={{opacity: fadeAnim }}>
-        <View style={{ paddingBottom: 40 }}>
-          <Text h2 style={styles.welcomeText}>
-            WELCOME BACK
-          </Text>
-        </View>
-        <View style={{ paddingBottom: 5 }}>
-          <Input
-            cursorColor="#ffffff"
-            placeholder="user@email.com"
-            selectionColor="white"
-            placeholderTextColor="#d8d8d8ff"
-            leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
-            inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-            labelStyle={{ color: 'white' }}
-            inputContainerStyle={{ borderBottomColor: 'white' }}
-            value={email}
-            onChangeText={setEmail}
-            accessibilityLabel="Email"
-            disabled={isLoading}
-          />
-        </View>
-        <Input
-          cursorColor="#ffffff"
-          placeholder="**********"
-          selectionColor="white"
-          placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-          inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
-          labelStyle={{ color: 'white' }}
-          inputContainerStyle={{ borderBottomColor: 'white' }}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          accessibilityLabel="Password"
-          disabled={isLoading}
-        />
-        <Button
-          title="LOG IN"
-          buttonStyle={{
-            backgroundColor: 'white',
-            borderWidth: 2,
-            borderColor: 'white',
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
-          titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-          onPress={handleLogin}
-          disabled={isLoading}
-          loading={isLoading}
-        />
-        <View>
-          <Button
-            containerStyle={{
-              marginVertical: 10,
-            }}
-            title="Sign up"
-            type="clear"
-            titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-            onPress={handleNavigateToSignUp}
-            disabled={isLoading}
-          />
-        </View>
-        <View>
-          <Button
-            title="Password Reset"
-            type="clear"
-            titleStyle={{ color: '#fff', fontWeight: 'bold' }}
-            onPress={handleNavigateToPasswordReset}
-            disabled={isLoading}
-          />
+      <Animated.View style={{opacity: fadeAnim}}>
+        <View style={styles.entirePage}>
+          <View style={{height: '20%'}}>
+            <View style={{flex: 1, justifyContent: 'flex-end'}}>
+              <Text style={styles.welcomeText}>
+                WELCOME BACK
+              </Text>
+            </View>
+          </View>
+          <View style={{height: '60%', overflow: 'hidden'}}>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <View>
+              <Input
+                cursorColor="#ffffff"
+                placeholder="user@email.com"
+                selectionColor="white"
+                placeholderTextColor="#d8d8d8ff"
+                leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+                inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+                labelStyle={{ color: 'white' }}
+                inputContainerStyle={{ borderBottomColor: 'white' }}
+                value={email}
+                onChangeText={setEmail}
+                accessibilityLabel="Email"
+                disabled={isLoading}
+              />
+            </View>
+            <Input
+              cursorColor="#ffffff"
+              placeholder="**********"
+              selectionColor="white"
+              placeholderTextColor="#d8d8d8ff"
+              leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+              inputStyle={{ color: 'white', fontSize: 22, paddingLeft: 20 }}
+              labelStyle={{ color: 'white' }}
+              inputContainerStyle={{ borderBottomColor: 'white' }}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              accessibilityLabel="Password"
+              disabled={isLoading}
+            />
+            <Button
+              title="LOG IN"
+              buttonStyle={{
+                backgroundColor: 'white',
+                borderWidth: 2,
+                borderColor: 'white',
+                borderRadius: 30,
+              }}
+              containerStyle={{
+                marginHorizontal: 50,
+                marginVertical: 10,
+              }}
+              titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+              onPress={handleLogin}
+              disabled={isLoading}
+              loading={isLoading}
+            />
+            <View>
+              <Button
+                containerStyle={{
+                  marginVertical: 10,
+                }}
+                title="Sign up"
+                type="clear"
+                titleStyle={{ color: '#fff', fontWeight: 'bold' }}
+                onPress={handleNavigateToSignUp}
+                disabled={isLoading}
+              />
+            </View>
+            <View>
+              <Button
+                title="Password Reset"
+                type="clear"
+                titleStyle={{ color: '#fff', fontWeight: 'bold' }}
+                onPress={handleNavigateToPasswordReset}
+                disabled={isLoading}
+              />
+            </View>
+            </View>
+          </View>
+          <View style={{height: '20%'}}>
+            <View style={{flex: 1, justifyContent: 'flex-end'}}>
+              <Image source={require('../../assets/images/splash-icon.png')} style={{height: 60, width: 60, alignSelf: 'center'}} />
+            </View>
+          </View>
         </View>
       </Animated.View>
     </ScreenComponent>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  name: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 15,
+    // paddingBottom: 40,
+    fontWeight: '500',
+    // textDecorationLine: 'underline',
+  } as TextStyle,
   welcomeText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: 30,
   } as TextStyle,
-  separator: {
-    marginVertical: 8,
-    width: '80%',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  } as ViewStyle,
 });
 
 export default LoginScreen;
