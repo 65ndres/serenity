@@ -18,7 +18,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const width = Dimensions.get('window').width;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Separator: React.FC = () => <View style={styles.separator} />;
 
@@ -106,7 +106,7 @@ const SignUpScreen: React.FC = () => {
             placeholder="user@email.com"
             selectionColor="white"
             placeholderTextColor="#d8d8d8ff"
-            leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+            leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: screenWidth * 0.08 }}
             inputStyle={styles.inputStyle}
             labelStyle={styles.labelStyle}
             inputContainerStyle={styles.inputContainerStyle}
@@ -125,7 +125,7 @@ const SignUpScreen: React.FC = () => {
           placeholder="password"
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: screenWidth * 0.08 }}
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           inputContainerStyle={styles.inputContainerStyle}
@@ -145,7 +145,7 @@ const SignUpScreen: React.FC = () => {
           placeholder="confirm password"
           selectionColor="white"
           placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: screenWidth * 0.08 }}
           inputStyle={styles.inputStyle}
           labelStyle={styles.labelStyle}
           inputContainerStyle={styles.inputContainerStyle}
@@ -209,11 +209,12 @@ const styles = StyleSheet.create({
   welcomeText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: screenWidth * 0.08,
   } as TextStyle,
   inputStyle: {
     color: 'white',
-    fontSize: 22,
-    paddingLeft: 20,
+    fontSize: screenWidth * 0.06,
+    paddingLeft: screenWidth * 0.05,
   } as TextStyle,
   labelStyle: {
     color: 'white',
@@ -223,24 +224,25 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   errorStyle: {
     color: '#ff6b6b',
-    fontSize: 14,
+    fontSize: screenWidth * 0.037,
   } as TextStyle,
   signupButton: {
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: 'white',
-    borderRadius: 30,
+    borderRadius: screenWidth * 0.08,
   } as ViewStyle,
   signupButtonContainer: {
-    marginHorizontal: 50,
-    marginVertical: 10,
+    marginHorizontal: screenWidth * 0.13,
+    marginVertical: screenHeight * 0.012,
   } as ViewStyle,
   signupButtonTitle: {
     fontWeight: 'bold',
     color: '#ac8861ff',
+    fontSize: screenWidth * 0.047,
   } as TextStyle,
   separator: {
-    marginVertical: 8,
+    marginVertical: screenHeight * 0.01,
     width: '80%',
     borderBottomColor: 'white',
     borderBottomWidth: 1,
@@ -248,8 +250,8 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   } as ViewStyle,
   logoImage: {
-    height: 60,
-    width: 60,
+    height: screenWidth * 0.16,
+    width: screenWidth * 0.16,
     alignSelf: 'center',
   } as ImageStyle,
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, Image, StyleSheet, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
@@ -63,9 +63,15 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   return (
     <ScreenComponent>
       <Animated.View style={{opacity: fadeAnim }}>
-        <View style={{height: '80%'}}>
-          <View style={styles.filter}> </View>       
-          <VerseModule data={[]} active={4} url={API_URL_HIS_WILL} />
+      <View style={{height: '20%'}}>
+      </View>
+        <View style={{height: '60%'}}>
+          <VerseModule data={[]} url={API_URL_HIS_WILL} active={0} />
+        </View>
+        <View style={{height: '20%'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
+          </View>
         </View>
       </Animated.View>
     </ScreenComponent>
@@ -105,6 +111,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     textAlign: 'center',
     borderWidth: 0
+  },
+  logoImage: {
+    height: 60,
+    width: 60,
+    alignSelf: 'center',
   }
 });
 

@@ -86,7 +86,7 @@ const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) =>
     >
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.screenContainer, style]}>
-          {processChildren(children)}
+      {processChildren(children)}
         </View>
       </SafeAreaView>
     </ImageBackground>

@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   loginButtonTitle: {
     fontWeight: 'bold',
     color: '#ac8861ff',
-    fontSize: screenWidth * 0.045,
+    fontSize: screenWidth * 0.05,
   } as TextStyle,
   secondaryButtonContainer: {
     marginVertical: screenHeight * 0.012,
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   secondaryButtonTitle: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: screenWidth * 0.04,
+    fontSize: screenWidth * 0.05,
   } as TextStyle,
   logoImage: {
     height: screenWidth * 0.16,

@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import React, { useCallback, useRef } from 'react';
 import {
   Animated,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -78,13 +79,28 @@ const Home: React.FC = () => {
   return (
     <ScreenComponent>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <Pressable onPress={() => navigateWithFadeOut('HisWillScreen')}>
-          <Text style={styles.text}>His will</Text>
-        </Pressable>
-        <Separator />
-        <Pressable onPress={() => navigateWithFadeOut('YourChoiceScreen')}>
-          <Text style={styles.text}>Your choice</Text>
-        </Pressable>
+        <View style={{height: '20%'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <Text style={styles.textt}>GOOD MORNING</Text>
+          </View>
+        </View>
+
+        <View style={{height: '60%'}}>
+          <View style={{flex: 1, justifyContent: 'center'}}>
+          <Pressable onPress={() => navigateWithFadeOut('HisWillScreen')}>
+            <Text style={styles.text}>His will</Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={() => navigateWithFadeOut('YourChoiceScreen')}>
+            <Text style={styles.text}>Your choice</Text>
+          </Pressable>
+          </View>
+        </View>
+        <View style={{height: '20%'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} />
+          </View>
+        </View>
       </Animated.View>
     </ScreenComponent>
   );
@@ -98,21 +114,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   } as ViewStyle,
+  textt: {
+    color: 'white',
+    fontSize: 30,
+    lineHeight: 64,
+    fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
+    textAlign: 'center',
+  } as TextStyle,
   text: {
     color: 'white',
-    fontSize: 44,
-    lineHeight: 84,
-    fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
+    fontSize: 40,
+    fontWeight: '300',
     textAlign: 'center',
   } as TextStyle,
   separator: {
     marginVertical: 8,
     width: '80%',
     borderBottomColor: 'white',
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     marginLeft: 'auto',
     marginRight: 'auto',
   } as ViewStyle,
+    logoImage: {
+      height: 60,
+      width: 60,
+      alignSelf: 'center',
+    } as TextStyle,
+  welcomeText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '500',
+    textAlign: 'center',
+  } as TextStyle,
 });
 
 export default Home;

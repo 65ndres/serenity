@@ -98,14 +98,14 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="Home"
         component={Home}
-        options={{ drawerLabel: 'Home', headerTitle: () => <Text style={styles.text}></Text> }}
+        options={{ drawerLabel: 'Home', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text> }}
       />
       <Drawer.Screen
         name="HisWillScreen"
         component={HisWillScreen}
         options={{
           drawerLabel: 'His will',
-          headerTitle: () => <Text style={styles.text}>HIS WILL</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
       <Drawer.Screen
@@ -146,14 +146,14 @@ const UnauthenticatedNavigator: React.FC = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>Promesas</Text> }}
+        options={{ headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text> }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
         options={{
           headerLeft: () => <BackButton text="" />,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>Promesas</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
       <Stack.Screen
@@ -161,7 +161,7 @@ const UnauthenticatedNavigator: React.FC = () => {
         component={PasswordResetScreen}
         options={{
           headerLeft: () => <BackButton text="Login" />,
-          headerTitle: () => <Text style={{ color: 'transparent' }}>HOME</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
     </Stack.Navigator>

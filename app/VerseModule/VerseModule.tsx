@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -209,8 +209,8 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                     accessibilityLabel={item.liked ? 'Unlike verse' : 'Like verse'}
                     accessibilityRole="button"
                   >
-                    <AntDesign
-                      name={item.liked ? 'heart' : 'hearto'}
+                    <FontAwesome
+                      name={(item.liked ? 'heart' : 'heart-o') as any}
                       size={28}
                       color={item.liked ? 'white' : 'white'}
                     />
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   bookText: {
     fontSize: 18,
     color: 'white',
-    fontWeight: '600',
+    fontWeight: '400',
     marginRight: 4,
   },
   chapterVerseText: {
