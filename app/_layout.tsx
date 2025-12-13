@@ -124,7 +124,10 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
-        options={{ drawerLabel: 'PROFILE', headerTitle: () => <Text style={styles.text}></Text> }}
+        options={{ drawerLabel: 'PROFILE',
+          headerLeft: () => <BackButton text="" /> ,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '300' }}>PROFILE</Text>,
+         }}
       />
     </Drawer.Navigator>
   );
