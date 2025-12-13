@@ -41,6 +41,8 @@ const UserProfileScreen: React.FC = () => {
   const [newPassword, setNewPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(true);
+  const [firstNameError, setFirstNameError] = useState<string>('');
+  const [lastNameError, setLastNameError] = useState<string>('');
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -54,7 +56,7 @@ const UserProfileScreen: React.FC = () => {
     try {
       setIsLoadingProfile(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/profile`, {
+      const response = await axios.get(`${API_URL}/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -72,6 +74,25 @@ const UserProfileScreen: React.FC = () => {
   };
 
   const updateProfile = async () => {
+    // Reset errors
+    setFirstNameError('');
+    setLastNameError('');
+    
+    // Validate required fields
+    let hasError = false;
+    if (!firstName.trim()) {
+      setFirstNameError('First name is required');
+      hasError = true;
+    }
+    if (!lastName.trim()) {
+      setLastNameError('Last name is required');
+      hasError = true;
+    }
+    
+    if (hasError) {
+      return;
+    }
+    
     try {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
@@ -90,7 +111,7 @@ const UserProfileScreen: React.FC = () => {
         payload.new_password = newPassword;
       }
       
-      await axios.post(`${API_URL}/profile`, payload, {
+      await axios.post(`${API_URL}/user`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -126,7 +147,12 @@ const UserProfileScreen: React.FC = () => {
           labelStyle={{color: 'white'}}
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={firstName}
-          onChangeText={setFirstName}
+          onChangeText={(text) => {
+            setFirstName(text);
+            if (firstNameError) setFirstNameError('');
+          }}
+          errorMessage={firstNameError}
+          errorStyle={styles.errorStyle}
           disabled={isLoadingProfile || isLoading}
         />
         <Input
@@ -138,7 +164,12 @@ const UserProfileScreen: React.FC = () => {
           inputStyle={{color: 'white', fontSize: 18, paddingLeft: 20}}
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={lastName}
-          onChangeText={setLastName}
+          onChangeText={(text) => {
+            setLastName(text);
+            if (lastNameError) setLastNameError('');
+          }}
+          errorMessage={lastNameError}
+          errorStyle={styles.errorStyle}
           disabled={isLoadingProfile || isLoading}
         />
         <Input
@@ -152,11 +183,12 @@ const UserProfileScreen: React.FC = () => {
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
-          disabled={isLoadingProfile || isLoading}
+          disabled={true}
         />
+        <Text style={{color: 'white', fontSize: 15, fontWeight: '300', textAlign: 'center', fontStyle: 'italic', paddingBottom: 10}}>*You will be singed out if the password is changed.</Text>
       <Input
         cursorColor="#ffffff"
-        placeholder="Old Password"
+        placeholder="New Password"
         selectionColor="white"
         placeholderTextColor="#d8d8d8ff"
         leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 25 }}
@@ -171,7 +203,7 @@ const UserProfileScreen: React.FC = () => {
       />
       <Input
         cursorColor="#ffffff"
-        placeholder="New Password"
+        placeholder="Confirm New Password"
         selectionColor="white"
         placeholderTextColor="#d8d8d8ff"
         leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 25 }}
@@ -235,6 +267,10 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   } as ViewStyle,
+  errorStyle: {
+    color: '#ff6b6b',
+    fontSize: 14,
+  } as TextStyle,
 });
 
 export default UserProfileScreen;
