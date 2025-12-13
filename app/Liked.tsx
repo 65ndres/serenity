@@ -143,60 +143,70 @@ const Liked: React.FC = () => {
   return (
     <ScreenComponent>
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-        <ScrollView
-          style={{
-            height: 800,
-          }}
-        >
-          {listComponentVisibility && <View style={styles.container}>
-          {loading ? (
-            <View style={styles.centerContainer}>
-              <ActivityIndicator size="large" color="white" />
+        <View style={{ height: "15%" }}>
+        </View>
+        <View style={{ height: "65%" }}> 
+          <ScrollView
+            style={{
+              height: '100%',
+            }}
+          >
+            {listComponentVisibility && <View style={styles.container}>
+            {loading ? (
+              <View style={styles.centerContainer}>
+                <ActivityIndicator size="large" color="white" />
+              </View>
+            ) : error ? (
+              <View style={styles.centerContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            ) : verses.length === 0 ? (
+              <View style={styles.centerContainer}>
+                <Text style={styles.emptyText}>No liked verses yet</Text>
+              </View>
+            ) : (
+              verses.map((item) => (
+                <TouchableOpacity 
+                  key={item.id}
+                  onPress={() => showModule(item.id)}
+                >
+                  <View style={styles.lineItemContainer}>
+                    <Text style={styles.lineItemText}>
+                      {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
+                    </Text>
+                    <Text style={{color: 'white', fontSize: 16}}>
+                      {item.text
+                        ? item.text.length > 30
+                          ? item.text.slice(0, 30) + '...'
+                          : item.text
+                        : ''}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
+          </View>}
+          {moduleComponentVisibility && selectedVerse && 
+          <View style={{ height: "100%" }}>
+            <View style={{ height: "60%" }}>
+              <VerseModule data={[selectedVerse]} active={4} url={''} />
             </View>
-          ) : error ? (
-            <View style={styles.centerContainer}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : verses.length === 0 ? (
-            <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>No liked verses yet</Text>
-            </View>
-          ) : (
-            verses.map((item) => (
-              <TouchableOpacity 
-                key={item.id}
-                onPress={() => showModule(item.id)}
-              >
-                <View style={styles.lineItemContainer}>
-                  <Text style={styles.lineItemText}>
-                    {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
-                  </Text>
-                  <Text style={{color: 'white', fontSize: 16}}>
-                    {item.text
-                      ? item.text.length > 30
-                        ? item.text.slice(0, 30) + '...'
-                        : item.text
-                      : ''}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))
-          )}
-        </View>}
-        {moduleComponentVisibility && selectedVerse && 
-        <View style={{ height: "100%" }}>
-          <View style={{ height: "40%" }}>
           </View>
-          <View style={{ height: "60%" }}>
-            <VerseModule data={[selectedVerse]} active={4} url={''} />
+          }
+          </ScrollView>
+        </View>
+        <View style={{ height: "20%" }}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
           </View>
         </View>
-        }
-        </ScrollView>
       </Animated.View>
     </ScreenComponent>
   );
 };
+
+{/* <View style={{ height: "20%" }}>
+          </View> */}
 
 const styles = StyleSheet.create({
   lineItem: {
@@ -208,7 +218,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignContent: 'center',
-    paddingTop: 150,
   } as ViewStyle,
   centerContainer: {
     flex: 1,
@@ -231,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: 'white',
     paddingBottom: 20,
     paddingTop: 20,

@@ -5,7 +5,6 @@ import { useFonts } from 'expo-font';
 import React, { useCallback, useRef } from 'react';
 import {
   Animated,
-  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -79,14 +78,13 @@ const Home: React.FC = () => {
   return (
     <ScreenComponent>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <View style={{height: '20%'}}>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <Text style={styles.textt}>Good morning</Text>
-          </View>
+        <View style={{height: '15%'}}>
         </View>
 
-        <View style={{height: '60%'}}>
+        <View style={{height: '65%'}}>
+          {/* <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} /> */}
           <View style={{flex: 1, justifyContent: 'center'}}>
+          
           <Pressable onPress={() => navigateWithFadeOut('HisWillScreen')}>
             <Text style={styles.text}>HIS WILL</Text>
           </Pressable>
@@ -98,7 +96,8 @@ const Home: React.FC = () => {
         </View>
         <View style={{height: '20%'}}>
           <View style={{flex: 1, justifyContent: 'flex-end'}}>
-          <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} />
+          <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
+          {/* <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} /> */}
           </View>
         </View>
       </Animated.View>
@@ -134,6 +133,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginTop: 25,
+    marginBottom: 25,
   } as ViewStyle,
     logoImage: {
       height: 60,

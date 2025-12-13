@@ -2,7 +2,7 @@
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
@@ -76,7 +76,7 @@ const AuthenticatedNavigator: React.FC = () => {
         },
         drawerLabelStyle: {
           color: 'white', // Updated from 'blue' to match theme
-          fontSize: 26,
+          fontSize: 20,
           fontWeight: '300',
           textAlign: 'center'
           
@@ -98,31 +98,33 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="Home"
         component={Home}
-        options={{ drawerLabel: 'Home', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text> }}
+        options={{ 
+          headerLeft: () => <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} />,
+          drawerLabel: 'HOME', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>HOME</Text> }}
       />
       <Drawer.Screen
         name="HisWillScreen"
         component={HisWillScreen}
         options={{
-          drawerLabel: 'His will',
+          drawerLabel: 'HIS WILL',
+          headerLeft: () => <BackButton text="" /> ,
           headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '300' }}>HIS WILL</Text>,
         }}
       />
       <Drawer.Screen
-        name="Liked"
-        component={LikedScreen}
-        options={{ drawerLabel: 'Liked Verses', headerTitle: () => <Text style={styles.text}>LIKED</Text> }}
-      />
-      <Drawer.Screen
         name="YourChoiceScreen"
         component={YourChoiceScreen}
-        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>YOUR CHOICE</Text>}}
+        options={{headerLeft: () => <BackButton text="" /> ,drawerLabel: 'YOUR CHOICE', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>YOUR CHOICE</Text>}}
       />
-
+      <Drawer.Screen
+        name="Liked"
+        component={LikedScreen}
+        options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={styles.text}>LIKED VERSES</Text> }}
+      />
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
-        options={{ drawerLabel: 'Profile', headerTitle: () => <Text style={styles.text}></Text> }}
+        options={{ drawerLabel: 'PROFILE', headerTitle: () => <Text style={styles.text}></Text> }}
       />
     </Drawer.Navigator>
   );
@@ -207,6 +209,11 @@ const styles = StyleSheet.create({
     fontWeight: 300,
     fontSize: 26,
   },
+  logoImage: {
+    width: 35,
+    height: 35,
+    marginLeft: 20,
+  } as ViewStyle,
   appBackground: {
     flex: 1,
     width: '100%',
