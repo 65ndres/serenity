@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as Haptics from 'expo-haptics';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
@@ -47,6 +48,9 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const toggleLike = async (index: number) => {
     const verse = verses[index];
     if (!verse || !verse.id) return;
+
+    // Provide haptic feedback
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     // Optimistically update the UI
     const previousLikedState = verse.liked;
@@ -164,10 +168,10 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
         {url.length === 0 && verses.length === 0 ? (
           <View style={{ flex: 1, display: 'flex' }}>
             <View style={{width: (width - 80), height: width}}>
-              <View style={{display: 'flex', alignItems: 'flex-end'}}>
+              <View style={{display: 'flex', alignItems: 'flex-end', paddingTop: 20}}>
 
-                  <Text style={{ color: 'white', fontSize: 20, alignSelf: 'center' }}>
-                    Choose a catergory from above
+                  <Text style={{ color: 'white', fontSize: 20, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>
+                  "Search for the LORD and for his strength..."
                   </Text>
               </View>
             </View>
@@ -190,7 +194,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                     paddingHorizontal: 20,
                     flex: 1,
                   }}
-                  contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+                  contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-start', paddingTop: 20 }}
                 >
                   <Text style={styles.verseText}>{item.text}</Text>
                 </ScrollView>

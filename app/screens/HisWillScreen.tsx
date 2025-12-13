@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
@@ -64,13 +64,16 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
     <ScreenComponent>
       <Animated.View style={{opacity: fadeAnim }}>
       <View style={{height: '20%'}}>
+        <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 10}}> 
+          <Text style={{ color: 'white', fontSize: 18, fontWeight: '300', textAlign: 'center', fontStyle: 'italic' }}>"Trust in the LORD..."</Text>
+        </View>
       </View>
         <View style={{height: '60%'}}>
           <VerseModule data={[]} url={API_URL_HIS_WILL} active={0} />
         </View>
         <View style={{height: '20%'}}>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
+        <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+          <Text style={{ color: 'white', fontSize: 15, fontWeight: '500' }}>Promesas</Text>
           </View>
         </View>
       </Animated.View>

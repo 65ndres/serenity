@@ -81,18 +81,18 @@ const Home: React.FC = () => {
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={{height: '20%'}}>
           <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <Text style={styles.textt}>GOOD MORNING</Text>
+            <Text style={styles.textt}>Good morning</Text>
           </View>
         </View>
 
         <View style={{height: '60%'}}>
           <View style={{flex: 1, justifyContent: 'center'}}>
           <Pressable onPress={() => navigateWithFadeOut('HisWillScreen')}>
-            <Text style={styles.text}>His will</Text>
+            <Text style={styles.text}>HIS WILL</Text>
           </Pressable>
           <Separator />
           <Pressable onPress={() => navigateWithFadeOut('YourChoiceScreen')}>
-            <Text style={styles.text}>Your choice</Text>
+            <Text style={styles.text}>YOUR CHOICE</Text>
           </Pressable>
           </View>
         </View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   } as TextStyle,
   text: {
     color: 'white',
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: '300',
     textAlign: 'center',
   } as TextStyle,

@@ -91,7 +91,7 @@ const AuthenticatedNavigator: React.FC = () => {
         headerTintColor: 'white',
         headerTitleStyle: {
           color: 'white',
-          fontSize: 18,
+          fontSize: 25,
         },
       }}
     >
@@ -105,7 +105,7 @@ const AuthenticatedNavigator: React.FC = () => {
         component={HisWillScreen}
         options={{
           drawerLabel: 'His will',
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '300' }}>HIS WILL</Text>,
         }}
       />
       <Drawer.Screen
@@ -116,7 +116,7 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="YourChoiceScreen"
         component={YourChoiceScreen}
-        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={styles.text}></Text> }}
+        options={{ drawerLabel: 'Your Choice', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>YOUR CHOICE</Text>}}
       />
 
       <Drawer.Screen

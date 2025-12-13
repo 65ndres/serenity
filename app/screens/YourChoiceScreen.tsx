@@ -1,6 +1,6 @@
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 import YourChoiceContent from '../sharedComponents/YourChoiceContent';
@@ -84,12 +84,18 @@ const YourChoiceScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
   return (
     <ScreenComponent>
       <Animated.View style={{opacity: fadeAnim }}>
-        <View style={{height: '80%'}}>        
-          <YourChoiceContent></YourChoiceContent>
+      <View style={{height: '12%'}}>
+      </View>
+        <View style={{height: '68%'}}>
+            <YourChoiceContent></YourChoiceContent>
+        </View>
+        <View style={{height: '20%'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+          <Text style={{ color: 'white', fontSize: 15, fontWeight: '500' }}>Promesas</Text>
+          </View>
         </View>
       </Animated.View>
     </ScreenComponent>
-  
 );
   
 };
@@ -150,6 +156,11 @@ const styles = StyleSheet.create({
     containerss: {
       backgroundColor: 'transparent',
       borderWidth: 0
+    },
+    logoImage: {
+      height: 60,
+      width: 60,
+      alignSelf: 'center',
     }
 });
 

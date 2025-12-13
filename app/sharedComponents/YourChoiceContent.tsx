@@ -1,5 +1,6 @@
+import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { API_URL } from '../../constants/Config';
 import VerseModule from '../VerseModule/VerseModule';
@@ -31,29 +32,34 @@ const YourChoiceContent: React.FC = () => {
 
   return (
     <>
-      <Dropdown
-      style={styles.dropdown}
-      placeholderStyle={styles.placeholderStyle}
-      selectedTextStyle={styles.selectedTextStyle}
-      inputSearchStyle={styles.inputSearchStyle}
-      iconStyle={styles.iconStyle}
-      itemTextStyle={{ color: 'white', textAlign: 'center', fontSize: 20 }}
-      data={categoriesToList}
-      maxHeight={300}
-      autoScroll={false}
-      activeColor="transparent"
-      labelField="label"
-      valueField="value"
-      placeholder="Select item"
-      searchPlaceholder="Search..."
-      containerStyle={styles.containerss}
-      onFocus={toggleVerseComponent}
-      onBlur={toggleVerseComponent}
-      iconColor={'transparent'}
-      onChange={item => {
-        updateUrl(item.value);
-      } } />
-
+      <View style={styles.dropdownContainer}>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          itemTextStyle={{ color: 'white', textAlign: 'center', fontSize: 20, fontWeight: '300' }}
+          data={categoriesToList}
+          maxHeight={300}
+          autoScroll={false}
+          activeColor="transparent"
+          labelField="label"
+          valueField="value"
+          placeholder="Select a category"
+          containerStyle={styles.containerss}
+          onFocus={toggleVerseComponent}
+          onBlur={toggleVerseComponent}
+          iconColor={'transparent'}
+          onChange={item => {
+            updateUrl(item.value);
+          } } />
+      </View>
+      {verseComponentVisibility &&
+        <View style={styles.chevronContainer}>
+          <Feather name="chevron-down" size={25} color="white" />
+        </View>}
+  
         {verseComponentVisibility && <VerseModule data={[]} active={4} url={url} />}
     </>
   );
@@ -84,12 +90,20 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  dropdownContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   dropdown: {
-    margin: 16,
     height: 50,
     backgroundColor: 'transparent',
     textAlign: 'center',
-    borderWidth: 0
+    borderWidth: 0,
+    width: '100%',
+  },
+  chevronContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     marginRight: 5,
@@ -97,12 +111,15 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 20,
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '300',
   },
   selectedTextStyle: {
-    fontSize: 25,
+    fontSize: 20,
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '300',
+    // fontStyle: 'italic',
   },
   iconStyle: {
     color: 'transparent',
