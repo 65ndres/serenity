@@ -43,6 +43,8 @@ const UserProfileScreen: React.FC = () => {
   const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(true);
   const [firstNameError, setFirstNameError] = useState<string>('');
   const [lastNameError, setLastNameError] = useState<string>('');
+  const [newPasswordError, setNewPasswordError] = useState<string>('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -77,6 +79,8 @@ const UserProfileScreen: React.FC = () => {
     // Reset errors
     setFirstNameError('');
     setLastNameError('');
+    setNewPasswordError('');
+    setConfirmPasswordError('');
     
     // Validate required fields
     let hasError = false;
@@ -87,6 +91,18 @@ const UserProfileScreen: React.FC = () => {
     if (!lastName.trim()) {
       setLastNameError('Last name is required');
       hasError = true;
+    }
+    
+    // Validate password fields - if either has characters, both must match
+    const hasNewPassword = oldPassword.trim().length > 0;
+    const hasConfirmPassword = newPassword.trim().length > 0;
+    
+    if (hasNewPassword || hasConfirmPassword) {
+      if (oldPassword !== newPassword) {
+        setNewPasswordError('Passwords do not match');
+        setConfirmPasswordError('Passwords do not match');
+        hasError = true;
+      }
     }
     
     if (hasError) {
@@ -103,11 +119,8 @@ const UserProfileScreen: React.FC = () => {
         email: email.toLowerCase(),
       };
       
-      // Only include password fields if they are provided
-      if (oldPassword.trim()) {
-        payload.old_password = oldPassword;
-      }
-      if (newPassword.trim()) {
+      // Only include password field if it's provided
+      if (oldPassword.trim() && newPassword.trim()) {
         payload.new_password = newPassword;
       }
       
@@ -196,9 +209,17 @@ const UserProfileScreen: React.FC = () => {
         labelStyle={{ color: 'white' }}
         inputContainerStyle={{ borderBottomColor: 'white' }}
         value={oldPassword}
-        onChangeText={setOldPassword}
+        onChangeText={(text) => {
+          setOldPassword(text);
+          if (newPasswordError || confirmPasswordError) {
+            setNewPasswordError('');
+            setConfirmPasswordError('');
+          }
+        }}
+        errorMessage={newPasswordError}
+        errorStyle={styles.errorStyle}
         secureTextEntry
-        accessibilityLabel="Old Password"
+        accessibilityLabel="New Password"
         disabled={isLoadingProfile || isLoading}
       />
       <Input
@@ -211,9 +232,17 @@ const UserProfileScreen: React.FC = () => {
         labelStyle={{ color: 'white' }}
         inputContainerStyle={{ borderBottomColor: 'white' }}
         value={newPassword}
-        onChangeText={setNewPassword}
+        onChangeText={(text) => {
+          setNewPassword(text);
+          if (newPasswordError || confirmPasswordError) {
+            setNewPasswordError('');
+            setConfirmPasswordError('');
+          }
+        }}
+        errorMessage={confirmPasswordError}
+        errorStyle={styles.errorStyle}
         secureTextEntry
-        accessibilityLabel="New Password"
+        accessibilityLabel="Confirm New Password"
         disabled={isLoadingProfile || isLoading}
       />
       </View>
