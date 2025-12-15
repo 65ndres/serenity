@@ -20,7 +20,7 @@ interface Props {
   ref: React.RefObject<ICarouselInstance>;
 }
 
-const width = Dimensions.get("window").width;
+const { height } = Dimensions.get('window');
 
 interface Verse {
   book: string;
@@ -62,18 +62,18 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
 
   return (
     <ScreenComponent>
-      <Animated.View style={{opacity: fadeAnim }}>
-      <View style={{height: '20%'}}>
-        <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 10}}> 
-          <Text style={{ color: 'white', fontSize: 24, fontWeight: '300', textAlign: 'center', fontStyle: 'italic' }}>"Trust in the LORD..."</Text>
+      <Animated.View style={{ opacity: fadeAnim }}>
+        <View style={styles.topSection}>
+          <View style={styles.topContent}>
+            <Text style={styles.quoteText}>"Trust in the LORD..."</Text>
+          </View>
         </View>
-      </View>
-        <View style={{height: '60%'}}>
+        <View style={styles.middleSection}>
           <VerseModule data={[]} url={API_URL_HIS_WILL} active={0} />
         </View>
-        <View style={{height: '20%'}}>
-        <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-          <Text style={{ color: 'white', fontSize: 15, fontWeight: '500' }}>Promesas</Text>
+        <View style={styles.bottomSection}>
+          <View style={styles.bottomContent}>
+            <Text style={styles.appNameText}>Promesas</Text>
           </View>
         </View>
       </Animated.View>
@@ -87,6 +87,38 @@ export default HisWillScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  topSection: {
+    height: '20%',
+  },
+  topContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: height * 0.015, // ~1.5% of screen height for consistent spacing
+  },
+  middleSection: {
+    height: '60%',
+  },
+  bottomSection: {
+    height: '20%',
+  },
+  bottomContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  quoteText: {
+    color: 'white',
+    fontSize: height * 0.03, // scales with screen height
+    fontWeight: '300',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  appNameText: {
+    color: 'white',
+    fontSize: height * 0.018, // scales with screen height
+    fontWeight: '500',
   },
   image: {
     flex: 1,
