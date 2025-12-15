@@ -20,7 +20,7 @@ interface Props {
   ref: React.RefObject<ICarouselInstance>;
 }
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 interface Verse {
   book: string;
@@ -126,14 +126,14 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 44,
-    lineHeight: 84,
+    fontSize: height * 0.055,
+    lineHeight: height * 0.1,
     fontWeight: 'light',
     textAlign: 'center',
   },
   separator: {
-    marginVertical: 8,
-    width:"80%",
+    marginVertical: height * 0.01,
+    width: '80%',
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     marginLeft: 'auto',
@@ -141,15 +141,15 @@ const styles = StyleSheet.create({
   },
 
   filter: {
-    margin: 16,
-    height: 50,
+    margin: height * 0.02,
+    height: height * 0.06,
     backgroundColor: 'transparent',
     textAlign: 'center',
     borderWidth: 0
   },
   logoImage: {
-    height: 60,
-    width: 60,
+    height: width * 0.15,
+    width: width * 0.15,
     alignSelf: 'center',
   }
 });
