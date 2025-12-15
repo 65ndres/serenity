@@ -72,18 +72,14 @@ const AuthenticatedNavigator: React.FC = () => {
         headerTransparent: true,
         drawerStyle: {
           backgroundColor: 'transparent', // Transparent to show ImageBackground
-          width: 250,
+          width: 300,
         },
         drawerLabelStyle: {
           color: 'white', // Updated from 'blue' to match theme
-          fontSize: 20,
+          fontSize: 25,
           fontWeight: '300',
           textAlign: 'center'
           
-        },
-        drawerItemStyle: {
-          borderBottomColor: 'white',
-          borderBottomWidth: 1
         },
         headerStyle: {
           backgroundColor: 'transparent',

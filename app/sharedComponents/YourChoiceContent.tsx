@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   placeholderStyle: {
-    fontSize: 20,
+    fontSize: 24,
     color: 'white',
     textAlign: 'center',
     fontWeight: '300',
   },
   selectedTextStyle: {
-    fontSize: 20,
+    fontSize: 24,
     color: 'white',
     textAlign: 'center',
     fontWeight: '300',
