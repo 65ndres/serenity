@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "serenityv1.app"
-               BlueprintName = "serenityv1"
-               ReferencedContainer = "container:serenityv1.xcodeproj">
+               BuildableName = "Promesas.app"
+               BlueprintName = "Promesas"
+               ReferencedContainer = "container:Promesas.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "serenityv1Tests.xctest"
-               BlueprintName = "serenityv1Tests"
-               ReferencedContainer = "container:serenityv1.xcodeproj">
+               BuildableName = "PromesasTests.xctest"
+               BlueprintName = "PromesasTests"
+               ReferencedContainer = "container:Promesas.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "serenityv1.app"
-            BlueprintName = "serenityv1"
-            ReferencedContainer = "container:serenityv1.xcodeproj">
+            BuildableName = "Promesas.app"
+            BlueprintName = "Promesas"
+            ReferencedContainer = "container:Promesas.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "serenityv1.app"
-            BlueprintName = "serenityv1"
-            ReferencedContainer = "container:serenityv1.xcodeproj">
+            BuildableName = "Promesas.app"
+            BlueprintName = "Promesas"
+            ReferencedContainer = "container:Promesas.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

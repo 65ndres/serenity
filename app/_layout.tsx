@@ -100,7 +100,7 @@ const AuthenticatedNavigator: React.FC = () => {
         component={Home}
         options={{ 
           headerLeft: () => <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} />,
-          drawerLabel: 'HOME', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>HOME</Text> }}
+          drawerLabel: 'HOME', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>HOME</Text> }}
       />
       <Drawer.Screen
         name="HisWillScreen"
@@ -108,25 +108,25 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{
           drawerLabel: 'HIS WILL',
           headerLeft: () => <BackButton text="" /> ,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '300' }}>HIS WILL</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>HIS WILL</Text>,
         }}
       />
       <Drawer.Screen
         name="YourChoiceScreen"
         component={YourChoiceScreen}
-        options={{headerLeft: () => <BackButton text="" /> ,drawerLabel: 'YOUR CHOICE', headerTitle: () => <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>YOUR CHOICE</Text>}}
+        options={{headerLeft: () => <BackButton text="" /> ,drawerLabel: 'YOUR CHOICE', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>YOUR CHOICE</Text>}}
       />
       <Drawer.Screen
         name="Liked"
         component={LikedScreen}
-        options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={styles.text}>LIKED VERSES</Text> }}
+        options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>LIKED VERSES</Text> }}
       />
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
         options={{ drawerLabel: 'PROFILE',
           headerLeft: () => <BackButton text="" /> ,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '300' }}>PROFILE</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>PROFILE</Text>,
          }}
       />
     </Drawer.Navigator>
@@ -142,7 +142,7 @@ const UnauthenticatedNavigator: React.FC = () => {
       initialRouteName="Login"
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: { color: 'white', fontSize: 18 },
+          headerTitleStyle: { color: 'white', fontSize: 20, fontWeight: '400' },
         cardStyle: { backgroundColor: 'transparent', flex: 1 },
         headerTintColor: 'white',
         

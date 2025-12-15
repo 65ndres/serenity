@@ -1,25 +1,14 @@
-# EAS Build ignore file
-# Files and directories listed here will not be uploaded to EAS Build servers
+# Exclude large unused image files from EAS builds
 
-# Dependencies (will be installed on build server)
-node_modules/
+# Exclude build artifacts
+ios/build/
+ios/Pods/
+android/build/
+android/app/build/
+android/.gradle/
 
-# Build artifacts
-.expo/
-dist/
-web-build/
+# Exclude development files
 *.log
-
-# Local development files
-.env*.local
-*.pem
-*.key
-*.p8
-*.p12
-*.mobileprovision
-*.jks
-
-# OS files
 .DS_Store
 Thumbs.db
 

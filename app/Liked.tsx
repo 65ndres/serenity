@@ -174,10 +174,10 @@ const Liked: React.FC = () => {
                     <Text style={styles.lineItemText}>
                       {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
                     </Text>
-                    <Text style={{color: 'white', fontSize: 16}}>
+                    <Text style={{color: 'white', fontSize: 20}}>
                       {item.text
-                        ? item.text.length > 30
-                          ? item.text.slice(0, 30) + '...'
+                        ? item.text.length > 20
+                          ? item.text.slice(0, 20) + '...'
                           : item.text
                         : ''}
                     </Text>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   lineItemText: {
     color: 'white', // Adjust text color as needed
-    fontSize: 16,   // Adjust font size as needed
+    fontSize: 20,   // Adjust font size as needed
   },
   image: {
     flex: 1,

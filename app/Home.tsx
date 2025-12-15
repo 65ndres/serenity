@@ -115,20 +115,20 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   textt: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 40,
     lineHeight: 64,
     fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
     textAlign: 'center',
   } as TextStyle,
   text: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: '300',
     textAlign: 'center',
   } as TextStyle,
   separator: {
     marginVertical: 8,
-    width: '80%',
+    width: '90%',
     borderBottomColor: 'white',
     borderBottomWidth: 2,
     marginLeft: 'auto',

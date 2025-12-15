@@ -83,4 +83,14 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Build artifacts
+ios/build/
+ios/Pods/
+ios/Podfile.lock
+android/build/
+android/app/build/
+android/.gradle/
+
+# Large unused assets (keep only what's needed)
+
 # @end expo-cli

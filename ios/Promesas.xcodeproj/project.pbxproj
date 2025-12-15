@@ -8,30 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		32B15AF41B727DE991D007B0 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78B8ABF1006ABA9C16680AE /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		45C024F013D31A6F51805360 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F8DD5000D0F12E924B831 /* ExpoModulesProvider.swift */; };
-		6045860EE2D0C03A78DCE8C8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6B641499238E9DC8F8C443F3 /* PrivacyInfo.xcprivacy */; };
-		AB29312E95B2D2C7564BB472 /* libPods-serenityv1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BFA897CBADCBD2C09D90168 /* libPods-serenityv1.a */; };
+		80AC790DECCB5F494F8A8560 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 510E0AE6302F1475239BD66F /* PrivacyInfo.xcprivacy */; };
+		B052609D34B5A26B7E82CEA2 /* libPods-Promesas.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94ACCD694371AD84763F0B57 /* libPods-Promesas.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		C15CB7E45CFE4C6FA7EB012F /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B922E64A603460F85B29C87 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* serenityv1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = serenityv1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = serenityv1/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = serenityv1/Info.plist; sourceTree = "<group>"; };
-		2BFA897CBADCBD2C09D90168 /* libPods-serenityv1.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-serenityv1.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F76D71139EBBC9516E686A9 /* Pods-serenityv1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-serenityv1.release.xcconfig"; path = "Target Support Files/Pods-serenityv1/Pods-serenityv1.release.xcconfig"; sourceTree = "<group>"; };
-		6B641499238E9DC8F8C443F3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = serenityv1/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		95F78D80BE561BD7537CAD01 /* Pods-serenityv1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-serenityv1.debug.xcconfig"; path = "Target Support Files/Pods-serenityv1/Pods-serenityv1.debug.xcconfig"; sourceTree = "<group>"; };
-		9E9F8DD5000D0F12E924B831 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-serenityv1/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = serenityv1/SplashScreen.storyboard; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Promesas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Promesas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Promesas/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Promesas/Info.plist; sourceTree = "<group>"; };
+		510E0AE6302F1475239BD66F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Promesas/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5BBEDE48DF9D9397F36DC5C3 /* Pods-Promesas.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Promesas.debug.xcconfig"; path = "Target Support Files/Pods-Promesas/Pods-Promesas.debug.xcconfig"; sourceTree = "<group>"; };
+		94ACCD694371AD84763F0B57 /* libPods-Promesas.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Promesas.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Promesas/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		CB051478339CF17CCA04F3B5 /* Pods-Promesas.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Promesas.release.xcconfig"; path = "Target Support Files/Pods-Promesas/Pods-Promesas.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = serenityv1/AppDelegate.swift; sourceTree = "<group>"; };
-		F11748442D0722820044C1D9 /* serenityv1-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "serenityv1-Bridging-Header.h"; path = "serenityv1/serenityv1-Bridging-Header.h"; sourceTree = "<group>"; };
-		3B922E64A603460F85B29C87 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "serenityv1/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Promesas/AppDelegate.swift; sourceTree = "<group>"; };
+		F11748442D0722820044C1D9 /* Promesas-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Promesas-Bridging-Header.h"; path = "Promesas/Promesas-Bridging-Header.h"; sourceTree = "<group>"; };
+		F78B8ABF1006ABA9C16680AE /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Promesas/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,53 +37,42 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB29312E95B2D2C7564BB472 /* libPods-serenityv1.a in Frameworks */,
+				B052609D34B5A26B7E82CEA2 /* libPods-Promesas.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* serenityv1 */ = {
+		13B07FAE1A68108700A75B9A /* Promesas */ = {
 			isa = PBXGroup;
 			children = (
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
-				F11748442D0722820044C1D9 /* serenityv1-Bridging-Header.h */,
+				F11748442D0722820044C1D9 /* Promesas-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				6B641499238E9DC8F8C443F3 /* PrivacyInfo.xcprivacy */,
-				3B922E64A603460F85B29C87 /* noop-file.swift */,
+				510E0AE6302F1475239BD66F /* PrivacyInfo.xcprivacy */,
 			);
-			name = serenityv1;
+			name = Promesas;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				2BFA897CBADCBD2C09D90168 /* libPods-serenityv1.a */,
+				94ACCD694371AD84763F0B57 /* libPods-Promesas.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3ECE825554DBE4ACD585A0C9 /* serenityv1 */ = {
+		3D55679EEDB21920B2D4D67B /* Promesas */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F8DD5000D0F12E924B831 /* ExpoModulesProvider.swift */,
+				F78B8ABF1006ABA9C16680AE /* ExpoModulesProvider.swift */,
 			);
-			name = serenityv1;
-			sourceTree = "<group>";
-		};
-		814583A08F32F7993DA8EE57 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				95F78D80BE561BD7537CAD01 /* Pods-serenityv1.debug.xcconfig */,
-				5F76D71139EBBC9516E686A9 /* Pods-serenityv1.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
+			name = Promesas;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -98,12 +85,12 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* serenityv1 */,
+				13B07FAE1A68108700A75B9A /* Promesas */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				814583A08F32F7993DA8EE57 /* Pods */,
-				B0E8B85C199F88DABDA1A873 /* ExpoModulesProviders */,
+				B06C3699DAA21A1B007CA25C /* Pods */,
+				93D0D5DF6ACE01FBC7F21E2E /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -113,17 +100,27 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* serenityv1.app */,
+				13B07F961A680F5B00A75B9A /* Promesas.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B0E8B85C199F88DABDA1A873 /* ExpoModulesProviders */ = {
+		93D0D5DF6ACE01FBC7F21E2E /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				3ECE825554DBE4ACD585A0C9 /* serenityv1 */,
+				3D55679EEDB21920B2D4D67B /* Promesas */,
 			);
 			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		B06C3699DAA21A1B007CA25C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5BBEDE48DF9D9397F36DC5C3 /* Pods-Promesas.debug.xcconfig */,
+				CB051478339CF17CCA04F3B5 /* Pods-Promesas.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -132,32 +129,32 @@
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
 			);
 			name = Supporting;
-			path = serenityv1/Supporting;
+			path = Promesas/Supporting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* serenityv1 */ = {
+		13B07F861A680F5B00A75B9A /* Promesas */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "serenityv1" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Promesas" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				8487A047BEFB2FF98CF58126 /* [Expo] Configure project */,
+				F907B8EDC731728F99563848 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				C8CF040DD6380450879C111E /* [CP] Embed Pods Frameworks */,
+				225D7C840203A27FA62BFB8A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = serenityv1;
-			productName = serenityv1;
-			productReference = 13B07F961A680F5B00A75B9A /* serenityv1.app */;
+			name = Promesas;
+			productName = Promesas;
+			productReference = 13B07F961A680F5B00A75B9A /* Promesas.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -173,7 +170,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "serenityv1" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Promesas" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -186,7 +183,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* serenityv1 */,
+				13B07F861A680F5B00A75B9A /* Promesas */,
 			);
 		};
 /* End PBXProject section */
@@ -199,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				6045860EE2D0C03A78DCE8C8 /* PrivacyInfo.xcprivacy in Resources */,
+				80AC790DECCB5F494F8A8560 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +210,8 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
 			);
 			name = "Bundle React Native code and images";
 			outputPaths = (
@@ -236,11 +235,33 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-serenityv1-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Promesas-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		225D7C840203A27FA62BFB8A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Promesas/Pods-Promesas-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Promesas/Pods-Promesas-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
@@ -249,12 +270,11 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-serenityv1/Pods-serenityv1-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Promesas/Pods-Promesas-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -278,8 +298,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -287,7 +305,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -311,15 +328,13 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-serenityv1/Pods-serenityv1-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Promesas/Pods-Promesas-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8487A047BEFB2FF98CF58126 /* [Expo] Configure project */ = {
+		F907B8EDC731728F99563848 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -328,33 +343,20 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/Promesas/Promesas.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-Promesas/expo-configure-project.sh",
 			);
 			name = "[Expo] Configure project";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-Promesas/ExpoModulesProvider.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-serenityv1/expo-configure-project.sh\"\n";
-		};
-		C8CF040DD6380450879C111E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-serenityv1/Pods-serenityv1-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-serenityv1/Pods-serenityv1-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Promesas/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -364,8 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				45C024F013D31A6F51805360 /* ExpoModulesProvider.swift in Sources */,
-				C15CB7E45CFE4C6FA7EB012F /* noop-file.swift in Sources */,
+				32B15AF41B727DE991D007B0 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,18 +375,18 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 95F78D80BE561BD7537CAD01 /* Pods-serenityv1.debug.xcconfig */;
+			baseConfigurationReference = 5BBEDE48DF9D9397F36DC5C3 /* Pods-Promesas.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = serenityv1/serenityv1.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Promesas/Promesas.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
-				INFOPLIST_FILE = serenityv1/Info.plist;
+				INFOPLIST_FILE = Promesas/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -399,8 +400,8 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.afre92.serenityv1;
-				PRODUCT_NAME = "Promesas";
-				SWIFT_OBJC_BRIDGING_HEADER = "serenityv1/serenityv1-Bridging-Header.h";
+				PRODUCT_NAME = Promesas;
+				SWIFT_OBJC_BRIDGING_HEADER = "Promesas/Promesas-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -410,13 +411,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F76D71139EBBC9516E686A9 /* Pods-serenityv1.release.xcconfig */;
+			baseConfigurationReference = CB051478339CF17CCA04F3B5 /* Pods-Promesas.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = serenityv1/serenityv1.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Promesas/Promesas.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = serenityv1/Info.plist;
+				INFOPLIST_FILE = Promesas/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -430,8 +431,8 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.afre92.serenityv1;
-				PRODUCT_NAME = "Promesas";
-				SWIFT_OBJC_BRIDGING_HEADER = "serenityv1/serenityv1-Bridging-Header.h";
+				PRODUCT_NAME = Promesas;
+				SWIFT_OBJC_BRIDGING_HEADER = "Promesas/Promesas-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -493,13 +494,10 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -551,12 +549,9 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -565,7 +560,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "serenityv1" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Promesas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -574,7 +569,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "serenityv1" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Promesas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

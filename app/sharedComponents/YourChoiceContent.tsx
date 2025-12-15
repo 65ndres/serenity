@@ -1,6 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { API_URL } from '../../constants/Config';
 import VerseModule from '../VerseModule/VerseModule';
@@ -21,6 +21,7 @@ const YourChoiceContent: React.FC = () => {
   
   const [verseComponentVisibility, setVerseComponentVisibility] = useState(true)
   const [url, setUrl] = useState("")
+  const dropdownRef = useRef<any>(null)
 
   const updateUrl = (category: string) => {
     setUrl(`${API_URL}/verses/search?category=${category}`)
@@ -30,10 +31,25 @@ const YourChoiceContent: React.FC = () => {
     setVerseComponentVisibility(!verseComponentVisibility)
   }
 
+  const handleChevronPress = () => {
+    // Trigger dropdown by focusing it programmatically
+    if (dropdownRef.current) {
+      // Try to open the dropdown - the ref might have different methods
+      // If open() doesn't work, we can use a workaround
+      try {
+        dropdownRef.current.open?.();
+      } catch (e) {
+        // Alternative: focus the dropdown input
+        dropdownRef.current.focus?.();
+      }
+    }
+  }
+
   return (
     <>
       <View style={styles.dropdownContainer}>
         <Dropdown
+          ref={dropdownRef}
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -57,7 +73,9 @@ const YourChoiceContent: React.FC = () => {
       </View>
       {verseComponentVisibility &&
         <View style={styles.chevronContainer}>
-          <Feather name="chevron-down" size={25} color="white" />
+          <Pressable onPress={handleChevronPress}>
+            <Feather name="chevron-down" size={25} color="white" />
+          </Pressable>
         </View>}
   
         {verseComponentVisibility && <VerseModule data={[]} active={4} url={url} />}

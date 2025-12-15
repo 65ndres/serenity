@@ -65,7 +65,7 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       <Animated.View style={{opacity: fadeAnim }}>
       <View style={{height: '20%'}}>
         <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 10}}> 
-          <Text style={{ color: 'white', fontSize: 18, fontWeight: '300', textAlign: 'center', fontStyle: 'italic' }}>"Trust in the LORD..."</Text>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: '300', textAlign: 'center', fontStyle: 'italic' }}>"Trust in the LORD..."</Text>
         </View>
       </View>
         <View style={{height: '60%'}}>
