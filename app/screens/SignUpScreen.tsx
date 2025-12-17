@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Dimensions, Image, ImageStyle, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import 'react-native-reanimated';
+import PasswordInputs from '../../components/PasswordInputs';
 import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
@@ -120,44 +121,19 @@ const SignUpScreen: React.FC = () => {
             accessibilityLabel="Email"
             disabled={isLoading}
           />
-        <Input
-          cursorColor="#ffffff"
-          placeholder="password"
-          selectionColor="white"
-          placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: screenWidth * 0.08 }}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          inputContainerStyle={styles.inputContainerStyle}
-          value={password}
-          onChangeText={(text) => {
+        <PasswordInputs
+          newPassword={password}
+          confirmPassword={passwordConfirmation}
+          onNewPasswordChange={(text) => {
             setPassword(text);
             if (passwordError) setPasswordError('');
           }}
-          errorMessage={passwordError}
-          errorStyle={styles.errorStyle}
-          secureTextEntry
-          accessibilityLabel="Password"
-          disabled={isLoading}
-        />
-        <Input
-          cursorColor="#ffffff"
-          placeholder="confirm password"
-          selectionColor="white"
-          placeholderTextColor="#d8d8d8ff"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: screenWidth * 0.08 }}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          inputContainerStyle={styles.inputContainerStyle}
-          value={passwordConfirmation}
-          onChangeText={(text) => {
+          onConfirmPasswordChange={(text) => {
             setPasswordConfirmation(text);
             if (passwordConfirmationError) setPasswordConfirmationError('');
           }}
-          errorMessage={passwordConfirmationError}
-          errorStyle={styles.errorStyle}
-          secureTextEntry
-          accessibilityLabel="Confirm Password"
+          newPasswordError={passwordError}
+          confirmPasswordError={passwordConfirmationError}
           disabled={isLoading}
         />
         <Button

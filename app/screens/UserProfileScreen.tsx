@@ -18,6 +18,7 @@ import {
 import 'react-native-reanimated';
 import { API_URL } from '../../constants/Config';
 // import { ScreenContainer } from 'react-native-screens';
+import PasswordInputs from '../../components/PasswordInputs';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
 // Define the navigation stack param list
@@ -199,50 +200,25 @@ const UserProfileScreen: React.FC = () => {
           disabled={true}
         />
         <Text style={{color: 'white', fontSize: 18, fontWeight: '300', textAlign: 'center', fontStyle: 'italic', paddingBottom: 10}}>*You will be singed out if the password is changed.</Text>
-      <Input
-        cursorColor="#ffffff"
-        placeholder="New Password"
-        selectionColor="white"
-        placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-        inputStyle={{ color: 'white', fontSize: 20, paddingLeft: 20 }}
-        labelStyle={{ color: 'white' }}
-        inputContainerStyle={{ borderBottomColor: 'white' }}
-        value={oldPassword}
-        onChangeText={(text) => {
+      <PasswordInputs
+        newPassword={oldPassword}
+        confirmPassword={newPassword}
+        onNewPasswordChange={(text) => {
           setOldPassword(text);
           if (newPasswordError || confirmPasswordError) {
             setNewPasswordError('');
             setConfirmPasswordError('');
           }
         }}
-        errorMessage={newPasswordError}
-        errorStyle={styles.errorStyle}
-        secureTextEntry
-        accessibilityLabel="New Password"
-        disabled={isLoadingProfile || isLoading}
-      />
-      <Input
-        cursorColor="#ffffff"
-        placeholder="Confirm New Password"
-        selectionColor="white"
-        placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-        inputStyle={{ color: 'white', fontSize: 20, paddingLeft: 20 }}
-        labelStyle={{ color: 'white' }}
-        inputContainerStyle={{ borderBottomColor: 'white' }}
-        value={newPassword}
-        onChangeText={(text) => {
+        onConfirmPasswordChange={(text) => {
           setNewPassword(text);
           if (newPasswordError || confirmPasswordError) {
             setNewPasswordError('');
             setConfirmPasswordError('');
           }
         }}
-        errorMessage={confirmPasswordError}
-        errorStyle={styles.errorStyle}
-        secureTextEntry
-        accessibilityLabel="Confirm New Password"
+        newPasswordError={newPasswordError}
+        confirmPasswordError={confirmPasswordError}
         disabled={isLoadingProfile || isLoading}
       />
       </View>

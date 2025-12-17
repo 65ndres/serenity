@@ -75,7 +75,7 @@ const YourChoiceContent: React.FC = () => {
       </View>
       {verseComponentVisibility &&
         <View style={styles.chevronContainer}>
-          <Pressable onPress={handleChevronPress}>
+          <Pressable onPress={handleChevronPress} style={{paddingLeft:70, paddingRight: 70}}>
             <Feather name="chevron-down" size={screenWidth * 0.065} color="white" />
           </Pressable>
         </View>}
@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
   chevronContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   icon: {
     marginRight: screenWidth * 0.013,

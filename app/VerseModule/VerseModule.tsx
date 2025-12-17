@@ -170,7 +170,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             <View style={{width: (width - 80), height: width}}>
               <View style={{display: 'flex', alignItems: 'flex-end', paddingTop: 20}}>
 
-                  <Text style={{ color: 'white', fontSize: 20, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>
+                  <Text style={{ color: 'white', fontSize: 22, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>
                   "Search for the LORD and for his strength..."
                   </Text>
               </View>

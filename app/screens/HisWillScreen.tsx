@@ -65,7 +65,7 @@ const HisWillScreen: React.FC<VerseModuleProps> = ({ data, active }) => {
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={styles.topSection}>
           <View style={styles.topContent}>
-            <Text style={styles.quoteText}>"Trust in the LORD..."</Text>
+            <Text style={styles.quoteText}>"Trust in the LORD with all your heart..."</Text>
           </View>
         </View>
         <View style={styles.middleSection}>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     color: 'white',
-    fontSize: height * 0.03, // scales with screen height
+    fontSize: height * 0.027, // scales with screen height
     fontWeight: '300',
     textAlign: 'center',
     fontStyle: 'italic',

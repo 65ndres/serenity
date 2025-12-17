@@ -1,8 +1,10 @@
 // app/_layout.tsx
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Image, ImageBackground, StyleSheet, Text, ViewStyle } from 'react-native';
+import { Dimensions, Image, ImageBackground, ImageStyle, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
@@ -15,6 +17,8 @@ import UserProfileScreen from './screens/UserProfileScreen';
 import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
 // Set the animation options. This is optional.
+
+const { width, height } = Dimensions.get('window');
 
 type RootDrawerParamList = {
   Home: undefined;
@@ -34,6 +38,20 @@ type AuthStackParamList = {
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 const Stack = createStackNavigator<AuthStackParamList>();
+
+const DrawerToggleButton: React.FC<{ size?: number }> = ({ size }) => {
+  const navigation = useNavigation();
+  const iconSize = size || height * 0.035; // scales with screen height
+  
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      style={styles.drawerToggleButton}
+    >
+      <Ionicons name="menu-sharp" size={iconSize} color="white" />
+    </TouchableOpacity>
+  );
+};
 
 const CustomDrawerContent: React.FC<any> = (props) => {
   const { logout } = useAuth();
@@ -72,11 +90,12 @@ const AuthenticatedNavigator: React.FC = () => {
         headerTransparent: true,
         drawerStyle: {
           backgroundColor: 'transparent', // Transparent to show ImageBackground
-          width: 300,
+          width: width * 0.75, // scales with screen width (~75% of screen width)
         },
         drawerLabelStyle: {
           color: 'white', // Updated from 'blue' to match theme
-          fontSize: 25,
+          lineHeight: height * 0.04, // scales with screen height
+          fontSize: height * 0.031, // scales with screen height
           fontWeight: '300',
           textAlign: 'center'
           
@@ -87,8 +106,9 @@ const AuthenticatedNavigator: React.FC = () => {
         headerTintColor: 'white',
         headerTitleStyle: {
           color: 'white',
-          fontSize: 25,
+          fontSize: height * 0.031, // scales with screen height
         },
+        headerRight: () => <DrawerToggleButton size={height * 0.043} />,
       }}
     >
       <Drawer.Screen
@@ -96,7 +116,7 @@ const AuthenticatedNavigator: React.FC = () => {
         component={Home}
         options={{ 
           headerLeft: () => <Image source={require('../assets/images/splash-icon.png')} style={styles.logoImage} />,
-          drawerLabel: 'HOME', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>HOME</Text> }}
+          drawerLabel: 'HOME', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>HOME</Text> }}
       />
       <Drawer.Screen
         name="HisWillScreen"
@@ -104,25 +124,25 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{
           drawerLabel: 'HIS WILL',
           headerLeft: () => <BackButton text="" /> ,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>HIS WILL</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>HIS WILL</Text>,
         }}
       />
       <Drawer.Screen
         name="YourChoiceScreen"
         component={YourChoiceScreen}
-        options={{headerLeft: () => <BackButton text="" /> ,drawerLabel: 'YOUR CHOICE', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>YOUR CHOICE</Text>}}
+        options={{headerLeft: () => <BackButton text="" /> ,drawerLabel: 'YOUR CHOICE', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>YOUR CHOICE</Text>}}
       />
       <Drawer.Screen
         name="Liked"
         component={LikedScreen}
-        options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>LIKED VERSES</Text> }}
+        options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>LIKED VERSES</Text> }}
       />
       <Drawer.Screen
         name="Profile"
         component={UserProfileScreen}
         options={{ drawerLabel: 'PROFILE',
           headerLeft: () => <BackButton text="" /> ,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '400' }}>PROFILE</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>PROFILE</Text>,
          }}
       />
     </Drawer.Navigator>
@@ -138,7 +158,7 @@ const UnauthenticatedNavigator: React.FC = () => {
       initialRouteName="Login"
       screenOptions={{
         headerTransparent: true,
-          headerTitleStyle: { color: 'white', fontSize: 20, fontWeight: '400' },
+          headerTitleStyle: { color: 'white', fontSize: height * 0.025, fontWeight: '400' },
         cardStyle: { backgroundColor: 'transparent', flex: 1 },
         headerTintColor: 'white',
         
@@ -147,14 +167,14 @@ const UnauthenticatedNavigator: React.FC = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text> }}
+        options={{ headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text> }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
         options={{
           headerLeft: () => <BackButton text="" />,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
       <Stack.Screen
@@ -162,7 +182,7 @@ const UnauthenticatedNavigator: React.FC = () => {
         component={PasswordResetScreen}
         options={{
           headerLeft: () => <BackButton text="Login" />,
-          headerTitle: () => <Text style={{ color: 'white', fontSize: 20, fontWeight: '500' }}>Promesas</Text>,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
     </Stack.Navigator>
@@ -184,9 +204,10 @@ const RootLayout: React.FC = () => {
 const styles = StyleSheet.create({
   text: {
     color: 'white',
-    fontSize: 20,
+    fontSize: height * 0.025, // scales with screen height
     fontWeight: '300',
     textAlign: 'center',
+    lineHeight: height * 0.04, // scales with screen height
   },
   drawerBackground: {
     flex: 1,
@@ -198,7 +219,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: '900',
     color: 'blue',
-    paddingTop: 150,
+    paddingTop: height * 0.185, // scales with screen height (~18.5% of screen height)
     backgroundColor: 'rgba(0, 0, 0, 0.50)', // Overlay for readability
     
   } as ViewStyle,
@@ -206,12 +227,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     fontWeight: 300,
-    fontSize: 26,
+    fontSize: height * 0.032, // scales with screen height
   },
   logoImage: {
-    width: 35,
-    height: 35,
-    marginLeft: 20,
+    width: width * 0.08, // scales with screen width (~8% of screen width)
+    height: width * 0.08, // scales with screen width (~8% of screen width)
+    marginLeft: width * 0.053, // scales with screen width (~5.3% of screen width)
+  } as ImageStyle,
+  drawerToggleButton: {
+    marginRight: width * 0.053, // scales with screen width (~5.3% of screen width)
   } as ViewStyle,
   appBackground: {
     flex: 1,
