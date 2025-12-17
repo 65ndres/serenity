@@ -77,7 +77,8 @@ const SignUpScreen: React.FC = () => {
     }
     
     if (password !== passwordConfirmation) {
-      Alert.alert('Error', 'Passwords do not match');
+      setPasswordError('Passwords do not match');
+      setPasswordConfirmationError('Passwords do not match');
       return;
     }
     setIsLoading(true);
@@ -126,11 +127,17 @@ const SignUpScreen: React.FC = () => {
           confirmPassword={passwordConfirmation}
           onNewPasswordChange={(text) => {
             setPassword(text);
-            if (passwordError) setPasswordError('');
+            if (passwordError || passwordConfirmationError) {
+              setPasswordError('');
+              setPasswordConfirmationError('');
+            }
           }}
           onConfirmPasswordChange={(text) => {
             setPasswordConfirmation(text);
-            if (passwordConfirmationError) setPasswordConfirmationError('');
+            if (passwordError || passwordConfirmationError) {
+              setPasswordError('');
+              setPasswordConfirmationError('');
+            }
           }}
           newPasswordError={passwordError}
           confirmPasswordError={passwordConfirmationError}
