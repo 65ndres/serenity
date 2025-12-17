@@ -155,8 +155,8 @@ const UserProfileScreen: React.FC = () => {
           placeholder='First name'
           selectionColor={'white'}
           placeholderTextColor={'#d8d8d8ff'}
-          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 25 }}
-          inputStyle={{color: 'white', fontSize: 18, paddingLeft: 20}}
+          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+          inputStyle={{color: 'white', fontSize: 20, paddingLeft: 20}}
           labelStyle={{color: 'white'}}
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={firstName}
@@ -173,8 +173,8 @@ const UserProfileScreen: React.FC = () => {
           placeholder='Last name'
           selectionColor={'white'}
           placeholderTextColor={'#d8d8d8ff'}
-          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 25 }}
-          inputStyle={{color: 'white', fontSize: 18, paddingLeft: 20}}
+          leftIcon={{ type: 'font-awesome', name: 'user', color: '#ffffffff', size: 30 }}
+          inputStyle={{color: 'white', fontSize: 20, paddingLeft: 20}}
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={lastName}
           onChangeText={(text) => {
@@ -190,22 +190,22 @@ const UserProfileScreen: React.FC = () => {
           placeholder='user@email.com'
           selectionColor={'white'}
           placeholderTextColor={'#d8d8d8ff'}
-          leftIcon={{ type: 'materialIcons', name: 'alternate-email', color: '#ffffffff', size: 25 }}
-          inputStyle={{color: 'white', fontSize: 18, paddingLeft: 10}}
+          leftIcon={{ type: 'materialIcons', name: 'alternate-email', color: '#ffffffff', size: 30 }}
+          inputStyle={{color: 'white', fontSize: 20, paddingLeft: 10}}
           labelStyle={{color: 'white'}}
           inputContainerStyle={{borderBottomColor: 'white'}}
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
           disabled={true}
         />
-        <Text style={{color: 'white', fontSize: 15, fontWeight: '300', textAlign: 'center', fontStyle: 'italic', paddingBottom: 10}}>*You will be singed out if the password is changed.</Text>
+        <Text style={{color: 'white', fontSize: 18, fontWeight: '300', textAlign: 'center', fontStyle: 'italic', paddingBottom: 10}}>*You will be singed out if the password is changed.</Text>
       <Input
         cursorColor="#ffffff"
         placeholder="New Password"
         selectionColor="white"
         placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 25 }}
-        inputStyle={{ color: 'white', fontSize: 18, paddingLeft: 20 }}
+        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+        inputStyle={{ color: 'white', fontSize: 20, paddingLeft: 20 }}
         labelStyle={{ color: 'white' }}
         inputContainerStyle={{ borderBottomColor: 'white' }}
         value={oldPassword}
@@ -227,8 +227,8 @@ const UserProfileScreen: React.FC = () => {
         placeholder="Confirm New Password"
         selectionColor="white"
         placeholderTextColor="#d8d8d8ff"
-        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 25 }}
-        inputStyle={{ color: 'white', fontSize: 18, paddingLeft: 20 }}
+        leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+        inputStyle={{ color: 'white', fontSize: 20, paddingLeft: 20 }}
         labelStyle={{ color: 'white' }}
         inputContainerStyle={{ borderBottomColor: 'white' }}
         value={newPassword}
