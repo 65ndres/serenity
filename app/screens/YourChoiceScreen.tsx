@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
       marginRight: 5,
     },
     placeholderStyle: {
-      fontSize: 20,
+      fontSize: 22,
     },
     selectedTextStyle: {
       fontSize: 25,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     },
     inputSearchStyle: {
       height: 40,
-      fontSize: 20,
+      fontSize: 22,
     },
     containerss: {
       backgroundColor: 'transparent',

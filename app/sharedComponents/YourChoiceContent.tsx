@@ -1,9 +1,11 @@
 import Feather from '@expo/vector-icons/Feather';
 import React, { useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { API_URL } from '../../constants/Config';
 import VerseModule from '../VerseModule/VerseModule';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // interface BackButtonProps {
 //   text: string;
@@ -55,9 +57,9 @@ const YourChoiceContent: React.FC = () => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          itemTextStyle={{ color: 'white', textAlign: 'center', fontSize: 20, fontWeight: '300' }}
+          itemTextStyle={{ color: 'white', textAlign: 'center', fontSize: screenWidth * 0.05, fontWeight: '400' }}
           data={categoriesToList}
-          maxHeight={300}
+          maxHeight={screenHeight * 0.4}
           autoScroll={false}
           activeColor="transparent"
           labelField="label"
@@ -74,7 +76,7 @@ const YourChoiceContent: React.FC = () => {
       {verseComponentVisibility &&
         <View style={styles.chevronContainer}>
           <Pressable onPress={handleChevronPress}>
-            <Feather name="chevron-down" size={25} color="white" />
+            <Feather name="chevron-down" size={screenWidth * 0.065} color="white" />
           </Pressable>
         </View>}
   
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   separator: {
-    marginVertical: 8,
+    marginVertical: screenHeight * 0.01,
     width:"80%",
     borderBottomColor: 'white',
     borderBottomWidth: 1,
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   dropdown: {
-    height: 50,
+    height: screenHeight * 0.06,
     backgroundColor: 'transparent',
     textAlign: 'center',
     borderWidth: 0,
@@ -124,19 +126,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    marginRight: 5,
+    marginRight: screenWidth * 0.013,
   },
   placeholderStyle: {
-    fontSize: 24,
+    fontSize: screenWidth * 0.06,
     color: 'white',
     textAlign: 'center',
-    fontWeight: '300',
+    fontWeight: '400',
   },
   selectedTextStyle: {
-    fontSize: 24,
+    fontSize: screenWidth * 0.06,
     color: 'white',
     textAlign: 'center',
-    fontWeight: '300',
+    fontWeight: '400',
     // fontStyle: 'italic',
   },
   iconStyle: {
@@ -144,8 +146,8 @@ const styles = StyleSheet.create({
     display: 'none'
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    height: screenHeight * 0.05,
+    fontSize: screenWidth * 0.04,
   },
   containerss: {
     backgroundColor: 'transparent',
