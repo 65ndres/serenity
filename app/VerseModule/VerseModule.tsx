@@ -180,7 +180,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
           <View style={{ flex: 1 }}>
           <Carousel
             ref={ref}
-            width={width} // scales with screen width (~65.3% of screen width, equivalent to width - 130 on 375px screen)
+            width={width * 0.84} // scales with screen width (~84% of screen width, equivalent to width - 60 on 375px screen)
             height={width}
             data={verses}
             loop={true}
@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
     paddingTop: height * 0.025, // scales with screen height (~2.5% of screen height)
     justifyContent: 'space-between',
     textAlign: 'center',
-    paddingRight: 30,
-    paddingLeft: 30,
+    // paddingRight: 30,
+    // paddingLeft: 30,
   },
   verseText: {
     textAlign: 'center',

@@ -247,15 +247,7 @@ const styles = StyleSheet.create({
 export default function Layout() {
   return (
     <AuthProvider>
-      <ImageBackground
-        source={require('../assets/images/bg.jpg')}
-        resizeMode="cover"
-        style={styles.appBackground}
-      >
-        {/* <NavigationContainer> */}
-          <RootLayout />
-        {/* </NavigationContainer> */}
-      </ImageBackground>
+        <RootLayout />
     </AuthProvider>
   );
 }

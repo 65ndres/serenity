@@ -96,18 +96,9 @@ const ScreenComponent: React.FC<ScreenComponentProps> = ({ children, style }) =>
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    width: '100%',
-    height: '100%',
   } as ViewStyle,
   screenContainer: {
-    height:'100%',
-    justifyContent: 'center',
-    flex: 1,
-    width: width,
-    // paddingLeft: 40,
-    // paddingRight: 40,
-    maxWidth: width,
-    maxHeight: height
+    width: width * 0.84,
   } as ViewStyle, 
   safeArea: {
     flex: 1,
