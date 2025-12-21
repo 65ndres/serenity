@@ -27,7 +27,7 @@ const BackButton: React.FC<BackButtonProps> = ({ text, onPress }) => {
       accessibilityRole="button"
     >
       <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <Ionicons name="arrow-back-sharp" size={25} color="white" />
+        <Ionicons name="arrow-back-sharp" size={30} color="white" />
         <Text style={{ color: 'white', paddingLeft: 10, fontSize: 20 }}>{text}</Text>
       </View>
     </TouchableOpacity>

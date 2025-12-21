@@ -33,7 +33,7 @@ interface VerseModuleProps {
   url: string;
 }
 
-const width = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window");
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
@@ -166,11 +166,11 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     
     <View>
         {url.length === 0 && verses.length === 0 ? (
-          <View style={{ flex: 1, display: 'flex' }}>
-            <View style={{width: (width - 80), height: width}}>
-              <View style={{display: 'flex', alignItems: 'flex-end', paddingTop: 20}}>
+          <View >
+            <View style={{width: '90%'}}>
+              <View style={{display: 'flex', alignItems: 'flex-end', paddingTop: height * 0.025}}>
 
-                  <Text style={{ color: 'white', fontSize: 22, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>
+                  <Text style={{ color: 'white', fontSize: height * 0.027, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>
                   "Search for the LORD and for his strength..."
                   </Text>
               </View>
@@ -180,7 +180,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
           <View style={{ flex: 1 }}>
           <Carousel
             ref={ref}
-            width={width - 80} // is 80 to offset the 40 of each side on the screencomponent
+            width={width} // scales with screen width (~65.3% of screen width, equivalent to width - 130 on 375px screen)
             height={width}
             data={verses}
             loop={true}
@@ -191,12 +191,13 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
               <View style={styles.card}>
                 <ScrollView
                   style={{
-                    paddingHorizontal: 20,
                     flex: 1,
                   }}
-                  contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-start', paddingTop: 20 }}
+                  contentContainerStyle={{justifyContent: 'flex-start' }}
                 >
-                  <Text style={styles.verseText}>{item.text}</Text>
+                  <View style={{width: '100%'}}>
+                    <Text style={styles.verseText}>{item.text}</Text>
+                  </View>
                 </ScrollView>
 
                 <View style={styles.footer}>
@@ -215,7 +216,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                   >
                     <FontAwesome
                       name={(item.liked ? 'heart' : 'heart-o') as any}
-                      size={28}
+                      size={height * 0.034}
                       color={item.liked ? 'white' : 'white'}
                     />
                   </TouchableOpacity>
@@ -239,37 +240,40 @@ const styles = StyleSheet.create({
 
   card: {
     flex: 1,
-    // padding: 20,
+    paddingTop: height * 0.025, // scales with screen height (~2.5% of screen height)
     justifyContent: 'space-between',
+    textAlign: 'center',
+    paddingRight: 30,
+    paddingLeft: 30,
   },
   verseText: {
     textAlign: 'center',
-    fontSize: 28,
+    fontSize: height * 0.034, // scales with screen height (~3.4% of screen height)
     color: 'white',
     fontWeight: '300',
-    lineHeight: 38,
+    lineHeight: height * 0.047, // scales with screen height (~4.7% of screen height)
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: height * 0.025, // scales with screen height (~2.5% of screen height)
   },
   reference: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   bookText: {
-    fontSize: 18,
+    fontSize: height * 0.022, // scales with screen height (~2.2% of screen height)
     color: 'white',
     fontWeight: '400',
-    marginRight: 4,
+    marginRight: width * 0.011, // scales with screen width (~1.1% of screen width)
   },
   chapterVerseText: {
-    fontSize: 18,
+    fontSize: height * 0.022, // scales with screen height (~2.2% of screen height)
     color: 'white',
   },
   favoriteButton: {
-    padding: 8,
+    padding: width * 0.021, // scales with screen width (~2.1% of screen width)
   },
 });

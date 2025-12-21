@@ -190,10 +190,10 @@ const LoginScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   animatedView: {
-    flex: 1,
+    // flex: 1,
   } as ViewStyle,
   entirePage: {
-    flex: 1,
+    // width: '400px'
   } as ViewStyle,
   topSection: {
     height: '20%',

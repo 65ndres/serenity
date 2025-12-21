@@ -104,14 +104,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     width: width,
-    paddingLeft: 40,
-    paddingRight: 40,
-    maxWidth: 400,
+    // paddingLeft: 40,
+    // paddingRight: 40,
+    maxWidth: width,
     maxHeight: height
   } as ViewStyle, 
   safeArea: {
     flex: 1,
     backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
   } as ViewStyle,
   })
 export default ScreenComponent;
