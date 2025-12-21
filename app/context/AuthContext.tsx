@@ -144,3 +144,6 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+
+// Default export for route compatibility
+export default AuthProvider;
