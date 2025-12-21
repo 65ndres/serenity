@@ -166,7 +166,6 @@ const SignUpScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   animatedView: {
-    flex: 1,
   } as ViewStyle,
   topSection: {
     height: '20%',

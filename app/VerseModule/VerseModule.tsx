@@ -167,7 +167,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     <View>
         {url.length === 0 && verses.length === 0 ? (
           <View >
-            <View style={{width: '90%'}}>
+            <View style={{width: '100%'}}>
               <View style={{display: 'flex', alignItems: 'flex-end', paddingTop: height * 0.025}}>
 
                   <Text style={{ color: 'white', fontSize: height * 0.027, textAlign: 'center', alignSelf: 'center', fontWeight: '300', fontStyle: 'italic' }}>

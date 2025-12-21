@@ -142,7 +142,7 @@ const Liked: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+      <Animated.View style={{ opacity: fadeAnim }}>
         <View style={{ height: "15%" }}>
         </View>
         <View style={{ height: "65%" }}> 
