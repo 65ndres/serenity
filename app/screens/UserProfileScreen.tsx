@@ -16,12 +16,10 @@ import {
   ViewStyle
 } from 'react-native';
 import 'react-native-reanimated';
-import { API_URL } from '../../constants/Config';
-// import { ScreenContainer } from 'react-native-screens';
 import PasswordInputs from '../../components/PasswordInputs';
+import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 
-// Define the navigation stack param list
 type RootStackParamList = {
   Home: undefined;
   VerseModule: undefined;
@@ -50,7 +48,6 @@ const UserProfileScreen: React.FC = () => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // Fetch profile data on component load
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -77,13 +74,11 @@ const UserProfileScreen: React.FC = () => {
   };
 
   const updateProfile = async () => {
-    // Reset errors
     setFirstNameError('');
     setLastNameError('');
     setNewPasswordError('');
     setConfirmPasswordError('');
     
-    // Validate required fields
     let hasError = false;
     if (!firstName.trim()) {
       setFirstNameError('First name is required');
@@ -94,7 +89,6 @@ const UserProfileScreen: React.FC = () => {
       hasError = true;
     }
     
-    // Validate password fields - if either has characters, both must match
     const hasNewPassword = oldPassword.trim().length > 0;
     const hasConfirmPassword = newPassword.trim().length > 0;
     
@@ -120,7 +114,6 @@ const UserProfileScreen: React.FC = () => {
         email: email.toLowerCase(),
       };
       
-      // Only include password field if it's provided
       if (oldPassword.trim() && newPassword.trim()) {
         payload.new_password = newPassword;
       }
@@ -131,7 +124,6 @@ const UserProfileScreen: React.FC = () => {
       
       Alert.alert('Success', 'Profile updated successfully');
       
-      // Clear password fields after successful update
       setOldPassword('');
       setNewPassword('');
     } catch (error: any) {
@@ -261,7 +253,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 44,
     lineHeight: 64,
-    fontWeight: '300', // Use numeric value for better TypeScript compatibility ('light' equivalent)
+    fontWeight: '300',
     textAlign: 'center',
   } as TextStyle,
   separator: {
