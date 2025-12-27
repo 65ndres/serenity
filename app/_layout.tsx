@@ -9,8 +9,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
+import ConversationsScreen from './screens/ConversationsScreen';
 import HisWillScreen from './screens/HisWillScreen';
 import LoginScreen from './screens/LoginScreen';
+import NewConversationScreen from './screens/NewConversationScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
@@ -28,6 +30,8 @@ type RootDrawerParamList = {
   HisWillScreen: undefined;
   YourChoiceScreen: undefined;
   Profile: undefined;
+  Conversations: undefined;
+  NewConversation: undefined;
 };
 
 type AuthStackParamList = {
@@ -136,6 +140,21 @@ const AuthenticatedNavigator: React.FC = () => {
         name="Liked"
         component={LikedScreen}
         options={{ drawerLabel: 'LIKED VERSES', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>LIKED VERSES</Text> }}
+      />
+      <Drawer.Screen
+        name="Conversations"
+        component={ConversationsScreen}
+        options={{ drawerLabel: 'CONVERSATIONS', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATIONS</Text> }}
+      />
+      <Drawer.Screen
+        name="NewConversation"
+        component={NewConversationScreen}
+        options={{ 
+          drawerLabel: () => null, // Hide from drawer
+          drawerItemStyle: { display: 'none' }, // Hide from drawer menu
+          headerLeft: () => <BackButton text="" />,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>NEW CONVERSATION</Text>,
+        }}
       />
       <Drawer.Screen
         name="Profile"
