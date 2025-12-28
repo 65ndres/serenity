@@ -144,14 +144,17 @@ const AuthenticatedNavigator: React.FC = () => {
       <Drawer.Screen
         name="Conversations"
         component={ConversationsScreen}
-        options={{ drawerLabel: 'CONVERSATIONS', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATIONS</Text> }}
+        options={{
+          drawerLabel: 'CONVERSATIONS', headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATIONS</Text>,
+          headerLeft: () => <BackButton text="" />,
+        }}
       />
       <Drawer.Screen
         name="NewConversation"
         component={NewConversationScreen}
         options={{ 
           drawerLabel: () => null, // Hide from drawer
-          drawerItemStyle: { display: 'none' }, // Hide from drawer menu
+          // drawerItemStyle: { display: 'none' }, // Hide from drawer menu
           headerLeft: () => <BackButton text="" />,
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>NEW CONVERSATION</Text>,
         }}

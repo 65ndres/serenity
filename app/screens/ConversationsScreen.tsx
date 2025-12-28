@@ -1,7 +1,7 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Button } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
@@ -37,7 +37,7 @@ interface Conversation {
   other_user_id?: number;
   other_user_name?: string;
   other_user_email?: string;
-  last_message?: string;
+  last_message?: string | { body?: string; sender?: string };
   updated_at?: string;
 }
 
@@ -61,7 +61,7 @@ const ConversationsScreen: React.FC = () => {
       const token = await AsyncStorage.getItem('token');
       
       // Adjust the endpoint based on your API structure
-      const response = await axios.get(`${API_URL}/conversations`, {
+      const response = await axios.get(`${API_URL}/user/conversations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -140,15 +140,35 @@ const ConversationsScreen: React.FC = () => {
                   <View style={styles.lineItemContainer}>
                     <View style={styles.conversationInfo}>
                       <Text style={styles.conversationName}>
-                        {item.other_user_name || item.other_user_email || 'Unknown User'}
+                        {item.last_message.sender}
                       </Text>
-                      {item.last_message && (
-                        <Text style={styles.lastMessage}>
-                          {item.last_message.length > 40
-                            ? item.last_message.slice(0, 40) + '...'
-                            : item.last_message}
-                        </Text>
-                      )}
+                      {(() => {
+                        // Handle both string and object with body and sender properties
+                        if (typeof item.last_message === 'string') {
+                          return (
+                            <Text style={styles.lastMessage}>
+                              {item.last_message.length > 40
+                                ? item.last_message.slice(0, 40) + '...'
+                                : item.last_message}
+                            </Text>
+                          );
+                        }
+                        
+                        if (item.last_message && typeof item.last_message === 'object') {
+                          const messageText = item.last_message.body || '';
+                          const sender = item.last_message.sender || '';
+                          
+                          return messageText ? (
+                            <Text style={styles.lastMessage}>
+                              {messageText.length > 40
+                                ? messageText.slice(0, 40) + '...'
+                                : messageText}
+                            </Text>
+                          ) : null;
+                        }
+                        
+                        return null;
+                      })()}
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -214,6 +234,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
     marginBottom: 5,
+  },
+  senderName: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: 15,
+    fontWeight: '400',
+    marginBottom: 3,
   },
   lastMessage: {
     color: 'rgba(255, 255, 255, 0.7)',
