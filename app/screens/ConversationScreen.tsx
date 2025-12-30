@@ -2,19 +2,20 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Input } from '@rneui/themed';
+import { Button } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import 'react-native-reanimated';
 
 import { API_URL } from '../../constants/Config';
@@ -56,12 +57,19 @@ interface ConversationData {
   }>;
 }
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
 interface Verse {
   id: number;
   book: string;
   chapter: number;
   verse: number;
   text: string;
+}
+
+interface VerseDropdownItem {
+  label: string;
+  value: Verse;
 }
 
 // Type the Conversation component
@@ -77,8 +85,9 @@ const ConversationScreen: React.FC = () => {
   const [conversationData, setConversationData] = useState<ConversationData | null>(null);
   const [messages, setMessages] = useState<ConversationData['messages']>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const [inputText, setInputText] = useState<string>('');
-  const [verseResults, setVerseResults] = useState<Verse[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [verseDropdownData, setVerseDropdownData] = useState<VerseDropdownItem[]>([]);
+  const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
   const [loading, setLoading] = useState(true);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -130,9 +139,9 @@ const ConversationScreen: React.FC = () => {
     }).start();
   }, [fadeAnim]);
 
-  // Debounced verse search - search as user types
-  const handleInputChange = (text: string) => {
-    setInputText(text);
+  // Debounced verse search - search as user types in dropdown
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
     
     // Search for verses when user types at least 2 characters
     if (text.trim().length >= 2) {
@@ -143,7 +152,7 @@ const ConversationScreen: React.FC = () => {
         searchVerses(text.trim());
       }, 500);
     } else {
-      setVerseResults([]);
+      setVerseDropdownData([]);
     }
   };
 
@@ -161,20 +170,31 @@ const ConversationScreen: React.FC = () => {
         const versesData = Array.isArray(response.data) 
           ? response.data 
           : response.data.verses || [];
-        setVerseResults(versesData);
+        
+        // Convert verses to dropdown format
+        const dropdownData: VerseDropdownItem[] = versesData.map((verse: Verse) => ({
+          label: `${verse.book} ${verse.chapter}:${verse.verse} - ${verse.text}`,
+          value: verse,
+        }));
+        setVerseDropdownData(dropdownData);
       }
     } catch (e) {
       console.error('Search verses failed', e);
-      setVerseResults([]);
+      setVerseDropdownData([]);
     }
   };
 
-  const handleVerseSelect = async (verse: Verse) => {
-    if (!currentUserId || !conversationData) return;
+  const handleVerseSelect = (item: VerseDropdownItem) => {
+    setSelectedVerse(item.value);
+    setSearchQuery(item.label);
+  };
+
+  const handleSendVerse = async () => {
+    if (!selectedVerse || !currentUserId || !conversationData) return;
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const verseText = `${verse.book} ${verse.chapter}:${verse.verse} - ${verse.text}`;
+      const verseText = `${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verse} - ${selectedVerse.text}`;
       
       const response = await axios.post(
         `${API_URL}/conversations/${conversationData.id}/messages`,
@@ -185,8 +205,9 @@ const ConversationScreen: React.FC = () => {
       if (response.data) {
         // Add new message to the list
         setMessages((prev) => [...prev, response.data.message || response.data]);
-        setInputText('');
-        setVerseResults([]);
+        setSearchQuery('');
+        setSelectedVerse(null);
+        setVerseDropdownData([]);
         
         // Scroll to bottom
         setTimeout(() => {
@@ -268,51 +289,42 @@ const ConversationScreen: React.FC = () => {
               />
             </View>
 
-             {/* Verse Search Results */}
-             {inputText.trim().length >= 2 && verseResults.length > 0 && (
-               <View style={styles.verseResultsContainer}>
-                 <FlatList
-                   data={verseResults}
-                   renderItem={({ item }) => (
-                     <TouchableOpacity
-                       style={styles.verseResultItem}
-                       onPress={() => handleVerseSelect(item)}
-                     >
-                       <Text style={styles.verseResultText}>
-                         {`${item.book} ${item.chapter}:${item.verse}`}
-                       </Text>
-                       <Text style={styles.verseResultBody} numberOfLines={2}>
-                         {item.text}
-                       </Text>
-                     </TouchableOpacity>
-                   )}
-                   keyExtractor={(item) => item.id.toString()}
-                   style={styles.verseResultsList}
-                   keyboardShouldPersistTaps="handled"
+             {/* Verse Search Dropdown */}
+             <View style={styles.dropdownContainer}>
+               <Dropdown
+                 style={styles.dropdown}
+                 placeholderStyle={styles.placeholderStyle}
+                 selectedTextStyle={styles.selectedTextStyle}
+                 inputSearchStyle={styles.inputSearchStyle}
+                 iconStyle={styles.iconStyle}
+                 itemTextStyle={styles.itemTextStyle}
+                 data={verseDropdownData}
+                 maxHeight={screenHeight * 0.3}
+                 autoScroll={false}
+                 activeColor="rgba(255, 255, 255, 0.1)"
+                 labelField="label"
+                 valueField="value"
+                 placeholder="Search for verses..."
+                 search
+                 searchPlaceholder="Type to search..."
+                 value={selectedVerse ? { label: searchQuery, value: selectedVerse } : null}
+                 onChange={handleVerseSelect}
+                 onChangeText={handleSearchChange}
+                 containerStyle={styles.dropdownListContainer}
+               />
+             </View>
+
+             {/* Send Button */}
+             {selectedVerse && (
+               <View style={styles.sendButtonContainer}>
+                 <Button
+                   title="Send Verse"
+                   buttonStyle={styles.sendButton}
+                   titleStyle={styles.sendButtonTitle}
+                   onPress={handleSendVerse}
                  />
                </View>
              )}
-
-             {/* Input Area */}
-             <View style={styles.inputContainer}>
-               <Input
-                 placeholder="Search for verses..."
-                 value={inputText}
-                 onChangeText={handleInputChange}
-                 placeholderTextColor={'#d8d8d8ff'}
-                 inputStyle={{ color: 'white', fontSize: 16 }}
-                 inputContainerStyle={{ borderBottomColor: 'white' }}
-                 leftIcon={{ 
-                   type: 'materialIcons', 
-                   name: 'search',
-                   color: '#ffffffff', 
-                   size: 24 
-                 }}
-                 cursorColor={"#ffffff"}
-                 selectionColor={'white'}
-                 multiline={false}
-               />
-             </View>
           </View>
         </View>
         <View style={{ height: "20%" }}>
@@ -377,36 +389,59 @@ const styles = StyleSheet.create({
   sentMessageTime: {
     color: 'rgba(0, 0, 0, 0.6)',
   },
-  verseResultsContainer: {
-    // maxHeight: 150,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.2)',
-  } as ViewStyle,
-  verseResultsList: {
-    flexGrow: 0,
-  },
-  verseResultItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  verseResultText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  verseResultBody: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 14,
-  },
-  inputContainer: {
+  dropdownContainer: {
     paddingHorizontal: 10,
     paddingVertical: 8,
-    // borderTopWidth: 1,
-    // borderTopColor: 'rgba(255, 255, 255, 0.2)',
   } as ViewStyle,
+  dropdown: {
+    height: screenHeight * 0.06,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: 'white',
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    color: 'white',
+    borderBottomColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  itemTextStyle: {
+    color: 'white',
+    fontSize: 16,
+  },
+  dropdownListContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 8,
+  },
+  sendButtonContainer: {
+    paddingHorizontal: 10,
+    paddingBottom: 8,
+  } as ViewStyle,
+  sendButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 30,
+  } as ViewStyle,
+  sendButtonTitle: {
+    fontWeight: 'bold',
+    color: '#ac8861ff',
+  },
 });
 
 export default ConversationScreen;
