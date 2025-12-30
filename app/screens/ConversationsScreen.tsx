@@ -7,13 +7,13 @@ import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle
+    ActivityIndicator,
+    Animated,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    ViewStyle
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -26,6 +26,9 @@ type RootStackParamList = {
   Home: undefined;
   Conversations: undefined;
   NewConversation: undefined;
+  Conversation: {
+    other_user_id: number;
+  };
 };
 
 // Type the navigation prop
@@ -133,14 +136,20 @@ const ConversationsScreen: React.FC = () => {
                 <TouchableOpacity 
                   key={item.id}
                   onPress={() => {
-                    // Navigate to conversation detail when available
-                    console.log('Conversation pressed:', item.id);
+                    // Navigate to conversation screen with other_user_id
+                    if (item.other_user_id) {
+                      navigation.navigate('Conversation', {
+                        other_user_id: item.other_user_id,
+                      });
+                    }
                   }}
                 >
                   <View style={styles.lineItemContainer}>
                     <View style={styles.conversationInfo}>
                       <Text style={styles.conversationName}>
-                        {item.last_message.sender}
+                        {typeof item.last_message === 'object' && item.last_message?.sender 
+                          ? item.last_message.sender 
+                          : item.other_user_name || item.other_user_email || 'Unknown User'}
                       </Text>
                       {(() => {
                         // Handle both string and object with body and sender properties

@@ -7,13 +7,13 @@ import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    ActivityIndicator,
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ViewStyle
+  ActivityIndicator,
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -26,6 +26,9 @@ type RootStackParamList = {
   Home: undefined;
   Conversations: undefined;
   NewConversation: undefined;
+  Conversation: {
+    other_user_id: number;
+  };
 };
 
 // Type the navigation prop
@@ -51,7 +54,7 @@ const NewConversationScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Fade-in animation on component mount
   useEffect(() => {
@@ -112,24 +115,11 @@ const NewConversationScreen: React.FC = () => {
     }
   };
 
-  const handleUserSelect = async (user: User) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      
-      // Create or get existing conversation with the selected user
-      // Adjust the endpoint based on your API structure
-      const response = await axios.post(
-        `${API_URL}/conversations`,
-        { other_user_id: user.id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      // Navigate back to conversations or to the conversation detail
-      navigation.navigate('Conversations');
-    } catch (e) {
-      console.error('Create conversation failed', e);
-      setError('Failed to create conversation');
-    }
+  const handleUserSelect = (user: User) => {
+    // Navigate to conversation screen with the other_user_id
+    navigation.navigate('Conversation', {
+      other_user_id: user.id,
+    });
   };
 
   if (!loaded) {

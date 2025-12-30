@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
 import ConversationsScreen from './screens/ConversationsScreen';
+import ConversationScreen from './screens/ConversationScreen';
 import HisWillScreen from './screens/HisWillScreen';
 import LoginScreen from './screens/LoginScreen';
 import NewConversationScreen from './screens/NewConversationScreen';
@@ -32,6 +33,9 @@ type RootDrawerParamList = {
   Profile: undefined;
   Conversations: undefined;
   NewConversation: undefined;
+  Conversation: {
+    other_user_id: number;
+  };
 };
 
 type AuthStackParamList = {
@@ -157,6 +161,16 @@ const AuthenticatedNavigator: React.FC = () => {
           drawerItemStyle: { display: 'none' }, // Hide from drawer menu
           headerLeft: () => <BackButton text="" />,
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>NEW CONVERSATION</Text>,
+        }}
+      />
+      <Drawer.Screen
+        name="Conversation"
+        component={ConversationScreen}
+        options={{ 
+          drawerLabel: () => null, // Hide from drawer
+          drawerItemStyle: { display: 'none' }, // Hide from drawer menu
+          headerLeft: () => <BackButton text="" />,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATION</Text>,
         }}
       />
       <Drawer.Screen
