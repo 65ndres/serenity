@@ -1,8 +1,9 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button, Input } from '@rneui/themed';
+import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
@@ -154,7 +155,7 @@ const ConversationScreen: React.FC = () => {
       const token = await AsyncStorage.getItem('token');
       
       // Search for verses - adjust endpoint as needed
-      const response = await axios.get(`${API_URL}/verses/search`, {
+      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { q: query },
       });
@@ -304,6 +305,7 @@ const ConversationScreen: React.FC = () => {
               {/* Input Area */}
               <View style={styles.inputContainer}>
                 <View style={styles.inputRow}>
+                  <View style={{width: '80%'}}>
                   <Input
                     placeholder="Search for verses..."
                     value={inputText}
@@ -321,15 +323,18 @@ const ConversationScreen: React.FC = () => {
                     selectionColor={'white'}
                     multiline={false}
                   />
-                  {readyToSend && (
-                    <Button
-                      title="Send"
-                      buttonStyle={styles.sendButton}
-                      titleStyle={styles.sendButtonTitle}
-                      onPress={handleSendMessage}
-                      containerStyle={styles.sendButtonContainer}
-                    />
-                  )}
+                  </View>
+                  <View style={{width: '20%', justifyContent: 'center', alignItems: 'center'}}>
+                    {readyToSend && (
+                      <TouchableOpacity
+                        onPress={handleSendMessage}
+                        style={styles.sendIconButton}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons name="send" size={28} color="#ac8861ff" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
               </View>
           </View>
@@ -427,25 +432,17 @@ const styles = StyleSheet.create({
     // borderTopColor: 'rgba(255, 255, 255, 0.2)',
   } as ViewStyle,
   inputRow: {
-    // flexDirection: 'row',
+    flexDirection: 'row',
     // alignItems: 'center',
     // gap: 10,
   } as ViewStyle,
-  sendButtonContainer: {
-    marginLeft: 10,
-  },
-  sendButton: {
+  sendIconButton: {
     backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: 'white',
-    borderRadius: 30,
-    paddingHorizontal: 20,
+    borderRadius: 20,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   } as ViewStyle,
-  sendButtonTitle: {
-    fontWeight: 'bold',
-    color: '#ac8861ff',
-    fontSize: 16,
-  },
 });
 
 export default ConversationScreen;
