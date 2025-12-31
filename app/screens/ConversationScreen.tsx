@@ -48,6 +48,7 @@ interface ConversationData {
     last_name?: string;
   };
   messages: Array<{
+    address: string;
     id: number;
     body: string;
     sender_id: number;
@@ -96,12 +97,14 @@ const ConversationScreen: React.FC = () => {
       
       const conversationResponse = await axios.post(
         `${API_URL}/conversation/new`,
-        { other_user_id },
+        { other_user_id, conversation_id: conversationData?.id || null },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (conversationResponse.data) {
-        setConversationData(conversationResponse.data);
+        // debugger
+        setCurrentUserId(conversationResponse.data.current_user_id);
+        // setConversationData(conversationResponse.data);
         setMessages(conversationResponse.data.messages || []);
       }
     } catch (e) {
@@ -109,7 +112,7 @@ const ConversationScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [other_user_id]);
+  }, [other_user_id, conversationData?.id]);
 
   useEffect(() => {
     fetchConversationData();
@@ -212,7 +215,7 @@ const ConversationScreen: React.FC = () => {
           ]}
         >
           <Text style={[styles.messageText, isSent && styles.sentMessageText]}>
-            {item.body}
+            {item.address}
           </Text>
           <Text style={[styles.messageTime, isSent && styles.sentMessageTime]}>
             {new Date(item.created_at).toLocaleTimeString([], { 
