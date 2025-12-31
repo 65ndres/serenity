@@ -104,7 +104,7 @@ const ConversationScreen: React.FC = () => {
       if (conversationResponse.data) {
         // debugger
         setCurrentUserId(conversationResponse.data.current_user_id);
-        // setConversationData(conversationResponse.data);
+        setConversationData(conversationResponse.data);
         setMessages(conversationResponse.data.messages || []);
       }
     } catch (e) {
