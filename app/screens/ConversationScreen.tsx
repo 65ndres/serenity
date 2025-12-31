@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   FlatList,
@@ -85,43 +85,35 @@ const ConversationScreen: React.FC = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flatListRef = useRef<FlatList>(null);
-
+  const [seletedVerseId, setSeletedVerseId] = useState<number | null>(null);
+  
   // Fetch conversation data and current user ID
-  useEffect(() => {
-    const fetchConversationData = async () => {
-      try {
-        setLoading(true);
-        const token = await AsyncStorage.getItem('token');
-        
-        // Fetch current user ID
-        const userResponse = await axios.get(`${API_URL}/user`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        if (userResponse.data?.id) {
-          setCurrentUserId(userResponse.data.id);
-        }
+  const fetchConversationData = useCallback(async () => {
+    // I need to make sure this is loading the conversation again after a new message is sent
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('token');
+      
+      const conversationResponse = await axios.post(
+        `${API_URL}/conversation/new`,
+        { other_user_id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        // Create or get existing conversation with the selected user
-        const conversationResponse = await axios.post(
-          `${API_URL}/conversation/new`,
-          { other_user_id },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        if (conversationResponse.data) {
-          setConversationData(conversationResponse.data);
-          setMessages(conversationResponse.data.messages || []);
-        }
-      } catch (e) {
-        console.error('Failed to fetch conversation data', e);
-      } finally {
-        setLoading(false);
+      if (conversationResponse.data) {
+        setConversationData(conversationResponse.data);
+        setMessages(conversationResponse.data.messages || []);
       }
-    };
-
-    fetchConversationData();
+    } catch (e) {
+      console.error('Failed to fetch conversation data', e);
+    } finally {
+      setLoading(false);
+    }
   }, [other_user_id]);
+
+  useEffect(() => {
+    fetchConversationData();
+  }, [fetchConversationData]);
 
   // Fade-in animation on component mount
   useEffect(() => {
@@ -174,33 +166,28 @@ const ConversationScreen: React.FC = () => {
 
   const handleVerseSelect = async (verse: Verse) => {
     setInputText(`${verse.book} ${verse.chapter}:${verse.verse}`);
+    setSeletedVerseId(verse.id);
     setVerseResults([]);
     setReadyToSend(true);
   };
 
   const handleSendMessage = async () => {
-    if (!inputText.trim() || !readyToSend || !currentUserId || !conversationData) return;
+    // debugger
+    if (!inputText.trim() || !readyToSend || !conversationData || !seletedVerseId) return;
 
     try {
       const token = await AsyncStorage.getItem('token');
       
       const response = await axios.post(
         `${API_URL}/conversations/${conversationData.id}/messages`,
-        { body: inputText },
+        { verse_id: seletedVerseId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      if (response.data) {
-        // Add new message to the list
-        setMessages((prev) => [...prev, response.data.message || response.data]);
-        setInputText('');
-        setVerseResults([]);
-        setReadyToSend(false);
+// debugger
+      if (response.status === 200 || response.status === 201) {
+        fetchConversationData();
+        // fetchConversationData(conversationData.id);
         
-        // Scroll to bottom
-        setTimeout(() => {
-          flatListRef.current?.scrollToEnd({ animated: true });
-        }, 100);
       }
     } catch (e) {
       console.error('Send message failed', e);
@@ -325,15 +312,21 @@ const ConversationScreen: React.FC = () => {
                   />
                   </View>
                   <View style={{width: '20%', justifyContent: 'center', alignItems: 'center'}}>
-                    {readyToSend && (
-                      <TouchableOpacity
-                        onPress={handleSendMessage}
-                        style={styles.sendIconButton}
-                        activeOpacity={0.7}
-                      >
-                        <Ionicons name="send" size={28} color="#ac8861ff" />
-                      </TouchableOpacity>
-                    )}
+                    <TouchableOpacity
+                      onPress={handleSendMessage}
+                      style={[
+                        styles.sendIconButton,
+                        !readyToSend && styles.sendIconButtonDisabled
+                      ]}
+                      activeOpacity={0.7}
+                      disabled={!readyToSend}
+                    >
+                      <Ionicons 
+                        name="send" 
+                        size={28} 
+                        color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -442,6 +435,9 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  } as ViewStyle,
+  sendIconButtonDisabled: {
+    opacity: 0.5,
   } as ViewStyle,
 });
 
