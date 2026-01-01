@@ -256,6 +256,7 @@ const ConversationScreen: React.FC = () => {
           <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <View style={styles.container}>
             {/* Messages List */}
+            {verseResults.length === 0 &&
             <View style={styles.messagesContainer}>
               <FlatList
                 ref={flatListRef}
@@ -267,7 +268,7 @@ const ConversationScreen: React.FC = () => {
                 onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
               />
             </View>
-
+            }
              {/* Verse Search Results */}
              {inputText.trim().length >= 2 && verseResults.length > 0 && (
                <View style={styles.verseResultsContainer}>
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
   },
   verseResultsContainer: {
     // maxHeight: 150,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'transparent',
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.2)',
   } as ViewStyle,
