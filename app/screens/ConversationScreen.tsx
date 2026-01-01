@@ -27,7 +27,8 @@ type RootStackParamList = {
   Conversations: undefined;
   NewConversation: undefined;
   Conversation: {
-    other_user_id: number;
+    other_user_id?: number,
+    conversation_id?: number,
   };
 };
 
@@ -75,7 +76,7 @@ const ConversationScreen: React.FC = () => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  const { other_user_id } = route.params;
+  const { other_user_id, conversation_id } = route.params || {};
   const [conversationData, setConversationData] = useState<ConversationData | null>(null);
   const [messages, setMessages] = useState<ConversationData['messages']>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -97,7 +98,10 @@ const ConversationScreen: React.FC = () => {
       
       const conversationResponse = await axios.post(
         `${API_URL}/conversation/new`,
-        { other_user_id, conversation_id: conversationData?.id || null },
+        { 
+          other_user_id: other_user_id || null, 
+          conversation_id: conversation_id || conversationData?.id || null 
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -112,7 +116,7 @@ const ConversationScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [other_user_id, conversationData?.id]);
+  }, [other_user_id, conversation_id, conversationData?.id]);
 
   useEffect(() => {
     fetchConversationData();
@@ -251,7 +255,7 @@ const ConversationScreen: React.FC = () => {
     <ScreenComponent>
       {/* <Animated.View style={{ opacity: fadeAnim }}> */}
         <View style={{ height: "10%"}}>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 30}}>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60}}>
             <Text style={styles.quoteText}>With</Text>
             <Text style={{ color: 'white', fontSize: 22, fontWeight: '600' }}>{otherUserName}</Text>
           </View>

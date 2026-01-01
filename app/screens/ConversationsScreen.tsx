@@ -7,13 +7,13 @@ import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    ActivityIndicator,
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ViewStyle
+  ActivityIndicator,
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -107,6 +107,14 @@ const ConversationsScreen: React.FC = () => {
     navigation.navigate('NewConversation');
   };
 
+  // const handleConversationSelect = (conversation: Conversation) => {
+  //   // Navigate to conversation screen with the other_user_id
+  //   navigation.navigate('Conversation', {
+  //     // other_user_id: user.id,
+  //   });
+  // };
+
+
   return (
     <ScreenComponent>
       <Animated.View style={{ opacity: fadeAnim }}>
@@ -137,9 +145,9 @@ const ConversationsScreen: React.FC = () => {
                   key={item.id}
                   onPress={() => {
                     // Navigate to conversation screen with other_user_id
-                    if (item.other_user_id) {
+                    if (item.id) {
                       navigation.navigate('Conversation', {
-                        other_user_id: item.other_user_id,
+                        conversation_id: item.id,
                       });
                     }
                   }}
