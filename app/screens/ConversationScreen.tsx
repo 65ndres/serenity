@@ -119,13 +119,13 @@ const ConversationScreen: React.FC = () => {
   }, [fetchConversationData]);
 
   // Fade-in animation on component mount
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+  // useEffect(() => {
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 1,
+  //     duration: 500,
+  //     useNativeDriver: true,
+  //   }).start();
+  // }, [fadeAnim]);
 
   // Debounced verse search - search as user types
   const handleInputChange = (text: string) => {
@@ -172,6 +172,7 @@ const ConversationScreen: React.FC = () => {
     setSeletedVerseId(verse.id);
     setVerseResults([]);
     setReadyToSend(true);
+    // setInputText("");
   };
 
   const handleSendMessage = async () => {
@@ -190,7 +191,7 @@ const ConversationScreen: React.FC = () => {
       if (response.status === 200 || response.status === 201) {
         fetchConversationData();
         // fetchConversationData(conversationData.id);
-        
+        setInputText("");
       }
     } catch (e) {
       console.error('Send message failed', e);
@@ -200,7 +201,7 @@ const ConversationScreen: React.FC = () => {
 
   const renderMessage = ({ item }: { item: typeof messages[0] }) => {
     const isSent = item.sender_id === currentUserId;
-    
+    debugger
     return (
       <View
         style={[
@@ -248,11 +249,15 @@ const ConversationScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <Animated.View style={{ opacity: fadeAnim }}>
-        <View style={{ height: "15%" }}>
-
+      {/* <Animated.View style={{ opacity: fadeAnim }}> */}
+        <View style={{ height: "15%", marginTop: 50 }}>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.quoteText}>With</Text>
+            <Text style={{ color: 'white', fontSize: 22, fontWeight: '600' }}>{otherUserName}</Text>
+          </View>
         </View>
-        <View style={{ height: "65%" }}>
+        <View style={{ height: "60%" }}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <View style={styles.container}>
             {/* Messages List */}
             <View style={styles.messagesContainer}>
@@ -293,7 +298,13 @@ const ConversationScreen: React.FC = () => {
              )}
 
               {/* Input Area */}
-              <View style={styles.inputContainer}>
+
+          </View>
+          </View>
+        </View>
+        <View style={{ height: "25%" }}>
+          <View style={{flex: 1, justifyContent: 'flex-start'}}>
+          <View style={styles.inputContainer}>
                 <View style={styles.inputRow}>
                   <View style={{width: '80%'}}>
                   <Input
@@ -301,7 +312,7 @@ const ConversationScreen: React.FC = () => {
                     value={inputText}
                     onChangeText={handleInputChange}
                     placeholderTextColor={'#d8d8d8ff'}
-                    inputStyle={{ color: 'white', fontSize: 16 }}
+                    inputStyle={{ color: 'white', fontSize: 22 }}
                     inputContainerStyle={{ borderBottomColor: 'white'}}
                     leftIcon={{ 
                       type: 'materialIcons', 
@@ -334,13 +345,11 @@ const ConversationScreen: React.FC = () => {
                 </View>
               </View>
           </View>
-        </View>
-        <View style={{ height: "20%" }}>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <View style={{flex: 1}}>
             <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
           </View>
         </View>
-      </Animated.View>
+      {/* </Animated.View> */}
     </ScreenComponent>
   );
 };
@@ -352,7 +361,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   messagesContainer: {
     // flex: 1,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingTop: 10,
   } as ViewStyle,
   messagesList: {
@@ -360,7 +369,7 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     marginVertical: 4,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   } as ViewStyle,
   sentMessageContainer: {
     alignItems: 'flex-end',
@@ -385,6 +394,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginBottom: 4,
+  },
+  quoteText: {
+    color: 'white',
+    fontSize: 22, // scales with screen height
+    fontWeight: '300',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   sentMessageText: {
     color: '#333',
@@ -413,13 +429,13 @@ const styles = StyleSheet.create({
   },
   verseResultText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: '600',
     marginBottom: 4,
   },
   verseResultBody: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 14,
+    fontSize: 18,
   },
   inputContainer: {
     paddingHorizontal: 10,
