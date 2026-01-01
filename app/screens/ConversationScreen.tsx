@@ -250,13 +250,13 @@ const ConversationScreen: React.FC = () => {
   return (
     <ScreenComponent>
       {/* <Animated.View style={{ opacity: fadeAnim }}> */}
-        <View style={{ height: "15%", marginTop: 50 }}>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ height: "10%"}}>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 30}}>
             <Text style={styles.quoteText}>With</Text>
             <Text style={{ color: 'white', fontSize: 22, fontWeight: '600' }}>{otherUserName}</Text>
           </View>
         </View>
-        <View style={{ height: "60%" }}>
+        <View style={{ height: "70%" }}>
           <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <View style={styles.container}>
             {/* Messages List */}
@@ -302,50 +302,50 @@ const ConversationScreen: React.FC = () => {
           </View>
           </View>
         </View>
-        <View style={{ height: "25%" }}>
+        <View style={{ height: "20%" }}>
           <View style={{flex: 1, justifyContent: 'flex-start'}}>
-          <View style={styles.inputContainer}>
-                <View style={styles.inputRow}>
-                  <View style={{width: '80%'}}>
-                  <Input
-                    placeholder="Search for verses..."
-                    value={inputText}
-                    onChangeText={handleInputChange}
-                    placeholderTextColor={'#d8d8d8ff'}
-                    inputStyle={{ color: 'white', fontSize: 22 }}
-                    inputContainerStyle={{ borderBottomColor: 'white'}}
-                    leftIcon={{ 
-                      type: 'materialIcons', 
-                      name: 'search',
-                      color: '#ffffffff', 
-                      size: 24 
-                    }}
-                    cursorColor={"#ffffff"}
-                    selectionColor={'white'}
-                    multiline={false}
-                  />
+            <View style={styles.inputContainer}>
+                  <View style={styles.inputRow}>
+                    <View style={{width: '85%'}}>
+                    <Input
+                      placeholder="Search for verses..."
+                      value={inputText}
+                      onChangeText={handleInputChange}
+                      placeholderTextColor={'white'}
+                      inputStyle={{ color: 'white', fontSize: 22 }}
+                      inputContainerStyle={{ borderBottomColor: 'white'}}
+                      leftIcon={{ 
+                        type: 'materialIcons', 
+                        name: 'search',
+                        color: '#ffffffff', 
+                        size: 24 
+                      }}
+                      cursorColor={"#ffffff"}
+                      selectionColor={'white'}
+                      multiline={false}
+                    />
+                    </View>
+                    <View style={{width: '15%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                      <TouchableOpacity
+                        onPress={handleSendMessage}
+                        style={[
+                          styles.sendIconButton,
+                          !readyToSend && styles.sendIconButtonDisabled
+                        ]}
+                        activeOpacity={0.7}
+                        disabled={!readyToSend}
+                      >
+                        <Ionicons 
+                          name="send" 
+                          size={28} 
+                          color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <View style={{width: '20%', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity
-                      onPress={handleSendMessage}
-                      style={[
-                        styles.sendIconButton,
-                        !readyToSend && styles.sendIconButtonDisabled
-                      ]}
-                      activeOpacity={0.7}
-                      disabled={!readyToSend}
-                    >
-                      <Ionicons 
-                        name="send" 
-                        size={28} 
-                        color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
+            </View>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, justifyContent: 'flex-end', paddingBottom: 10}}>
             <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
           </View>
         </View>
@@ -356,7 +356,6 @@ const ConversationScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: "65%",
     justifyContent: 'flex-end',
   } as ViewStyle,
   messagesContainer: {
@@ -438,7 +437,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   inputContainer: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingVertical: 8,
     // borderTopWidth: 1,
     // borderTopColor: 'rgba(255, 255, 255, 0.2)',
