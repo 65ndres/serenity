@@ -36,6 +36,7 @@ type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 
 interface Conversation {
   id: number;
+  conversation_name?: string;
   user_id?: number;
   other_user_id?: number;
   other_user_name?: string;
@@ -155,9 +156,7 @@ const ConversationsScreen: React.FC = () => {
                   <View style={styles.lineItemContainer}>
                     <View style={styles.conversationInfo}>
                       <Text style={styles.conversationName}>
-                        {typeof item.last_message === 'object' && item.last_message?.sender 
-                          ? item.last_message.sender 
-                          : item.other_user_name || item.other_user_email || 'Unknown User'}
+                        {item.conversation_name}
                       </Text>
                       {(() => {
                         // Handle both string and object with body and sender properties

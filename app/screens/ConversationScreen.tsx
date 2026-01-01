@@ -42,12 +42,7 @@ type RouteProp = {
 
 interface ConversationData {
   id: number;
-  other_user?: {
-    id: number;
-    username?: string;
-    first_name?: string;
-    last_name?: string;
-  };
+  conversation_name?: string;
   messages: Array<{
     address: string;
     id: number;
@@ -237,10 +232,7 @@ const ConversationScreen: React.FC = () => {
     return null;
   }
 
-  const otherUserName = conversationData?.other_user 
-    ? `${conversationData.other_user.first_name || ''} ${conversationData.other_user.last_name || ''}`.trim() || conversationData.other_user.username
-    : 'Unknown User';
-
+  const otherUserName = conversationData?.conversation_name || "Unknown User";
   if (loading) {
     return (
       <ScreenComponent>
