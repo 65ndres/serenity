@@ -27,7 +27,8 @@ type RootStackParamList = {
   Conversations: undefined;
   NewConversation: undefined;
   Conversation: {
-    other_user_id: number;
+    other_user_id?: number;
+    conversation_id?: number;
   };
 };
 
@@ -41,7 +42,7 @@ interface Conversation {
   other_user_id?: number;
   other_user_name?: string;
   other_user_email?: string;
-  last_message?: string | { body?: string; sender?: string };
+  last_message?: string | { body?: string; sender?: string; verse?: string; time?: string };
   updated_at?: string;
 }
 
@@ -159,7 +160,30 @@ const ConversationsScreen: React.FC = () => {
                         {item.conversation_name}
                       </Text>
                       {(() => {
-                        // Handle both string and object with body and sender properties
+                        // Handle object with verse and time properties
+                        if (item.last_message && typeof item.last_message === 'object') {
+                          const verse = item.last_message.verse || '';
+                          const time = item.last_message.time || '';
+                          
+                          return (
+                            <View>
+                              {verse ? (
+                                <Text style={styles.lastMessage}>
+                                  {verse.length > 40
+                                    ? verse.slice(0, 40) + '...'
+                                    : verse}
+                                </Text>
+                              ) : null}
+                              {time ? (
+                                <Text style={styles.lastMessageTime}>
+                                  {time}
+                                </Text>
+                              ) : null}
+                            </View>
+                          );
+                        }
+                        
+                        // Fallback for string format (backward compatibility)
                         if (typeof item.last_message === 'string') {
                           return (
                             <Text style={styles.lastMessage}>
@@ -168,19 +192,6 @@ const ConversationsScreen: React.FC = () => {
                                 : item.last_message}
                             </Text>
                           );
-                        }
-                        
-                        if (item.last_message && typeof item.last_message === 'object') {
-                          const messageText = item.last_message.body || '';
-                          const sender = item.last_message.sender || '';
-                          
-                          return messageText ? (
-                            <Text style={styles.lastMessage}>
-                              {messageText.length > 40
-                                ? messageText.slice(0, 40) + '...'
-                                : messageText}
-                            </Text>
-                          ) : null;
                         }
                         
                         return null;
@@ -260,6 +271,11 @@ const styles = StyleSheet.create({
   lastMessage: {
     color: 'rgba(255, 255, 255, 0.7)',
     fontSize: 16,
+  },
+  lastMessageTime: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 12,
+    marginTop: 2,
   },
   buttonContainer: {
     paddingHorizontal: 50,

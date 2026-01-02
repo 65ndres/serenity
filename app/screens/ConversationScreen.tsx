@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   FlatList,
@@ -20,6 +20,8 @@ import 'react-native-reanimated';
 
 import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
+import BackButton from '../VerseModule/BackButton';
+import VerseModule from '../VerseModule/VerseModule';
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -83,6 +85,9 @@ const ConversationScreen: React.FC = () => {
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flatListRef = useRef<FlatList>(null);
   const [seletedVerseId, setSeletedVerseId] = useState<number | null>(null);
+  const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
+  const [listComponentVisibility, setListComponentVisibility] = useState(true);
+  const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
   
   // Fetch conversation data and current user ID
   const fetchConversationData = useCallback(async () => {
@@ -197,34 +202,90 @@ const ConversationScreen: React.FC = () => {
     }
   };
 
+  const fetchVerseByAddress = async (address: string) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      
+      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { q: address },
+      });
+
+      if (response.data) {
+        const versesData = Array.isArray(response.data) 
+          ? response.data 
+          : response.data.verses || [];
+        
+        if (versesData.length > 0) {
+          // Use the first verse from the results
+          setSelectedVerse(versesData[0]);
+          setModuleComponentVisibility(true);
+          setListComponentVisibility(false);
+        } else {
+          console.warn('No verse found for address:', address);
+        }
+      }
+    } catch (e) {
+      console.error('Fetch verse by address failed', e);
+    }
+  };
+
+  const handleBackPress = () => {
+    if (listComponentVisibility) {
+      // If showing the list, navigate back to previous screen
+      navigation.goBack();
+    } else {
+      // If showing the module, go back to the list
+      setModuleComponentVisibility(false);
+      setListComponentVisibility(true);
+      setSelectedVerse(null);
+    }
+  };
+
+  // Set header options dynamically based on listComponentVisibility
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <BackButton 
+          text={""} 
+          onPress={handleBackPress}
+        />
+      ),
+    });
+  }, [listComponentVisibility, navigation]);
+
 
   const renderMessage = ({ item }: { item: typeof messages[0] }) => {
     const isSent = item.sender_id === currentUserId;
-    debugger
     return (
-      <View
-        style={[
-          styles.messageContainer,
-          isSent ? styles.sentMessageContainer : styles.receivedMessageContainer,
-        ]}
+      <TouchableOpacity
+        onPress={() => fetchVerseByAddress(item.address)}
+        activeOpacity={0.7}
       >
         <View
           style={[
-            styles.messageBubble,
-            isSent ? styles.sentMessageBubble : styles.receivedMessageBubble,
+            styles.messageContainer,
+            isSent ? styles.sentMessageContainer : styles.receivedMessageContainer,
           ]}
         >
-          <Text style={[styles.messageText, isSent && styles.sentMessageText]}>
-            {item.address}
-          </Text>
-          <Text style={[styles.messageTime, isSent && styles.sentMessageTime]}>
-            {new Date(item.created_at).toLocaleTimeString([], { 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}
-          </Text>
+          <View
+            style={[
+              styles.messageBubble,
+              isSent ? styles.sentMessageBubble : styles.receivedMessageBubble,
+            ]}
+          >
+            <Text style={[styles.messageText, isSent && styles.sentMessageText]}>
+              {item.address}
+            </Text>
+            <Text style={[styles.messageTime, isSent && styles.sentMessageTime]}>
+              {new Date(item.created_at).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -253,99 +314,110 @@ const ConversationScreen: React.FC = () => {
           </View>
         </View>
         <View style={{ height: "70%" }}>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-          <View style={styles.container}>
-            {/* Messages List */}
-            {verseResults.length === 0 &&
-            <View style={styles.messagesContainer}>
-              <FlatList
-                ref={flatListRef}
-                data={messages}
-                renderItem={renderMessage}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={styles.messagesList}
-                inverted={false}
-                onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-              />
-            </View>
-            }
-             {/* Verse Search Results */}
-             {inputText.trim().length >= 2 && verseResults.length > 0 && (
-               <View style={styles.verseResultsContainer}>
-                 <FlatList
-                   data={verseResults}
-                   renderItem={({ item }) => (
-                     <TouchableOpacity
-                       style={styles.verseResultItem}
-                       onPress={() => handleVerseSelect(item)}
-                     >
-                       <Text style={styles.verseResultText}>
-                         {`${item.book} ${item.chapter}:${item.verse}`}
-                       </Text>
-                       <Text style={styles.verseResultBody} numberOfLines={2}>
-                         {item.text}
-                       </Text>
-                     </TouchableOpacity>
-                   )}
-                   keyExtractor={(item) => item.id.toString()}
-                   style={styles.verseResultsList}
-                   keyboardShouldPersistTaps="handled"
-                 />
-               </View>
-             )}
+          {listComponentVisibility && (
+            <View style={{flex: 1, justifyContent: 'flex-end'}}>
+              <View style={styles.container}>
+                {/* Messages List */}
+                {verseResults.length === 0 &&
+                <View style={styles.messagesContainer}>
+                  <FlatList
+                    ref={flatListRef}
+                    data={messages}
+                    renderItem={renderMessage}
+                    keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={styles.messagesList}
+                    inverted={false}
+                    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                  />
+                </View>
+                }
+                 {/* Verse Search Results */}
+                 {inputText.trim().length >= 2 && verseResults.length > 0 && (
+                   <View style={styles.verseResultsContainer}>
+                     <FlatList
+                       data={verseResults}
+                       renderItem={({ item }) => (
+                         <TouchableOpacity
+                           style={styles.verseResultItem}
+                           onPress={() => handleVerseSelect(item)}
+                         >
+                           <Text style={styles.verseResultText}>
+                             {`${item.book} ${item.chapter}:${item.verse}`}
+                           </Text>
+                           <Text style={styles.verseResultBody} numberOfLines={2}>
+                             {item.text}
+                           </Text>
+                         </TouchableOpacity>
+                       )}
+                       keyExtractor={(item) => item.id.toString()}
+                       style={styles.verseResultsList}
+                       keyboardShouldPersistTaps="handled"
+                     />
+                   </View>
+                 )}
 
-              {/* Input Area */}
+                  {/* Input Area */}
 
-          </View>
-          </View>
+              </View>
+            </View>
+          )}
+          {moduleComponentVisibility && selectedVerse && 
+            <View style={{ height: "100%" }}>
+              <View style={{ height: "60%" }}>
+                <VerseModule data={[selectedVerse]} active={4} url={''} />
+              </View>
+            </View>
+          }
         </View>
-        <View style={{ height: "20%" }}>
-          <View style={{flex: 1, justifyContent: 'flex-start'}}>
-            <View style={styles.inputContainer}>
-                  <View style={styles.inputRow}>
-                    <View style={{width: '85%'}}>
-                    <Input
-                      placeholder="Search for verses..."
-                      value={inputText}
-                      onChangeText={handleInputChange}
-                      placeholderTextColor={'white'}
-                      inputStyle={{ color: 'white', fontSize: 22 }}
-                      inputContainerStyle={{ borderBottomColor: 'white'}}
-                      leftIcon={{ 
-                        type: 'materialIcons', 
-                        name: 'search',
-                        color: '#ffffffff', 
-                        size: 24 
-                      }}
-                      cursorColor={"#ffffff"}
-                      selectionColor={'white'}
-                      multiline={false}
-                    />
+        {listComponentVisibility && (
+          <View style={{ height: "20%" }}>
+            <View style={{flex: 1, justifyContent: 'flex-start'}}>
+              <View style={styles.inputContainer}>
+                    <View style={styles.inputRow}>
+                      <View style={{width: '85%'}}>
+                      <Input
+                        placeholder="Search for verses..."
+                        value={inputText}
+                        onChangeText={handleInputChange}
+                        placeholderTextColor={'white'}
+                        inputStyle={{ color: 'white', fontSize: 22 }}
+                        inputContainerStyle={{ borderBottomColor: 'white'}}
+                        leftIcon={{ 
+                          type: 'materialIcons', 
+                          name: 'search',
+                          color: '#ffffffff', 
+                          size: 24 
+                        }}
+                        cursorColor={"#ffffff"}
+                        selectionColor={'white'}
+                        multiline={false}
+                      />
+                      </View>
+                      <View style={{width: '15%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <TouchableOpacity
+                          onPress={handleSendMessage}
+                          style={[
+                            styles.sendIconButton,
+                            !readyToSend && styles.sendIconButtonDisabled
+                          ]}
+                          activeOpacity={0.7}
+                          disabled={!readyToSend}
+                        >
+                          <Ionicons 
+                            name="send" 
+                            size={28} 
+                            color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={{width: '15%', justifyContent: 'center', alignItems: 'flex-end'}}>
-                      <TouchableOpacity
-                        onPress={handleSendMessage}
-                        style={[
-                          styles.sendIconButton,
-                          !readyToSend && styles.sendIconButtonDisabled
-                        ]}
-                        activeOpacity={0.7}
-                        disabled={!readyToSend}
-                      >
-                        <Ionicons 
-                          name="send" 
-                          size={28} 
-                          color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+              </View>
+            </View>
+            <View style={{flex: 1, justifyContent: 'flex-end', paddingBottom: 10}}>
+              <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
             </View>
           </View>
-          <View style={{flex: 1, justifyContent: 'flex-end', paddingBottom: 10}}>
-            <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
-          </View>
-        </View>
+        )}
       {/* </Animated.View> */}
     </ScreenComponent>
   );
