@@ -42,7 +42,7 @@ interface Conversation {
   other_user_id?: number;
   other_user_name?: string;
   other_user_email?: string;
-  last_message?: string | { body?: string; sender?: string; verse?: string; time?: string };
+  last_message?: string | { body?: string; sender?: string; verse?: string; time?: string; read?: boolean };
   updated_at?: string;
 }
 
@@ -156,19 +156,31 @@ const ConversationsScreen: React.FC = () => {
                 >
                   <View style={styles.lineItemContainer}>
                     <View style={styles.conversationInfo}>
-                      <Text style={styles.conversationName}>
-                        {item.conversation_name}
-                      </Text>
+                      <View style={styles.conversationHeader}>
+                        <Text style={[
+                          styles.conversationName,
+                          item.last_message && typeof item.last_message === 'object' && item.last_message.read === false && styles.unreadConversationName
+                        ]}>
+                          {item.conversation_name}
+                        </Text>
+                        {item.last_message && typeof item.last_message === 'object' && item.last_message.read === false && (
+                          <View style={styles.unreadIndicator} />
+                        )}
+                      </View>
                       {(() => {
                         // Handle object with verse and time properties
                         if (item.last_message && typeof item.last_message === 'object') {
                           const verse = item.last_message.verse || '';
                           const time = item.last_message.time || '';
+                          const read = item.last_message.read;
                           
                           return (
                             <View>
                               {verse ? (
-                                <Text style={styles.lastMessage}>
+                                <Text style={[
+                                  styles.lastMessage,
+                                  read === false && styles.unreadMessage
+                                ]}>
                                   {verse.length > 40
                                     ? verse.slice(0, 40) + '...'
                                     : verse}
@@ -256,11 +268,26 @@ const styles = StyleSheet.create({
   conversationInfo: {
     flex: 1,
   },
+  conversationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
   conversationName: {
     color: 'white',
     fontSize: 20,
     fontWeight: '500',
-    marginBottom: 5,
+    flex: 1,
+  },
+  unreadConversationName: {
+    fontWeight: '700',
+  },
+  unreadIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'white',
+    marginLeft: 8,
   },
   senderName: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -271,6 +298,10 @@ const styles = StyleSheet.create({
   lastMessage: {
     color: 'rgba(255, 255, 255, 0.7)',
     fontSize: 16,
+  },
+  unreadMessage: {
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
   },
   lastMessageTime: {
     color: 'rgba(255, 255, 255, 0.6)',

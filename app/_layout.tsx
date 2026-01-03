@@ -175,7 +175,6 @@ const AuthenticatedNavigator: React.FC = () => {
         options={{ 
           drawerLabel: () => null, // Hide from drawer
           drawerItemStyle: { display: 'none' }, // Hide from drawer menu
-          headerLeft: () => <BackButton text="" />,
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATION</Text>,
         }}
       />
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
 export default function Layout() {
   return (
     <AuthProvider>
-        <RootLayout />
+      <RootLayout />
     </AuthProvider>
   );
 }

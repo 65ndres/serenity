@@ -244,7 +244,7 @@ const ConversationScreen: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
         params: { q: address },
       });
-      debugger
+
       if (response.data) {
         const verses = response.data.verses || response.data;
         if (verses.length > 0) {
@@ -287,8 +287,8 @@ const ConversationScreen: React.FC = () => {
     navigation.setOptions({
       headerLeft: () => (
         <BackButton 
-          text={""} 
-          onPress={handleBackPress}
+          text="" 
+          onPress={() => navigation.navigate('Conversations')}
         />
       ),
     });
