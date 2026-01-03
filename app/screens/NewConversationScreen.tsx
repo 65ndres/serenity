@@ -1,7 +1,7 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
@@ -25,14 +25,23 @@ import ScreenComponent from '../sharedComponents/ScreenComponent';
 type RootStackParamList = {
   Home: undefined;
   Conversations: undefined;
-  NewConversation: undefined;
+  NewConversation: {
+    verse_id?: number;
+  };
   Conversation: {
-    other_user_id: number;
+    other_user_id?: number;
+    conversation_id?: number;
+    verse_id?: number;
   };
 };
 
 // Type the navigation prop
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
+type RouteProp = {
+  key: string;
+  name: 'NewConversation';
+  params: RootStackParamList['NewConversation'];
+};
 
 interface User {
   id: number;
@@ -44,7 +53,9 @@ interface User {
 // Type the NewConversation component
 const NewConversationScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<RouteProp>();
   const colorScheme = useColorScheme();
+  const { verse_id } = route.params || {};
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -116,9 +127,10 @@ const NewConversationScreen: React.FC = () => {
   };
 
   const handleUserSelect = (user: User) => {
-    // Navigate to conversation screen with the other_user_id
+    // Navigate to conversation screen with the other_user_id and verse_id if present
     navigation.navigate('Conversation', {
       other_user_id: user.id,
+      verse_id: verse_id,
     });
   };
 

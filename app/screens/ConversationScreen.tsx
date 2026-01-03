@@ -2,7 +2,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
@@ -31,6 +31,7 @@ type RootStackParamList = {
   Conversation: {
     other_user_id?: number,
     conversation_id?: number,
+    verse_id?: number,
   };
 };
 
@@ -73,7 +74,7 @@ const ConversationScreen: React.FC = () => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  const { other_user_id, conversation_id } = route.params || {};
+  const { other_user_id, conversation_id, verse_id } = route.params || {};
   const [conversationData, setConversationData] = useState<ConversationData | null>(null);
   const [messages, setMessages] = useState<ConversationData['messages']>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -88,6 +89,7 @@ const ConversationScreen: React.FC = () => {
   const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
   const [listComponentVisibility, setListComponentVisibility] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
+  const [verseIdLoaded, setVerseIdLoaded] = useState<boolean>(false);
   
   // Fetch conversation data and current user ID
   const fetchConversationData = useCallback(async () => {
@@ -118,9 +120,13 @@ const ConversationScreen: React.FC = () => {
     }
   }, [other_user_id, conversation_id, conversationData?.id]);
 
-  useEffect(() => {
-    fetchConversationData();
-  }, [fetchConversationData]);
+  useFocusEffect(
+    useCallback(() => {
+      if (listComponentVisibility) {
+        fetchConversationData();
+      }
+    }, [listComponentVisibility, fetchConversationData])
+  );
 
   // Fade-in animation on component mount
   // useEffect(() => {
@@ -229,6 +235,43 @@ const ConversationScreen: React.FC = () => {
       console.error('Fetch verse by address failed', e);
     }
   };
+
+  const fetchVerseById = useCallback(async (id: number) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      
+      const response = await axios.get(`${API_URL}/verses/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data) {
+        const verse = response.data.verse || response.data;
+        if (verse) {
+          // Set the verse address in the input
+          const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse}`;
+          setInputText(verseAddress);
+          setSeletedVerseId(verse.id);
+          setReadyToSend(true);
+          // Trigger search to show the verse in results
+          // Use setTimeout to ensure state is updated before searching
+          setTimeout(() => {
+            searchVerses(verseAddress);
+          }, 0);
+        }
+      }
+    } catch (e) {
+      console.error('Fetch verse by ID failed', e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fetch verse by ID when verse_id is present in route params
+  useEffect(() => {
+    if (verse_id && !verseIdLoaded) {
+      fetchVerseById(verse_id);
+      setVerseIdLoaded(true);
+    }
+  }, [verse_id, verseIdLoaded, fetchVerseById]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {

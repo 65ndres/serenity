@@ -32,9 +32,13 @@ type RootDrawerParamList = {
   YourChoiceScreen: undefined;
   Profile: undefined;
   Conversations: undefined;
-  NewConversation: undefined;
+  NewConversation: {
+    verse_id?: number;
+  };
   Conversation: {
-    other_user_id: number;
+    other_user_id?: number;
+    conversation_id?: number;
+    verse_id?: number;
   };
 };
 

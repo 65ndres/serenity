@@ -1,5 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import * as Haptics from 'expo-haptics';
 import React, { useEffect, useState } from 'react';
@@ -33,9 +36,18 @@ interface VerseModuleProps {
   url: string;
 }
 
+type RootDrawerParamList = {
+  NewConversation: {
+    verse_id?: number;
+  };
+};
+
+type NavigationProp = DrawerNavigationProp<RootDrawerParamList>;
+
 const { width, height } = Dimensions.get("window");
 
 const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
+  const navigation = useNavigation<NavigationProp>();
   const [verses, setVerses] = useState<Verse[]>([]); // Type it for clarity
   const [currentPage, setCurrentPage] = useState(1)
   const [pagination, setPagination] = useState<PaginationMetadata | null>(null)
@@ -208,18 +220,37 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
                     </Text>
                   </View>
 
-                  <TouchableOpacity
-                    onPress={() => toggleLike(index)}
-                    style={styles.favoriteButton}
-                    accessibilityLabel={item.liked ? 'Unlike verse' : 'Like verse'}
-                    accessibilityRole="button"
-                  >
-                    <FontAwesome
-                      name={(item.liked ? 'heart' : 'heart-o') as any}
-                      size={height * 0.034}
-                      color={item.liked ? 'white' : 'white'}
-                    />
-                  </TouchableOpacity>
+                  <View style={styles.actionButtons}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        navigation.navigate('NewConversation', {
+                          verse_id: item.id,
+                        });
+                      }}
+                      style={styles.shareButton}
+                      accessibilityLabel="Share verse"
+                      accessibilityRole="button"
+                    >
+                      <Ionicons
+                        name="share-outline"
+                        size={height * 0.034}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => toggleLike(index)}
+                      style={styles.favoriteButton}
+                      accessibilityLabel={item.liked ? 'Unlike verse' : 'Like verse'}
+                      accessibilityRole="button"
+                    >
+                      <FontAwesome
+                        name={(item.liked ? 'heart' : 'heart-o') as any}
+                        size={height * 0.034}
+                        color={item.liked ? 'white' : 'white'}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             )}
@@ -272,6 +303,14 @@ const styles = StyleSheet.create({
   chapterVerseText: {
     fontSize: height * 0.022, // scales with screen height (~2.2% of screen height)
     color: 'white',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  shareButton: {
+    padding: width * 0.021, // scales with screen width (~2.1% of screen width)
+    marginRight: width * 0.013, // scales with screen width (~1.3% of screen width)
   },
   favoriteButton: {
     padding: width * 0.021, // scales with screen width (~2.1% of screen width)
