@@ -171,16 +171,18 @@ const Liked: React.FC = () => {
                   onPress={() => showModule(item.id)}
                 >
                   <View style={styles.lineItemContainer}>
-                    <Text style={styles.lineItemText}>
-                      {`${item.book.charAt(0).toUpperCase() || ''}. ${item.chapter || ''}:${item.verse || ''}  `}
-                    </Text>
-                    <Text style={{color: 'white', fontSize: 20}}>
-                      {item.text
-                        ? item.text.length > 20
-                          ? item.text.slice(0, 20) + '...'
-                          : item.text
-                        : ''}
-                    </Text>
+                    <View style={styles.conversationInfo}>
+                      <Text style={styles.conversationName}>
+                        {`${item.book} ${item.chapter}:${item.verse}`}
+                      </Text>
+                      {item.text ? (
+                        <Text style={styles.lastMessage}>
+                          {item.text.length > 40
+                            ? item.text.slice(0, 45) + '...'
+                            : item.text}
+                        </Text>
+                      ) : null}
+                    </View>
                   </View>
                 </TouchableOpacity>
               ))
@@ -209,12 +211,6 @@ const Liked: React.FC = () => {
           </View> */}
 
 const styles = StyleSheet.create({
-  lineItem: {
-    color: 'blue',
-    justifyContent: 'center',
-    width: '100%',
-    borderColor: 'white' 
-  },
   container: {
     justifyContent: 'center',
     alignContent: 'center',
@@ -245,9 +241,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 20,
   },
-  lineItemText: {
-    color: 'white', // Adjust text color as needed
-    fontSize: 20,   // Adjust font size as needed
+  conversationInfo: {
+    flex: 1,
+  },
+  conversationName: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '500',
+    marginBottom: 5,
+  },
+  lastMessage: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 16,
   },
   image: {
     flex: 1,
