@@ -197,7 +197,7 @@ const Liked: React.FC = () => {
           {moduleComponentVisibility && selectedVerse && 
           <View style={{ height: "100%" }}>
             <View style={{ height: "60%" }}>
-              <VerseModule data={[selectedVerse]} active={4} url={''} />
+              <VerseModule data={[selectedVerse]} active={0} url={''} />
             </View>
           </View>
           }

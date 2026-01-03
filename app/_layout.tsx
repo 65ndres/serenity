@@ -4,13 +4,13 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemL
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Dimensions, Image, ImageBackground, ImageStyle, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { Dimensions, Image, ImageBackground, ImageStyle, StatusBar, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
 import LikedScreen from './Liked';
-import ConversationsScreen from './screens/ConversationsScreen';
 import ConversationScreen from './screens/ConversationScreen';
+import ConversationsScreen from './screens/ConversationsScreen';
 import HisWillScreen from './screens/HisWillScreen';
 import LoginScreen from './screens/LoginScreen';
 import NewConversationScreen from './screens/NewConversationScreen';
@@ -88,7 +88,9 @@ const CustomDrawerContent: React.FC<any> = (props) => {
 
 const AuthenticatedNavigator: React.FC = () => {
   return (
-    <Drawer.Navigator
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <Drawer.Navigator
       initialRouteName="Home"
 
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -182,6 +184,7 @@ const AuthenticatedNavigator: React.FC = () => {
          }}
       />
     </Drawer.Navigator>
+    </>
   );
 };
 
@@ -189,8 +192,9 @@ const AuthenticatedNavigator: React.FC = () => {
 
 const UnauthenticatedNavigator: React.FC = () => {
   return (
-    <SafeAreaProvider>  
-    <Stack.Navigator
+    <SafeAreaProvider>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{
         headerTransparent: true,

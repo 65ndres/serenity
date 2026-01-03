@@ -80,7 +80,7 @@ const YourChoiceContent: React.FC = () => {
           </Pressable>
         </View>}
   
-        {verseComponentVisibility && <VerseModule data={[]} active={4} url={url} />}
+        {verseComponentVisibility && <VerseModule data={[]} active={0} url={url} />}
     </>
   );
 };

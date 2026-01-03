@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 35,
-    fontWeight: '300',
+    fontWeight: '400',
     textAlign: 'center',
   } as TextStyle,
   separator: {
