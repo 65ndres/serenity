@@ -236,31 +236,28 @@ const ConversationScreen: React.FC = () => {
     }
   };
 
-  const fetchVerseById = useCallback(async (id: number) => {
+  const fetchVerseByInputText = useCallback(async (address: string) => {
     try {
       const token = await AsyncStorage.getItem('token');
       
-      const response = await axios.get(`${API_URL}/verses/${id}`, {
+      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
         headers: { Authorization: `Bearer ${token}` },
+        params: { q: address },
       });
-
+      debugger
       if (response.data) {
-        const verse = response.data.verse || response.data;
-        if (verse) {
+        const verses = response.data.verses || response.data;
+        if (verses.length > 0) {
           // Set the verse address in the input
+          const verse = verses[0];
           const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse}`;
           setInputText(verseAddress);
           setSeletedVerseId(verse.id);
           setReadyToSend(true);
-          // Trigger search to show the verse in results
-          // Use setTimeout to ensure state is updated before searching
-          setTimeout(() => {
-            searchVerses(verseAddress);
-          }, 0);
         }
       }
     } catch (e) {
-      console.error('Fetch verse by ID failed', e);
+      console.error('Fetch verse by input text failed', e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -268,10 +265,10 @@ const ConversationScreen: React.FC = () => {
   // Fetch verse by ID when verse_id is present in route params
   useEffect(() => {
     if (verse_id && !verseIdLoaded) {
-      fetchVerseById(verse_id);
+      fetchVerseByInputText(inputText);
       setVerseIdLoaded(true);
     }
-  }, [verse_id, verseIdLoaded, fetchVerseById]);
+  }, [inputText, verseIdLoaded, fetchVerseByInputText]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {
