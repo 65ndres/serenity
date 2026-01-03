@@ -361,16 +361,18 @@ const ConversationScreen: React.FC = () => {
               </View>
             </View>
           )}
-          {moduleComponentVisibility && selectedVerse && 
-            <View style={{ height: "100%" }}>
-              <View style={{ height: "60%" }}>
-                <VerseModule data={[selectedVerse]} active={4} url={''} />
-              </View>
-            </View>
+          {moduleComponentVisibility && selectedVerse &&
+          <>
+          <View style={{ paddingTop: 50 }}>
+            <VerseModule data={[selectedVerse]} active={4} url={''} />
+          </View>
+          </>
+            
           }
         </View>
-        {listComponentVisibility && (
-          <View style={{ height: "20%" }}>
+        <View style={{ height: "20%" }}>
+          {!moduleComponentVisibility && (
+            <>
             <View style={{flex: 1, justifyContent: 'flex-start'}}>
               <View style={styles.inputContainer}>
                     <View style={styles.inputRow}>
@@ -413,11 +415,13 @@ const ConversationScreen: React.FC = () => {
                     </View>
               </View>
             </View>
+            </>
+            )}
             <View style={{flex: 1, justifyContent: 'flex-end', paddingBottom: 10}}>
               <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
             </View>
           </View>
-        )}
+
       {/* </Animated.View> */}
     </ScreenComponent>
   );

@@ -183,7 +183,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             width={width * 0.84} // scales with screen width (~84% of screen width, equivalent to width - 60 on 375px screen)
             height={width}
             data={verses}
-            loop={true}
+            loop={false}
             autoPlay={false}
             onScrollEnd={onChange}
             defaultIndex={currentIndex} // Use current tracked index
