@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import {
   ActivityIndicator,
   Animated,
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -21,6 +22,8 @@ import { API_URL } from '../constants/Config';
 import ScreenComponent from './sharedComponents/ScreenComponent';
 import BackButton from './VerseModule/BackButton';
 import VerseModule from './VerseModule/VerseModule';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -177,9 +180,12 @@ const Liked: React.FC = () => {
                       </Text>
                       {item.text ? (
                         <Text style={styles.lastMessage}>
-                          {item.text.length > 40
-                            ? item.text.slice(0, 45) + '...'
-                            : item.text}
+                          {(() => {
+                            const sliceLimit = Math.floor(screenWidth * 0.093);
+                            return item.text.length > sliceLimit
+                              ? item.text.slice(0, sliceLimit) + '...'
+                              : item.text;
+                          })()}
                         </Text>
                       ) : null}
                     </View>
@@ -199,7 +205,7 @@ const Liked: React.FC = () => {
         </View>
         <View style={{ height: "20%" }}>
           <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
+            <Text style={styles.promesasText}>Promesas</Text>
           </View>
         </View>
       </Animated.View>
@@ -219,40 +225,47 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: screenHeight * 0.062,
   } as ViewStyle,
   errorText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: screenWidth * 0.042,
     textAlign: 'center',
   },
   emptyText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: screenWidth * 0.042,
     textAlign: 'center',
   },
   lineItemContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: screenWidth * 0.027,
     borderBottomWidth: 1,
     borderBottomColor: 'white',
-    paddingBottom: 20,
-    paddingTop: 20,
+    paddingBottom: screenHeight * 0.025,
+    paddingTop: screenHeight * 0.025,
+    overflow: 'hidden',
   },
   conversationInfo: {
     flex: 1,
   },
   conversationName: {
     color: 'white',
-    fontSize: 20,
+    fontSize: screenWidth * 0.047,
     fontWeight: '500',
-    marginBottom: 5,
+    marginBottom: screenHeight * 0.006,
   },
   lastMessage: {
     color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 16,
+    fontSize: screenWidth * 0.038,
+  },
+  promesasText: {
+    color: 'white',
+    fontSize: screenWidth * 0.035,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   image: {
     flex: 1,
