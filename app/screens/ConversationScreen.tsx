@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -22,6 +23,8 @@ import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 import BackButton from '../VerseModule/BackButton';
 import VerseModule from '../VerseModule/VerseModule';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -122,10 +125,14 @@ const ConversationScreen: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (listComponentVisibility) {
-        fetchConversationData();
-      }
-    }, [listComponentVisibility, fetchConversationData])
+      // Reset selectedVerse and visibility states when screen comes into focus
+      setSelectedVerse(null);
+      setModuleComponentVisibility(false);
+      setListComponentVisibility(true);
+      
+      // Always fetch conversation data when screen comes into focus
+      fetchConversationData();
+    }, [fetchConversationData])
   );
 
   // Fade-in animation on component mount
@@ -337,8 +344,8 @@ const ConversationScreen: React.FC = () => {
   if (loading) {
     return (
       <ScreenComponent>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Loading conversation...</Text>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading conversation...</Text>
         </View>
       </ScreenComponent>
     );
@@ -347,15 +354,15 @@ const ConversationScreen: React.FC = () => {
   return (
     <ScreenComponent>
       {/* <Animated.View style={{ opacity: fadeAnim }}> */}
-        <View style={{ height: "10%"}}>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60}}>
+        <View style={styles.topHeader}>
+          <View style={styles.headerContent}>
             <Text style={styles.quoteText}>With</Text>
-            <Text style={{ color: 'white', fontSize: 22, fontWeight: '600' }}>{otherUserName}</Text>
+            <Text style={styles.otherUserName}>{otherUserName}</Text>
           </View>
         </View>
-        <View style={{ height: "70%" }}>
+        <View style={styles.messagesArea}>
           {listComponentVisibility && (
-            <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <View style={styles.messagesWrapper}>
               <View style={styles.container}>
                 {/* Messages List */}
                 {verseResults.length === 0 &&
@@ -403,39 +410,39 @@ const ConversationScreen: React.FC = () => {
           )}
           {moduleComponentVisibility && selectedVerse &&
           <>
-          <View style={{ paddingTop: 50 }}>
-            <VerseModule data={[selectedVerse]} active={4} url={''} />
+          <View style={styles.verseModuleContainer}>
+            <VerseModule data={[selectedVerse]} active={0} url={''} />
           </View>
           </>
             
           }
         </View>
-        <View style={{ height: "20%" }}>
+        <View style={styles.bottomArea}>
           {!moduleComponentVisibility && (
             <>
-            <View style={{flex: 1, justifyContent: 'flex-start'}}>
+            <View style={styles.inputWrapper}>
               <View style={styles.inputContainer}>
                     <View style={styles.inputRow}>
-                      <View style={{width: '85%'}}>
+                      <View style={styles.inputFieldContainer}>
                       <Input
                         placeholder="Search for verses..."
                         value={inputText}
                         onChangeText={handleInputChange}
                         placeholderTextColor={'white'}
-                        inputStyle={{ color: 'white', fontSize: 22 }}
-                        inputContainerStyle={{ borderBottomColor: 'white'}}
+                        inputStyle={styles.inputText}
+                        inputContainerStyle={styles.inputContainerStyle}
                         leftIcon={{ 
                           type: 'materialIcons', 
                           name: 'search',
                           color: '#ffffffff', 
-                          size: 24 
+                          size: screenWidth * 0.064
                         }}
                         cursorColor={"#ffffff"}
                         selectionColor={'white'}
                         multiline={false}
                       />
                       </View>
-                      <View style={{width: '15%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                      <View style={styles.sendButtonContainer}>
                         <TouchableOpacity
                           onPress={handleSendMessage}
                           style={[
@@ -447,7 +454,7 @@ const ConversationScreen: React.FC = () => {
                         >
                           <Ionicons 
                             name="send" 
-                            size={28} 
+                            size={screenWidth * 0.075} 
                             color={readyToSend ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
                           />
                         </TouchableOpacity>
@@ -457,8 +464,8 @@ const ConversationScreen: React.FC = () => {
             </View>
             </>
             )}
-            <View style={{flex: 1, justifyContent: 'flex-end', paddingBottom: 10}}>
-              <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
+            <View style={styles.promesasContainer}>
+              <Text style={styles.promesasText}>Promesas</Text>
             </View>
           </View>
 
@@ -468,20 +475,56 @@ const ConversationScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  } as ViewStyle,
+  loadingText: {
+    color: 'white',
+    fontSize: screenWidth * 0.042,
+  },
+  topHeader: {
+    height: screenHeight * 0.15,
+    // paddingTop: 10,
+  } as ViewStyle,
+  headerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: screenHeight * 0.074,
+    marginTop: 20,
+  } as ViewStyle,
+  quoteText: {
+    color: 'white',
+    fontSize: screenWidth * 0.052,
+    fontWeight: '300',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  otherUserName: {
+    color: 'white',
+    fontSize: screenWidth * 0.052,
+    fontWeight: '600',
+  },
+  messagesArea: {
+    height: screenHeight * 0.60,
+  } as ViewStyle,
+  messagesWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  } as ViewStyle,
   container: {
     justifyContent: 'flex-end',
   } as ViewStyle,
   messagesContainer: {
-    // flex: 1,
-    // paddingHorizontal: 10,
-    paddingTop: 10,
+    paddingTop: screenHeight * 0.012,
   } as ViewStyle,
   messagesList: {
-    paddingBottom: 10,
+    paddingBottom: screenHeight * 0.012,
   },
   messageContainer: {
-    marginVertical: 4,
-    // paddingHorizontal: 10,
+    marginVertical: screenHeight * 0.005,
   } as ViewStyle,
   sentMessageContainer: {
     alignItems: 'flex-end',
@@ -491,42 +534,37 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   messageBubble: {
     maxWidth: '75%',
-    padding: 12,
-    borderRadius: 18,
+    padding: screenWidth * 0.032,
+    borderRadius: screenWidth * 0.048,
   } as ViewStyle,
   sentMessageBubble: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderBottomRightRadius: 4,
+    borderBottomRightRadius: screenWidth * 0.011,
   } as ViewStyle,
   receivedMessageBubble: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderBottomLeftRadius: 4,
+    borderBottomLeftRadius: screenWidth * 0.011,
   } as ViewStyle,
   messageText: {
     color: 'white',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  quoteText: {
-    color: 'white',
-    fontSize: 22, // scales with screen height
-    fontWeight: '300',
-    textAlign: 'center',
-    fontStyle: 'italic',
+    fontSize: screenWidth * 0.038,
+    marginBottom: screenHeight * 0.005,
   },
   sentMessageText: {
     color: '#333',
   },
   messageTime: {
     color: 'rgba(255, 255, 255, 0.6)',
-    fontSize: 11,
+    fontSize: screenWidth * 0.026,
     alignSelf: 'flex-end',
   },
   sentMessageTime: {
     color: 'rgba(0, 0, 0, 0.6)',
   },
+  verseModuleContainer: {
+    paddingTop: screenHeight * 0.062,
+  } as ViewStyle,
   verseResultsContainer: {
-    // maxHeight: 150,
     backgroundColor: 'transparent',
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.2)',
@@ -535,41 +573,69 @@ const styles = StyleSheet.create({
     flexGrow: 0,
   },
   verseResultItem: {
-    padding: 12,
+    padding: screenWidth * 0.032,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
+  } as ViewStyle,
   verseResultText: {
     color: 'white',
-    fontSize: 22,
+    fontSize: screenWidth * 0.052,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: screenHeight * 0.005,
   },
   verseResultBody: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 18,
+    fontSize: screenWidth * 0.042,
   },
+  bottomArea: {
+    height: screenHeight * 0.20,
+  } as ViewStyle,
+  inputWrapper: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  } as ViewStyle,
   inputContainer: {
-    // paddingHorizontal: 10,
-    paddingVertical: 8,
-    // borderTopWidth: 1,
-    // borderTopColor: 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: screenHeight * 0.01,
   } as ViewStyle,
   inputRow: {
     flexDirection: 'row',
-    // alignItems: 'center',
-    // gap: 10,
+  } as ViewStyle,
+  inputFieldContainer: {
+    width: '85%',
+  } as ViewStyle,
+  inputText: {
+    color: 'white',
+    fontSize: screenWidth * 0.052,
+  },
+  inputContainerStyle: {
+    borderBottomColor: 'white',
+  } as ViewStyle,
+  sendButtonContainer: {
+    width: '15%',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   } as ViewStyle,
   sendIconButton: {
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: screenWidth * 0.053,
+    padding: screenWidth * 0.027,
     justifyContent: 'center',
     alignItems: 'center',
   } as ViewStyle,
   sendIconButtonDisabled: {
     opacity: 0.5,
   } as ViewStyle,
+  promesasContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingBottom: screenHeight * 0.012,
+  } as ViewStyle,
+  promesasText: {
+    color: 'white',
+    fontSize: screenWidth * 0.035,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
 });
 
 export default ConversationScreen;

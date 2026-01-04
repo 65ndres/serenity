@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -21,6 +22,8 @@ import 'react-native-reanimated';
 
 import { API_URL } from '../../constants/Config';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -140,15 +143,11 @@ const ConversationsScreen: React.FC = () => {
   return (
     <ScreenComponent>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <View style={{ height: "15%" }}>
+        <View style={styles.topSpacer}>
         </View>
-        <View style={{ height: "65%" }}> 
-          <Animated.View style={{ opacity: contentFadeAnim, flex: 1 }}>
-            <ScrollView
-              style={{
-                height: '100%',
-              }}
-            >
+        <View style={styles.contentArea}> 
+          <Animated.View style={[styles.contentFadeContainer, { opacity: contentFadeAnim }]}>
+            <ScrollView style={styles.scrollView}>
               <View style={styles.container}>
             {loading ? (
               <View style={styles.centerContainer}>
@@ -176,18 +175,18 @@ const ConversationsScreen: React.FC = () => {
                   <View style={styles.lineItemContainer}>
                     <View style={styles.conversationInfo}>
                       <View style={styles.conversationHeader}>
+                        {item.read === false && (
+                          <View style={styles.unreadIndicator} />
+                        )}
                         <Text style={[
                           styles.conversationName,
                           item.read === false && styles.unreadConversationName
                         ]}>
                           {item.conversation_name}
                         </Text>
-                        {item.read === false && (
-                          <View style={styles.unreadIndicator} />
-                        )}
                         <Ionicons 
                           name="chevron-forward" 
-                          size={20} 
+                          size={screenWidth * 0.053} 
                           color="white" 
                           style={styles.chevronIcon}
                         />
@@ -200,28 +199,24 @@ const ConversationsScreen: React.FC = () => {
                           const read = item.last_message.read;
                           
                           return (
-                            <View style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <View style={styles.messageContainer}>
                               {verse ? (
-                                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={[
-                                  styles.lastMessage,
-                                  read === false && styles.unreadMessage
-                                ]}>
-                                  {verse.length > 40
-                                    ? verse.slice(0, 40) + '...'
-                                    : verse}
-                                </Text>
-                            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                            {time ? (
-                              
-                                <Text style={styles.lastMessageTime}>
-                                  {time}
-                                </Text>
+                                <View style={styles.messageRow}>
+                                  <Text style={[
+                                    styles.lastMessage,
+                                    read === false && styles.unreadMessage
+                                  ]}>
+                                    {verse.length > 40
+                                      ? verse.slice(0, 40) + '...'
+                                      : verse}
+                                  </Text>
+                                  {time ? (
+                                    <Text style={styles.lastMessageTime}>
+                                      {time}
+                                    </Text>
+                                  ) : null}
+                                </View>
                               ) : null}
-                            </View>
-                            </View>
-                              ) : null}
-
                             </View>
                           );
                         }
@@ -248,7 +243,7 @@ const ConversationsScreen: React.FC = () => {
             </ScrollView>
           </Animated.View>
         </View>
-        <View style={{ height: "20%" }}>
+        <View style={styles.bottomArea}>
           <View style={styles.buttonContainer}>
             <Button
               title="NEW CONVERSATION"
@@ -257,8 +252,8 @@ const ConversationsScreen: React.FC = () => {
               onPress={handleNewConversation}
             />
           </View>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <Text style={{ color: 'white', fontSize: 15, fontWeight: '500', textAlign: 'center' }}>Promesas</Text>
+          <View style={styles.promesasContainer}>
+            <Text style={styles.promesasText}>Promesas</Text>
           </View>
         </View>
       </Animated.View>
@@ -267,6 +262,18 @@ const ConversationsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  topSpacer: {
+    height: screenHeight * 0.12,
+  } as ViewStyle,
+  contentArea: {
+    height: screenHeight * 0.60,
+  } as ViewStyle,
+  contentFadeContainer: {
+    flex: 1,
+  } as ViewStyle,
+  scrollView: {
+    height: '100%',
+  } as ViewStyle,
   container: {
     justifyContent: 'center',
     alignContent: 'center',
@@ -275,39 +282,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: screenHeight * 0.062,
   } as ViewStyle,
   errorText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: screenWidth * 0.048,
     textAlign: 'center',
   },
   emptyText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: screenWidth * 0.048,
     textAlign: 'center',
   },
   lineItemContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: screenWidth * 0.027,
     borderBottomWidth: 1,
     borderBottomColor: 'white',
-    paddingBottom: 20,
-    paddingTop: 20,
-  },
+    paddingBottom: screenHeight * 0.025,
+    paddingTop: screenHeight * 0.025,
+  } as ViewStyle,
   conversationInfo: {
     flex: 1,
   },
   conversationHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
-  },
+    marginBottom: screenHeight * 0.006,
+  } as ViewStyle,
   conversationName: {
     color: 'white',
-    fontSize: 20,
+    fontSize: screenWidth * 0.053,
     fontWeight: '500',
     flex: 1,
   },
@@ -315,62 +322,88 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   unreadIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: screenWidth * 0.021,
+    height: screenWidth * 0.021,
+    borderRadius: screenWidth * 0.011,
     backgroundColor: 'white',
-    marginLeft: 8,
-  },
+    marginRight: screenWidth * 0.021,
+  } as ViewStyle,
   chevronIcon: {
-    marginLeft: 8,
+    marginLeft: screenWidth * 0.021,
   },
   unreadCountBadge: {
     backgroundColor: 'white',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    paddingHorizontal: 6,
+    borderRadius: screenWidth * 0.027,
+    minWidth: screenWidth * 0.053,
+    height: screenWidth * 0.053,
+    paddingHorizontal: screenWidth * 0.016,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
-  },
+    marginLeft: screenWidth * 0.021,
+  } as ViewStyle,
   unreadCountText: {
     color: '#ac8861ff',
-    fontSize: 12,
+    fontSize: screenWidth * 0.032,
     fontWeight: '700',
   },
   senderName: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 15,
+    fontSize: screenWidth * 0.04,
     fontWeight: '400',
-    marginBottom: 3,
+    marginBottom: screenHeight * 0.004,
   },
+  messageContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  } as ViewStyle,
+  messageRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  } as ViewStyle,
   lastMessage: {
     color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 16,
+    fontSize: screenWidth * 0.043,
+    flex: 1,
+    fontWeight: '400',
   },
   unreadMessage: {
     color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '500',
+    fontWeight: '400',
   },
   lastMessageTime: {
     color: 'rgba(255, 255, 255, 0.6)',
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: screenWidth * 0.032,
+    marginLeft: screenWidth * 0.027,
   },
+  bottomArea: {
+    height: screenHeight * 0.20,
+  } as ViewStyle,
   buttonContainer: {
-    paddingHorizontal: 50,
-    paddingBottom: 10,
-  },
+    paddingHorizontal: screenWidth * 0.133,
+    paddingBottom: screenHeight * 0.012,
+  } as ViewStyle,
   newConversationButton: {
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: 'white',
-    borderRadius: 30,
-  },
+    borderRadius: screenWidth * 0.08,
+  } as ViewStyle,
   buttonTitle: {
     fontWeight: 'bold',
     color: '#ac8861ff',
+    fontSize: screenWidth * 0.04,
+  },
+  promesasContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  } as ViewStyle,
+  promesasText: {
+    color: 'white',
+    fontSize: screenWidth * 0.04,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   image: {
     flex: 1,
