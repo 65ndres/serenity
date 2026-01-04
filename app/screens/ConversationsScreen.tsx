@@ -42,6 +42,8 @@ interface Conversation {
   other_user_id?: number;
   other_user_name?: string;
   other_user_email?: string;
+  read?: boolean;
+  unread_count?: number;
   last_message?: string | { body?: string; sender?: string; verse?: string; time?: string; read?: boolean };
   updated_at?: string;
 }
@@ -58,6 +60,7 @@ const ConversationsScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
+  const contentFadeAnim = useRef(new Animated.Value(1)).current; // Content opacity for fade-out
 
   const fetchConversations = async () => {
     try {
@@ -88,7 +91,9 @@ const ConversationsScreen: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetchConversations();
-    }, [])
+      // Reset content fade animation when screen comes into focus
+      contentFadeAnim.setValue(1);
+    }, [contentFadeAnim])
   );
 
   // Fade-in animation on component mount
@@ -109,6 +114,20 @@ const ConversationsScreen: React.FC = () => {
     navigation.navigate('NewConversation');
   };
 
+  const handleConversationPress = (conversationId: number) => {
+    // Fade out the content before navigation
+    Animated.timing(contentFadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      // Navigate after fade-out completes
+      navigation.navigate('Conversation', {
+        conversation_id: conversationId,
+      });
+    });
+  };
+
   // const handleConversationSelect = (conversation: Conversation) => {
   //   // Navigate to conversation screen with the other_user_id
   //   navigation.navigate('Conversation', {
@@ -123,12 +142,13 @@ const ConversationsScreen: React.FC = () => {
         <View style={{ height: "15%" }}>
         </View>
         <View style={{ height: "65%" }}> 
-          <ScrollView
-            style={{
-              height: '100%',
-            }}
-          >
-            <View style={styles.container}>
+          <Animated.View style={{ opacity: contentFadeAnim, flex: 1 }}>
+            <ScrollView
+              style={{
+                height: '100%',
+              }}
+            >
+              <View style={styles.container}>
             {loading ? (
               <View style={styles.centerContainer}>
                 <ActivityIndicator size="large" color="white" />
@@ -148,9 +168,7 @@ const ConversationsScreen: React.FC = () => {
                   onPress={() => {
                     // Navigate to conversation screen with other_user_id
                     if (item.id) {
-                      navigation.navigate('Conversation', {
-                        conversation_id: item.id,
-                      });
+                      handleConversationPress(item.id);
                     }
                   }}
                 >
@@ -159,11 +177,11 @@ const ConversationsScreen: React.FC = () => {
                       <View style={styles.conversationHeader}>
                         <Text style={[
                           styles.conversationName,
-                          item.last_message && typeof item.last_message === 'object' && item.last_message.read === false && styles.unreadConversationName
+                          item.read === false && styles.unreadConversationName
                         ]}>
                           {item.conversation_name}
                         </Text>
-                        {item.last_message && typeof item.last_message === 'object' && item.last_message.read === false && (
+                        {item.read === false && (
                           <View style={styles.unreadIndicator} />
                         )}
                       </View>
@@ -179,7 +197,7 @@ const ConversationsScreen: React.FC = () => {
                               {verse ? (
                                 <Text style={[
                                   styles.lastMessage,
-                                  read === false && styles.unreadMessage
+                                  (read === false || item.read === false) && styles.unreadMessage
                                 ]}>
                                   {verse.length > 40
                                     ? verse.slice(0, 40) + '...'
@@ -213,8 +231,9 @@ const ConversationsScreen: React.FC = () => {
                 </TouchableOpacity>
               ))
             )}
-          </View>
-          </ScrollView>
+              </View>
+            </ScrollView>
+          </Animated.View>
         </View>
         <View style={{ height: "20%" }}>
           <View style={styles.buttonContainer}>
@@ -288,6 +307,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'white',
     marginLeft: 8,
+  },
+  unreadCountBadge: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    paddingHorizontal: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  unreadCountText: {
+    color: '#ac8861ff',
+    fontSize: 12,
+    fontWeight: '700',
   },
   senderName: {
     color: 'rgba(255, 255, 255, 0.8)',
