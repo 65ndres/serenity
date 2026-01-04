@@ -135,6 +135,16 @@ const ConversationScreen: React.FC = () => {
     }, [fetchConversationData])
   );
 
+  // Scroll to bottom when messages are loaded or updated
+  useEffect(() => {
+    if (messages.length > 0 && flatListRef.current && listComponentVisibility) {
+      // Use setTimeout to ensure the FlatList has rendered
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: false });
+      }, 100);
+    }
+  }, [messages, listComponentVisibility]);
+
   // Fade-in animation on component mount
   // useEffect(() => {
   //   Animated.timing(fadeAnim, {
