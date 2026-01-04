@@ -42,14 +42,12 @@ type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 interface Conversation {
   id: number;
   conversation_name?: string;
-  user_id?: number;
-  other_user_id?: number;
-  other_user_name?: string;
-  other_user_email?: string;
   read?: boolean;
-  unread_count?: number;
-  last_message?: string | { body?: string; sender?: string; verse?: string; time?: string; read?: boolean };
-  updated_at?: string;
+  last_message?: {
+    body: string;
+    time: string;
+    read: boolean;
+  } | null;
 }
 
 // Type the Conversations component
@@ -191,49 +189,25 @@ const ConversationsScreen: React.FC = () => {
                           style={styles.chevronIcon}
                         />
                       </View>
-                      {(() => {
-                        // Handle object with verse and time properties
-                        if (item.last_message && typeof item.last_message === 'object') {
-                          const verse = item.last_message.verse || '';
-                          const time = item.last_message.time || '';
-                          const read = item.last_message.read;
-                          
-                          return (
-                            <View style={styles.messageContainer}>
-                              {verse ? (
-                                <View style={styles.messageRow}>
-                                  <Text style={[
-                                    styles.lastMessage,
-                                    read === false && styles.unreadMessage
-                                  ]}>
-                                    {verse.length > 40
-                                      ? verse.slice(0, 40) + '...'
-                                      : verse}
-                                  </Text>
-                                  {time ? (
-                                    <Text style={styles.lastMessageTime}>
-                                      {time}
-                                    </Text>
-                                  ) : null}
-                                </View>
-                              ) : null}
-                            </View>
-                          );
-                        }
-                        
-                        // Fallback for string format (backward compatibility)
-                        if (typeof item.last_message === 'string') {
-                          return (
-                            <Text style={styles.lastMessage}>
-                              {item.last_message.length > 40
-                                ? item.last_message.slice(0, 40) + '...'
-                                : item.last_message}
+                      {item.last_message && (
+                        <View style={styles.messageContainer}>
+                          <View style={styles.messageRow}>
+                            <Text style={[
+                              styles.lastMessage,
+                              item.last_message.read === false && styles.unreadMessage
+                            ]}>
+                              {item.last_message.body.length > Math.floor(screenWidth * 0.093)
+                                ? item.last_message.body.slice(0, Math.floor(screenWidth * 0.093)) + '...'
+                                : item.last_message.body}
                             </Text>
-                          );
-                        }
-                        
-                        return null;
-                      })()}
+                            {item.last_message.time && (
+                              <Text style={styles.lastMessageTime}>
+                                {item.last_message.time}
+                              </Text>
+                            )}
+                          </View>
+                        </View>
+                      )}
                     </View>
                   </View>
                 </TouchableOpacity>

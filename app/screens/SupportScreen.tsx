@@ -35,14 +35,18 @@ type RootStackParamList = {
     conversation_id?: number,
     verse_id?: number,
   };
+  Support: {
+    conversation_id?: number,
+    verse_id?: number,
+  };
 };
 
 // Type the navigation prop
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 type RouteProp = {
   key: string;
-  name: 'Conversation';
-  params: RootStackParamList['Conversation'];
+  name: 'Support';
+  params: RootStackParamList['Support'];
 };
 
 interface ConversationData {
@@ -65,8 +69,8 @@ interface Verse {
   text: string;
 }
 
-// Type the Conversation component
-const ConversationScreen: React.FC = () => {
+// Type the Support component
+const SupportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProp>();
   const colorScheme = useColorScheme();
@@ -74,18 +78,18 @@ const ConversationScreen: React.FC = () => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  const { other_user_id, conversation_id, verse_id } = route.params || {};
+  // Hardcode support user ID
+  const other_user_id = 911;
+  const { conversation_id, verse_id } = route.params || {};
   const [conversationData, setConversationData] = useState<ConversationData | null>(null);
   const [messages, setMessages] = useState<ConversationData['messages']>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [inputText, setInputText] = useState<string>('');
   const [verseResults, setVerseResults] = useState<Verse[]>([]);
-  // const [readyToSend, setReadyToSend] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flatListRef = useRef<FlatList>(null);
-  // const [seletedVerseId, setSeletedVerseId] = useState<number | null>(null);
   const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
   const [listComponentVisibility, setListComponentVisibility] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
@@ -93,7 +97,6 @@ const ConversationScreen: React.FC = () => {
   
   // Fetch conversation data and current user ID
   const fetchConversationData = useCallback(async () => {
-    // I need to make sure this is loading the conversation again after a new message is sent
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
@@ -101,14 +104,13 @@ const ConversationScreen: React.FC = () => {
       const conversationResponse = await axios.post(
         `${API_URL}/conversation/new`,
         { 
-          other_user_id: other_user_id || null, 
+          other_user_id: other_user_id, 
           conversation_id: conversation_id || conversationData?.id || null 
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (conversationResponse.data) {
-        // debugger
         setCurrentUserId(conversationResponse.data.current_user_id);
         setConversationData(conversationResponse.data);
         setMessages(conversationResponse.data.messages || []);
@@ -128,19 +130,18 @@ const ConversationScreen: React.FC = () => {
     }, [listComponentVisibility, fetchConversationData])
   );
 
-  // Fade-in animation on component mount
-  // useEffect(() => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 500,
-  //     useNativeDriver: true,
-  //   }).start();
-  // }, [fadeAnim]);
+  // Scroll to bottom when messages are loaded or updated
+  useEffect(() => {
+    if (messages.length > 0 && flatListRef.current && listComponentVisibility) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: false });
+      }, 100);
+    }
+  }, [messages, listComponentVisibility]);
 
   // Debounced verse search - search as user types
   const handleInputChange = (text: string) => {
     setInputText(text);
-    // setReadyToSend(false); // Reset readyToSend when user types
     
     // Search for verses when user types at least 2 characters
     if (text.trim().length >= 2) {
@@ -159,7 +160,6 @@ const ConversationScreen: React.FC = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       
-      // Search for verses - adjust endpoint as needed
       const response = await axios.get(`${API_URL}/verses/search_by_address`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { q: query },
@@ -179,29 +179,23 @@ const ConversationScreen: React.FC = () => {
 
   const handleVerseSelect = async (verse: Verse) => {
     setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`);
-    // setSeletedVerseId(verse.id);
     setVerseResults([]);
-    // setReadyToSend(true);
-    // setInputText("");
   };
 
   const handleSendMessage = async () => {
-    // debugger
-    if (!inputText.trim()  || !conversationData) return;
+    if (!inputText.trim() || !conversationData) return;
 
     try {
       const token = await AsyncStorage.getItem('token');
       
       const response = await axios.post(
         `${API_URL}/conversations/${conversationData.id}/messages`,
-        // { verse_id: seletedVerseId },
         { body: inputText.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-// debugger
+
       if (response.status === 200 || response.status === 201) {
         fetchConversationData();
-        // fetchConversationData(conversationData.id);
         setInputText("");
       }
     } catch (e) {
@@ -224,8 +218,6 @@ const ConversationScreen: React.FC = () => {
           : response.data.verses || [];
         
         if (versesData.length > 0) {
-          // Use the first verse from the results
-          // setSelectedVerse(versesData[0]);
           setModuleComponentVisibility(true);
           setListComponentVisibility(false);
         } else {
@@ -249,18 +241,14 @@ const ConversationScreen: React.FC = () => {
       if (response.data) {
         const verses = response.data.verses || response.data;
         if (verses.length > 0) {
-          // Set the verse address in the input
           const verse = verses[0];
           const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`;
           setInputText(verseAddress);
-          // setSeletedVerseId(verse.id);
-          // setReadyToSend(true);
         }
       }
     } catch (e) {
       console.error('Fetch verse by input text failed', e);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Fetch verse by ID when verse_id is present in route params
@@ -269,17 +257,14 @@ const ConversationScreen: React.FC = () => {
       fetchVerseByInputText(inputText);
       setVerseIdLoaded(true);
     }
-  }, [inputText, verseIdLoaded, fetchVerseByInputText]);
+  }, [inputText, verseIdLoaded, fetchVerseByInputText, verse_id]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {
-      // If showing the list, navigate back to previous screen
       navigation.goBack();
     } else {
-      // If showing the module, go back to the list
       setModuleComponentVisibility(false);
       setListComponentVisibility(true);
-      // setSelectedVerse(null);
     }
   };
 
@@ -294,7 +279,6 @@ const ConversationScreen: React.FC = () => {
       ),
     });
   }, [listComponentVisibility, navigation]);
-
 
   const renderMessage = ({ item }: { item: typeof messages[0] }) => {
     const isSent = item.sender_id === currentUserId;
@@ -334,7 +318,7 @@ const ConversationScreen: React.FC = () => {
     return null;
   }
 
-  const otherUserName = conversationData?.conversation_name || "Unknown User";
+  const otherUserName = "Support";
   if (loading) {
     return (
       <ScreenComponent>
@@ -347,115 +331,112 @@ const ConversationScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
-      {/* <Animated.View style={{ opacity: fadeAnim }}> */}
-        <View style={styles.topHeader}>
-          <View style={styles.headerContent}>
-            <Text style={styles.quoteText}>With</Text>
-            <Text style={styles.otherUserName}>{otherUserName}</Text>
-          </View>
+      <View style={styles.topHeader}>
+        <View style={styles.headerContent}>
+          <Text style={styles.quoteText}>With</Text>
+          <Text style={styles.otherUserName}>{otherUserName}</Text>
         </View>
-        <View style={styles.messagesArea}>
-          {listComponentVisibility && (
-            <View style={styles.messagesWrapper}>
-              <View style={styles.container}>
-                {/* Messages List */}
-                {verseResults.length === 0 &&
-                <View style={styles.messagesContainer}>
-                  <FlatList
-                    ref={flatListRef}
-                    data={messages}
-                    renderItem={renderMessage}
-                    keyExtractor={(item) => item.id.toString()}
-                    contentContainerStyle={styles.messagesList}
-                    inverted={false}
-                    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-                  />
-                </View>
-                }
-                 {/* Verse Search Results */}
-                 {inputText.trim().length >= 2 && verseResults.length > 0 && (
-                   <View style={styles.verseResultsContainer}>
-                     <FlatList
-                       data={verseResults}
-                       renderItem={({ item }) => (
-                         <TouchableOpacity
-                           style={styles.verseResultItem}
-                           onPress={() => handleVerseSelect(item)}
-                         >
-                           <Text style={styles.verseResultText}>
-                             {`${item.book} ${item.chapter}:${item.verse}`}
-                           </Text>
-                           <Text style={styles.verseResultBody} numberOfLines={2}>
-                             {item.text}
-                           </Text>
-                         </TouchableOpacity>
-                       )}
-                       keyExtractor={(item) => item.id.toString()}
-                       style={styles.verseResultsList}
-                       keyboardShouldPersistTaps="handled"
-                     />
-                   </View>
-                 )}
-
-                  {/* Input Area */}
-
+      </View>
+      <View style={styles.messagesArea}>
+        {listComponentVisibility && (
+          <View style={styles.messagesWrapper}>
+            <View style={styles.container}>
+              {/* Messages List */}
+              {verseResults.length === 0 &&
+              <View style={styles.messagesContainer}>
+                <FlatList
+                  ref={flatListRef}
+                  data={messages}
+                  renderItem={renderMessage}
+                  keyExtractor={(item) => item.id.toString()}
+                  contentContainerStyle={styles.messagesList}
+                  inverted={false}
+                  onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                />
               </View>
+              }
+               {/* Verse Search Results */}
+               {inputText.trim().length >= 2 && verseResults.length > 0 && (
+                 <View style={styles.verseResultsContainer}>
+                   <FlatList
+                     data={verseResults}
+                     renderItem={({ item }) => (
+                       <TouchableOpacity
+                         style={styles.verseResultItem}
+                         onPress={() => handleVerseSelect(item)}
+                       >
+                         <Text style={styles.verseResultText}>
+                           {`${item.book} ${item.chapter}:${item.verse}`}
+                         </Text>
+                         <Text style={styles.verseResultBody} numberOfLines={2}>
+                           {item.text}
+                         </Text>
+                       </TouchableOpacity>
+                     )}
+                     keyExtractor={(item) => item.id.toString()}
+                     style={styles.verseResultsList}
+                     keyboardShouldPersistTaps="handled"
+                   />
+                 </View>
+               )}
+
+                {/* Input Area */}
+
             </View>
-          )}
-        </View>
-        <View style={styles.bottomArea}>
-          {!moduleComponentVisibility && (
-            <>
-            <View style={styles.inputWrapper}>
-              <View style={styles.inputContainer}>
-                    <View style={styles.inputRow}>
-                      <View style={styles.inputFieldContainer}>
-                      <Input
-                        placeholder="Search for verses..."
-                        value={inputText}
-                        onChangeText={handleInputChange}
-                        placeholderTextColor={'white'}
-                        inputStyle={styles.inputText}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        leftIcon={{ 
-                          type: 'materialIcons', 
-                          name: 'search',
-                          color: '#ffffffff', 
-                          size: screenWidth * 0.064
-                        }}
-                        cursorColor={"#ffffff"}
-                        selectionColor={'white'}
-                        multiline={false}
-                      />
-                      </View>
-                      <View style={styles.sendButtonContainer}>
-                        <TouchableOpacity
-                          onPress={handleSendMessage}
-                          style={[
-                            styles.sendIconButton,
-                            inputText.trim().length < 2 && styles.sendIconButtonDisabled
-                          ]}
-                          activeOpacity={0.7}
-                          disabled={inputText.trim().length < 2}
-                        >
-                          <Ionicons 
-                            name="send" 
-                            size={screenWidth * 0.075} 
-                            color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
-                          />
-                        </TouchableOpacity>
-                      </View>
+          </View>
+        )}
+      </View>
+      <View style={styles.bottomArea}>
+        {!moduleComponentVisibility && (
+          <>
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputContainer}>
+                  <View style={styles.inputRow}>
+                    <View style={styles.inputFieldContainer}>
+                    <Input
+                      placeholder="Search for verses..."
+                      value={inputText}
+                      onChangeText={handleInputChange}
+                      placeholderTextColor={'white'}
+                      inputStyle={styles.inputText}
+                      inputContainerStyle={styles.inputContainerStyle}
+                      leftIcon={{ 
+                        type: 'materialIcons', 
+                        name: 'search',
+                        color: '#ffffffff', 
+                        size: screenWidth * 0.064
+                      }}
+                      cursorColor={"#ffffff"}
+                      selectionColor={'white'}
+                      multiline={false}
+                    />
                     </View>
-              </View>
-            </View>
-            </>
-            )}
-            <View style={styles.promesasContainer}>
-              <Text style={styles.promesasText}>Promesas</Text>
+                    <View style={styles.sendButtonContainer}>
+                      <TouchableOpacity
+                        onPress={handleSendMessage}
+                        style={[
+                          styles.sendIconButton,
+                          inputText.trim().length < 2 && styles.sendIconButtonDisabled
+                        ]}
+                        activeOpacity={0.7}
+                        disabled={inputText.trim().length < 2}
+                      >
+                        <Ionicons 
+                          name="send" 
+                          size={screenWidth * 0.075} 
+                          color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
             </View>
           </View>
-
-      {/* </Animated.View> */}
+          </>
+          )}
+          <View style={styles.promesasContainer}>
+            <Text style={styles.promesasText}>Promesas</Text>
+          </View>
+        </View>
     </ScreenComponent>
   );
 };
@@ -472,7 +453,6 @@ const styles = StyleSheet.create({
   },
   topHeader: {
     height: screenHeight * 0.15,
-    // paddingTop: 10,
   } as ViewStyle,
   headerContent: {
     flex: 1,
@@ -624,5 +604,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ConversationScreen;
+export default SupportScreen;
 

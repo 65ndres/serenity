@@ -16,6 +16,7 @@ import LoginScreen from './screens/LoginScreen';
 import NewConversationScreen from './screens/NewConversationScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import SupportScreen from './screens/SupportScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import YourChoiceScreen from './screens/YourChoiceScreen';
 import BackButton from './VerseModule/BackButton';
@@ -37,6 +38,10 @@ type RootDrawerParamList = {
   };
   Conversation: {
     other_user_id?: number;
+    conversation_id?: number;
+    verse_id?: number;
+  };
+  Support: {
     conversation_id?: number;
     verse_id?: number;
   };
@@ -176,6 +181,15 @@ const AuthenticatedNavigator: React.FC = () => {
           drawerLabel: () => null, // Hide from drawer
           drawerItemStyle: { display: 'none' }, // Hide from drawer menu
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>CONVERSATION</Text>,
+        }}
+      />
+      <Drawer.Screen
+        name="Support"
+        component={SupportScreen}
+        options={{ 
+          drawerLabel: 'SUPPORT',
+          headerLeft: () => <BackButton text="" />,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '400' }}>SUPPORT</Text>,
         }}
       />
       <Drawer.Screen
