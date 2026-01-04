@@ -1,4 +1,5 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -184,6 +185,12 @@ const ConversationsScreen: React.FC = () => {
                         {item.read === false && (
                           <View style={styles.unreadIndicator} />
                         )}
+                        <Ionicons 
+                          name="chevron-forward" 
+                          size={20} 
+                          color="white" 
+                          style={styles.chevronIcon}
+                        />
                       </View>
                       {(() => {
                         // Handle object with verse and time properties
@@ -193,22 +200,28 @@ const ConversationsScreen: React.FC = () => {
                           const read = item.last_message.read;
                           
                           return (
-                            <View>
+                            <View style={{display: 'flex', justifyContent: 'space-between'}}>
                               {verse ? (
+                                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text style={[
                                   styles.lastMessage,
-                                  (read === false || item.read === false) && styles.unreadMessage
+                                  read === false && styles.unreadMessage
                                 ]}>
                                   {verse.length > 40
                                     ? verse.slice(0, 40) + '...'
                                     : verse}
                                 </Text>
-                              ) : null}
-                              {time ? (
+                            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                            {time ? (
+                              
                                 <Text style={styles.lastMessageTime}>
                                   {time}
                                 </Text>
                               ) : null}
+                            </View>
+                            </View>
+                              ) : null}
+
                             </View>
                           );
                         }
@@ -238,7 +251,7 @@ const ConversationsScreen: React.FC = () => {
         <View style={{ height: "20%" }}>
           <View style={styles.buttonContainer}>
             <Button
-              title="New Conversation"
+              title="NEW CONVERSATION"
               buttonStyle={styles.newConversationButton}
               titleStyle={styles.buttonTitle}
               onPress={handleNewConversation}
@@ -306,6 +319,9 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: 'white',
+    marginLeft: 8,
+  },
+  chevronIcon: {
     marginLeft: 8,
   },
   unreadCountBadge: {
