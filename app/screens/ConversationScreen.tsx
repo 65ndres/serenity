@@ -178,7 +178,7 @@ const ConversationScreen: React.FC = () => {
   };
 
   const handleVerseSelect = async (verse: Verse) => {
-    setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`);
+    setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`);
     // setSeletedVerseId(verse.id);
     setVerseResults([]);
     // setReadyToSend(true);
@@ -251,7 +251,7 @@ const ConversationScreen: React.FC = () => {
         if (verses.length > 0) {
           // Set the verse address in the input
           const verse = verses[0];
-          const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`;
+          const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`;
           setInputText(verseAddress);
           // setSeletedVerseId(verse.id);
           // setReadyToSend(true);

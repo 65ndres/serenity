@@ -196,9 +196,18 @@ const ConversationsScreen: React.FC = () => {
                               styles.lastMessage,
                               item.last_message.read === false && styles.unreadMessage
                             ]}>
-                              {item.last_message.body.length > Math.floor(screenWidth * 0.093)
-                                ? item.last_message.body.slice(0, Math.floor(screenWidth * 0.093)) + '...'
-                                : item.last_message.body}
+                              {(() => {
+                                const body = item.last_message.body;
+                                // Get text before newline if it exists
+                                const textBeforeNewline = body.includes('\n') 
+                                  ? body.split('\n')[0] 
+                                  : body;
+                                // Truncate at 30 characters if needed
+                                if (textBeforeNewline.length > 15) {
+                                  return textBeforeNewline.slice(0, 15) + '...';
+                                }
+                                return textBeforeNewline;
+                              })()}
                             </Text>
                             {item.last_message.time && (
                               <Text style={styles.lastMessageTime}>
