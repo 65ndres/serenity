@@ -3,8 +3,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
-import { Dimensions, Image, ImageBackground, ImageStyle, StatusBar, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Dimensions, Image, ImageBackground, ImageStyle, StatusBar, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from './Home';
@@ -72,6 +72,19 @@ const DrawerToggleButton: React.FC<{ size?: number }> = ({ size }) => {
 
 const CustomDrawerContent: React.FC<any> = (props) => {
   const { logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      // Redirect handled by RootLayout
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <ImageBackground
@@ -83,12 +96,10 @@ const CustomDrawerContent: React.FC<any> = (props) => {
       <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
         <DrawerItemList {...props} />
         <DrawerItem
-          label="Logout"
-          onPress={async () => {
-            await logout();
-            // Redirect handled by RootLayout
-          }}
+          label={isLoggingOut ? "Logging out..." : "Logout"}
+          onPress={handleLogout}
           labelStyle={styles.logoutLabel}
+          icon={isLoggingOut ? () => <ActivityIndicator size="small" color="white" /> : undefined}
         />
       </DrawerContentScrollView>
     </ImageBackground>
