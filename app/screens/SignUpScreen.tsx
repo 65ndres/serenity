@@ -85,7 +85,6 @@ const SignUpScreen: React.FC = () => {
     const success = await signup(email, password, passwordConfirmation);
     setIsLoading(false);
     if (success) {
-      navigation.navigate('Home');
     } else {
       Alert.alert('Error', 'Signup failed. Please check your details and try again.');
     }
