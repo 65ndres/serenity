@@ -46,6 +46,7 @@ type RouteProp = {
 interface User {
   id: number;
   email: string;
+  username?: string;
   first_name?: string;
   last_name?: string;
 }
@@ -150,7 +151,7 @@ const NewConversationScreen: React.FC = () => {
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholderTextColor={'#d8d8d8ff'}
-              inputStyle={{ color: 'white', fontSize: 20 }}
+              inputStyle={{ color: 'white', fontSize: 22 }}
               inputContainerStyle={{ borderBottomColor: 'white' }}
               leftIcon={{ 
                 type: 'materialIcons', 
@@ -193,12 +194,12 @@ const NewConversationScreen: React.FC = () => {
                   <View style={styles.lineItemContainer}>
                     <View style={styles.userInfo}>
                       <Text style={styles.userName}>
-                        {user.first_name && user.last_name
-                          ? `${user.first_name} ${user.last_name}`
-                          : user.email}
+                        {user.username || user.email}
                       </Text>
                       {user.first_name && user.last_name && (
-                        <Text style={styles.userEmail}>{user.email}</Text>
+                        <Text style={styles.userEmail}>
+                          {`${user.first_name} ${user.last_name}`}
+                        </Text>
                       )}
                     </View>
                   </View>
@@ -240,18 +241,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   searchContainer: {
-    paddingHorizontal: 10,
     paddingTop: 10,
   },
   lineItemContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    // padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     paddingBottom: 20,
     paddingTop: 20,
+    // paddingHorizontal: 10,
+    marginHorizontal: 20,
   },
   userInfo: {
     flex: 1,
