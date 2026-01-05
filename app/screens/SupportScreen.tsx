@@ -37,7 +37,6 @@ type RootStackParamList = {
   };
   Support: {
     conversation_id?: number,
-    verse_id?: number,
   };
 };
 
@@ -61,14 +60,6 @@ interface ConversationData {
   }>;
 }
 
-interface Verse {
-  id: number;
-  book: string;
-  chapter: number;
-  verse: number;
-  text: string;
-}
-
 // Type the Support component
 const SupportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -80,20 +71,14 @@ const SupportScreen: React.FC = () => {
 
   // Hardcode support user ID
   const other_user_id = 911;
-  const { conversation_id, verse_id } = route.params || {};
+  const { conversation_id } = route.params || {};
   const [conversationData, setConversationData] = useState<ConversationData | null>(null);
   const [messages, setMessages] = useState<ConversationData['messages']>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [inputText, setInputText] = useState<string>('');
-  const [verseResults, setVerseResults] = useState<Verse[]>([]);
   const [loading, setLoading] = useState(true);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flatListRef = useRef<FlatList>(null);
-  const [moduleComponentVisibility, setModuleComponentVisibility] = useState(false);
-  const [listComponentVisibility, setListComponentVisibility] = useState(true);
-  const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
-  const [verseIdLoaded, setVerseIdLoaded] = useState<boolean>(false);
   
   // Fetch conversation data and current user ID
   const fetchConversationData = useCallback(async () => {
@@ -124,62 +109,22 @@ const SupportScreen: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (listComponentVisibility) {
-        fetchConversationData();
-      }
-    }, [listComponentVisibility, fetchConversationData])
+      fetchConversationData();
+    }, [fetchConversationData])
   );
 
   // Scroll to bottom when messages are loaded or updated
   useEffect(() => {
-    if (messages.length > 0 && flatListRef.current && listComponentVisibility) {
+    if (messages.length > 0 && flatListRef.current) {
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: false });
       }, 100);
     }
-  }, [messages, listComponentVisibility]);
+  }, [messages]);
 
-  // Debounced verse search - search as user types
+  // Handle input change - free form text
   const handleInputChange = (text: string) => {
     setInputText(text);
-    
-    // Search for verses when user types at least 2 characters
-    if (text.trim().length >= 2) {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-      searchTimeoutRef.current = setTimeout(() => {
-        searchVerses(text.trim());
-      }, 500);
-    } else {
-      setVerseResults([]);
-    }
-  };
-
-  const searchVerses = async (query: string) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      
-      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { q: query },
-      });
-
-      if (response.data) {
-        const versesData = Array.isArray(response.data) 
-          ? response.data 
-          : response.data.verses || [];
-        setVerseResults(versesData);
-      }
-    } catch (e) {
-      console.error('Search verses failed', e);
-      setVerseResults([]);
-    }
-  };
-
-  const handleVerseSelect = async (verse: Verse) => {
-    setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`);
-    setVerseResults([]);
   };
 
   const handleSendMessage = async () => {
@@ -203,72 +148,7 @@ const SupportScreen: React.FC = () => {
     }
   };
 
-  const fetchVerseByAddress = async (address: string) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      
-      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { q: address },
-      });
-
-      if (response.data) {
-        const versesData = Array.isArray(response.data) 
-          ? response.data 
-          : response.data.verses || [];
-        
-        if (versesData.length > 0) {
-          setModuleComponentVisibility(true);
-          setListComponentVisibility(false);
-        } else {
-          console.warn('No verse found for address:', address);
-        }
-      }
-    } catch (e) {
-      console.error('Fetch verse by address failed', e);
-    }
-  };
-
-  const fetchVerseByInputText = useCallback(async (address: string) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      
-      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { q: address },
-      });
-
-      if (response.data) {
-        const verses = response.data.verses || response.data;
-        if (verses.length > 0) {
-          const verse = verses[0];
-          const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n ${verse.text}`;
-          setInputText(verseAddress);
-        }
-      }
-    } catch (e) {
-      console.error('Fetch verse by input text failed', e);
-    }
-  }, []);
-
-  // Fetch verse by ID when verse_id is present in route params
-  useEffect(() => {
-    if (verse_id && !verseIdLoaded) {
-      fetchVerseByInputText(inputText);
-      setVerseIdLoaded(true);
-    }
-  }, [inputText, verseIdLoaded, fetchVerseByInputText, verse_id]);
-
-  const handleBackPress = () => {
-    if (listComponentVisibility) {
-      navigation.goBack();
-    } else {
-      setModuleComponentVisibility(false);
-      setListComponentVisibility(true);
-    }
-  };
-
-  // Set header options dynamically based on listComponentVisibility
+  // Set header options
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -278,39 +158,34 @@ const SupportScreen: React.FC = () => {
         />
       ),
     });
-  }, [listComponentVisibility, navigation]);
+  }, [navigation]);
 
   const renderMessage = ({ item }: { item: typeof messages[0] }) => {
     const isSent = item.sender_id === currentUserId;
     return (
-      <TouchableOpacity
-        onPress={() => fetchVerseByAddress(item.body)}
-        activeOpacity={0.7}
+      <View
+        style={[
+          styles.messageContainer,
+          isSent ? styles.sentMessageContainer : styles.receivedMessageContainer,
+        ]}
       >
         <View
           style={[
-            styles.messageContainer,
-            isSent ? styles.sentMessageContainer : styles.receivedMessageContainer,
+            styles.messageBubble,
+            isSent ? styles.sentMessageBubble : styles.receivedMessageBubble,
           ]}
         >
-          <View
-            style={[
-              styles.messageBubble,
-              isSent ? styles.sentMessageBubble : styles.receivedMessageBubble,
-            ]}
-          >
-            <Text style={[styles.messageText, isSent && styles.sentMessageText]}>
-              {item.body}
-            </Text>
-            <Text style={[styles.messageTime, isSent && styles.sentMessageTime]}>
-              {new Date(item.created_at).toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-              })}
-            </Text>
-          </View>
+          <Text style={[styles.messageText, isSent && styles.sentMessageText]}>
+            {item.body}
+          </Text>
+          <Text style={[styles.messageTime, isSent && styles.sentMessageTime]}>
+            {new Date(item.created_at).toLocaleTimeString([], { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            })}
+          </Text>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -338,105 +213,64 @@ const SupportScreen: React.FC = () => {
         </View>
       </View>
       <View style={styles.messagesArea}>
-        {listComponentVisibility && (
-          <View style={styles.messagesWrapper}>
-            <View style={styles.container}>
-              {/* Messages List */}
-              {verseResults.length === 0 &&
-              <View style={styles.messagesContainer}>
-                <FlatList
-                  ref={flatListRef}
-                  data={messages}
-                  renderItem={renderMessage}
-                  keyExtractor={(item) => item.id.toString()}
-                  contentContainerStyle={styles.messagesList}
-                  inverted={false}
-                  onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-                />
-              </View>
-              }
-               {/* Verse Search Results */}
-               {inputText.trim().length >= 2 && verseResults.length > 0 && (
-                 <View style={styles.verseResultsContainer}>
-                   <FlatList
-                     data={verseResults}
-                     renderItem={({ item }) => (
-                       <TouchableOpacity
-                         style={styles.verseResultItem}
-                         onPress={() => handleVerseSelect(item)}
-                       >
-                         <Text style={styles.verseResultText}>
-                           {`${item.book} ${item.chapter}:${item.verse}`}
-                         </Text>
-                         <Text style={styles.verseResultBody} numberOfLines={2}>
-                           {item.text}
-                         </Text>
-                       </TouchableOpacity>
-                     )}
-                     keyExtractor={(item) => item.id.toString()}
-                     style={styles.verseResultsList}
-                     keyboardShouldPersistTaps="handled"
-                   />
-                 </View>
-               )}
-
-                {/* Input Area */}
-
+        <View style={styles.messagesWrapper}>
+          <View style={styles.container}>
+            {/* Messages List */}
+            <View style={styles.messagesContainer}>
+              <FlatList
+                ref={flatListRef}
+                data={messages}
+                renderItem={renderMessage}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={styles.messagesList}
+                inverted={false}
+                onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+              />
             </View>
-          </View>
-        )}
-      </View>
-      <View style={styles.bottomArea}>
-        {!moduleComponentVisibility && (
-          <>
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputContainer}>
-                  <View style={styles.inputRow}>
-                    <View style={styles.inputFieldContainer}>
-                    <Input
-                      placeholder="Search for verses..."
-                      value={inputText}
-                      onChangeText={handleInputChange}
-                      placeholderTextColor={'white'}
-                      inputStyle={styles.inputText}
-                      inputContainerStyle={styles.inputContainerStyle}
-                      leftIcon={{ 
-                        type: 'materialIcons', 
-                        name: 'search',
-                        color: '#ffffffff', 
-                        size: screenWidth * 0.064
-                      }}
-                      cursorColor={"#ffffff"}
-                      selectionColor={'white'}
-                      multiline={false}
-                    />
-                    </View>
-                    <View style={styles.sendButtonContainer}>
-                      <TouchableOpacity
-                        onPress={handleSendMessage}
-                        style={[
-                          styles.sendIconButton,
-                          inputText.trim().length < 2 && styles.sendIconButtonDisabled
-                        ]}
-                        activeOpacity={0.7}
-                        disabled={inputText.trim().length < 2}
-                      >
-                        <Ionicons 
-                          name="send" 
-                          size={screenWidth * 0.075} 
-                          color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-            </View>
-          </View>
-          </>
-          )}
-          <View style={styles.promesasContainer}>
-            <Text style={styles.promesasText}>Promesas</Text>
           </View>
         </View>
+      </View>
+      <View style={styles.bottomArea}>
+        <View style={styles.inputWrapper}>
+          <View style={styles.inputContainer}>
+            <View style={styles.inputRow}>
+              <View style={styles.inputFieldContainer}>
+                <Input
+                  placeholder="Type your message..."
+                  value={inputText}
+                  onChangeText={handleInputChange}
+                  placeholderTextColor={'white'}
+                  inputStyle={styles.inputText}
+                  inputContainerStyle={styles.inputContainerStyle}
+                  cursorColor={"#ffffff"}
+                  selectionColor={'white'}
+                  multiline={true}
+                />
+              </View>
+              <View style={styles.sendButtonContainer}>
+                <TouchableOpacity
+                  onPress={handleSendMessage}
+                  style={[
+                    styles.sendIconButton,
+                    !inputText.trim() && styles.sendIconButtonDisabled
+                  ]}
+                  activeOpacity={0.7}
+                  disabled={!inputText.trim()}
+                >
+                  <Ionicons 
+                    name="send" 
+                    size={screenWidth * 0.075} 
+                    color={inputText.trim() ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.promesasContainer}>
+          <Text style={styles.promesasText}>Promesas</Text>
+        </View>
+      </View>
     </ScreenComponent>
   );
 };
@@ -526,32 +360,6 @@ const styles = StyleSheet.create({
   },
   sentMessageTime: {
     color: 'rgba(0, 0, 0, 0.6)',
-  },
-  verseModuleContainer: {
-    paddingTop: screenHeight * 0.062,
-  } as ViewStyle,
-  verseResultsContainer: {
-    backgroundColor: 'transparent',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.2)',
-  } as ViewStyle,
-  verseResultsList: {
-    flexGrow: 0,
-  },
-  verseResultItem: {
-    padding: screenWidth * 0.032,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  } as ViewStyle,
-  verseResultText: {
-    color: 'white',
-    fontSize: screenWidth * 0.052,
-    fontWeight: '600',
-    marginBottom: screenHeight * 0.005,
-  },
-  verseResultBody: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: screenWidth * 0.042,
   },
   bottomArea: {
     height: screenHeight * 0.20,
