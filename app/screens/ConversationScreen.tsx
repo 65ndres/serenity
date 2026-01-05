@@ -194,7 +194,6 @@ const ConversationScreen: React.FC = () => {
       
       const response = await axios.post(
         `${API_URL}/conversations/${conversationData.id}/messages`,
-        // { verse_id: seletedVerseId },
         { body: inputText.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -265,11 +264,10 @@ const ConversationScreen: React.FC = () => {
 
   // Fetch verse by ID when verse_id is present in route params
   useEffect(() => {
-    if (verse_id && !verseIdLoaded) {
+    if (verse_id) {
       fetchVerseByInputText(inputText);
-      setVerseIdLoaded(true);
     }
-  }, [inputText, verseIdLoaded, fetchVerseByInputText]);
+  }, [inputText, fetchVerseByInputText]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {

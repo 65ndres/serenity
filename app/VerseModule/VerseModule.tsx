@@ -62,7 +62,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     if (!verse || !verse.id) return;
 
     // Provide haptic feedback
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     // Optimistically update the UI
     const previousLikedState = verse.liked;
