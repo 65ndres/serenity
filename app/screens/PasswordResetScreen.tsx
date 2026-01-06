@@ -132,16 +132,16 @@ const PasswordResetScreen: React.FC = () => {
     <ScreenComponent>
       <Animated.View style={{opacity: fadeAnim }}>
         <View>
-          <View style={{height: "20%"}}>
+          <View style={{height: "25%"}}>
             <View style={{flex: 1, justifyContent: 'flex-end'}}>
               <Text h2 style={{color: 'white', textAlign: 'center'}}>FORGOT?</Text>
             </View>
           </View>
 
-          <View style={{height: "60%"}}>
-            {emailSubmitted ? (
+          <View style={{height: "55%"}}>
+            {!emailSubmitted ? (
              
-                <View style={{flex: 1, justifyContent: 'center'}}>
+                <View style={{flex: 1, justifyContent: 'flex-start', marginTop: 60}}>
                   <View style={{paddingBottom: 5}}>
                     <Input
                       value={email}
@@ -227,7 +227,7 @@ const PasswordResetScreen: React.FC = () => {
           </View>
         </View>
         <View style={{height: "20%"}}> 
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
           <View style={styles.bottomSectionInner}>
             <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
           </View> 

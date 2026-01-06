@@ -8,6 +8,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
+  Image,
   StyleSheet,
   TextStyle,
   View,
@@ -173,114 +174,126 @@ const PasswordCodeScreen: React.FC = () => {
   return (
     <ScreenComponent>
       <Animated.View style={{opacity: fadeAnim }}>
-        <View style={{paddingBottom: 40}}>
-          <Text h2 style={{color: 'white', textAlign: 'center'}}>VERIFY CODE</Text>
+        <View style={{height: "22%"}}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <Text h2 style={{color: 'white', textAlign: 'center'}}>FORGOT?</Text>
+          </View>
         </View>
-        
-        {!codeVerified ? (
-          <>
-            <View style={{paddingBottom: 5}}>
-              <Input
-                value={code}
-                onChangeText={(text) => {
-                  setCode(text);
-                  if (codeError) setCodeError('');
-                }}
-                cursorColor={"#ffffff"}
-                placeholder='Enter verification code'
-                selectionColor={'white'}
-                placeholderTextColor={'#d8d8d8ff'}
-                leftIcon={{ type: 'font-awesome', name: 'key', color: '#ffffffff', size: 30 }}
-                inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
-                labelStyle={{color: 'white'}}
-                inputContainerStyle={{borderBottomColor: 'white'}}
-                errorMessage={codeError}
-                errorStyle={{color: '#ff6b6b'}}
-                disabled={isVerifying}
-                keyboardType="number-pad"
-              />
-            </View>
-            <Button
-              title={isVerifying ? "VERIFYING..." : "VERIFY CODE"}
-              buttonStyle={{
-                backgroundColor: 'white',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-              onPress={handleVerifyCode}
-              disabled={isVerifying}
-              loading={isVerifying}
-            />
-          </>
-        ) : (
-          <>
-            <View style={{paddingBottom: 5}}>
-              <Input
-                value={password}
-                onChangeText={(text) => {
-                  setPassword(text);
-                  if (passwordError) setPasswordError('');
-                }}
-                cursorColor={"#ffffff"}
-                placeholder='New password'
-                selectionColor={'white'}
-                placeholderTextColor={'#d8d8d8ff'}
-                leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-                inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
-                labelStyle={{color: 'white'}}
-                inputContainerStyle={{borderBottomColor: 'white'}}
-                errorMessage={passwordError}
-                errorStyle={{color: '#ff6b6b'}}
-                secureTextEntry
-                disabled={isUpdating}
-              />
-            </View>
-            <View style={{paddingBottom: 5}}>
-              <Input
-                value={passwordConfirmation}
-                onChangeText={(text) => {
-                  setPasswordConfirmation(text);
-                  if (passwordConfirmationError) setPasswordConfirmationError('');
-                }}
-                cursorColor={"#ffffff"}
-                placeholder='Confirm new password'
-                selectionColor={'white'}
-                placeholderTextColor={'#d8d8d8ff'}
-                leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
-                inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
-                labelStyle={{color: 'white'}}
-                inputContainerStyle={{borderBottomColor: 'white'}}
-                errorMessage={passwordConfirmationError}
-                errorStyle={{color: '#ff6b6b'}}
-                secureTextEntry
-                disabled={isUpdating}
-              />
-            </View>
-            <Button
-              title={isUpdating ? "UPDATING..." : "UPDATE PASSWORD"}
-              buttonStyle={{
-                backgroundColor: 'white',
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
-              onPress={handleUpdatePassword}
-              disabled={isUpdating}
-              loading={isUpdating}
-            />
-          </>
-        )}
+        <View style={{height: "58%"}}>
+          <View style={{flex: 1, justifyContent: 'flex-start', marginTop: 60}}>
+            {!codeVerified ? (
+              <>
+                <View style={{paddingBottom: 5}}>
+                  <Input
+                    value={code}
+                    onChangeText={(text) => {
+                      setCode(text);
+                      if (codeError) setCodeError('');
+                    }}
+                    cursorColor={"#ffffff"}
+                    placeholder='Enter verification code'
+                    selectionColor={'white'}
+                    placeholderTextColor={'#d8d8d8ff'}
+                    leftIcon={{ type: 'font-awesome', name: 'key', color: '#ffffffff', size: 30 }}
+                    inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
+                    labelStyle={{color: 'white'}}
+                    inputContainerStyle={{borderBottomColor: 'white'}}
+                    errorMessage={codeError}
+                    errorStyle={{color: '#ff6b6b'}}
+                    disabled={isVerifying}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <Button
+                  title={isVerifying ? "VERIFYING..." : "VERIFY CODE"}
+                  buttonStyle={{
+                    backgroundColor: 'white',
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 30,
+                  }}
+                  containerStyle={{
+                    marginHorizontal: 50,
+                    marginVertical: 10,
+                  }}
+                  titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+                  onPress={handleVerifyCode}
+                  disabled={isVerifying}
+                  loading={isVerifying}
+                />
+              </>
+            ) : (
+              <>
+                <View style={{paddingBottom: 5}}>
+                  <Input
+                    value={password}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      if (passwordError) setPasswordError('');
+                    }}
+                    cursorColor={"#ffffff"}
+                    placeholder='New password'
+                    selectionColor={'white'}
+                    placeholderTextColor={'#d8d8d8ff'}
+                    leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+                    inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
+                    labelStyle={{color: 'white'}}
+                    inputContainerStyle={{borderBottomColor: 'white'}}
+                    errorMessage={passwordError}
+                    errorStyle={{color: '#ff6b6b'}}
+                    secureTextEntry
+                    disabled={isUpdating}
+                  />
+                </View>
+                <View style={{paddingBottom: 20}}>
+                  <Input
+                    value={passwordConfirmation}
+                    onChangeText={(text) => {
+                      setPasswordConfirmation(text);
+                      if (passwordConfirmationError) setPasswordConfirmationError('');
+                    }}
+                    cursorColor={"#ffffff"}
+                    placeholder='Confirm new password'
+                    selectionColor={'white'}
+                    placeholderTextColor={'#d8d8d8ff'}
+                    leftIcon={{ type: 'font-awesome', name: 'lock', color: '#ffffffff', size: 30 }}
+                    inputStyle={{color: 'white', fontSize: 22, paddingLeft: 20}}
+                    labelStyle={{color: 'white'}}
+                    inputContainerStyle={{borderBottomColor: 'white'}}
+                    errorMessage={passwordConfirmationError}
+                    errorStyle={{color: '#ff6b6b'}}
+                    secureTextEntry
+                    disabled={isUpdating}
+                  />
+                </View>
+                <Button
+                  title={isUpdating ? "UPDATING..." : "UPDATE PASSWORD"}
+                  buttonStyle={{
+                    backgroundColor: 'white',
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 30,
+                  }}
+                  containerStyle={{
+                    marginHorizontal: 50,
+                    marginVertical: 10,
+                  }}
+                  titleStyle={{ fontWeight: 'bold', color: '#ac8861ff' }}
+                  onPress={handleUpdatePassword}
+                  disabled={isUpdating}
+                  loading={isUpdating}
+                />
+              </>
+            )}
+          </View>
+        </View>
+        <View style={{height: "20%"}}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={styles.bottomSectionInner}>
+            <Image source={require('../../assets/images/splash-icon.png')} style={styles.logoImage} />
+          </View> 
+          </View>
+        </View>
       </Animated.View>
     </ScreenComponent>
   );
@@ -309,6 +322,11 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   } as ViewStyle,
+  logoImage: {
+    height: 80,
+    width: 80,
+    alignSelf: 'center',
+  }
 });
 
 export default PasswordCodeScreen;
