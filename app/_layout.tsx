@@ -14,6 +14,7 @@ import ConversationsScreen from './screens/ConversationsScreen';
 import HisWillScreen from './screens/HisWillScreen';
 import LoginScreen from './screens/LoginScreen';
 import NewConversationScreen from './screens/NewConversationScreen';
+import PasswordCodeScreen from './screens/PasswordCodeScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import SupportScreen from './screens/SupportScreen';
@@ -51,6 +52,9 @@ type AuthStackParamList = {
   Login: undefined;
   SignUp: undefined;
   PasswordReset: undefined;
+  PasswordCode: {
+    email: string;
+  };
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -241,7 +245,7 @@ const UnauthenticatedNavigator: React.FC = () => {
         name="SignUp"
         component={SignUpScreen}
         options={{
-          headerLeft: () => <BackButton text="" />,
+          headerLeft: () => <BackButton text=" " />,
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
@@ -249,7 +253,15 @@ const UnauthenticatedNavigator: React.FC = () => {
         name="PasswordReset"
         component={PasswordResetScreen}
         options={{
-          headerLeft: () => <BackButton text="Login" />,
+          headerLeft: () => <BackButton text=" " />,
+          headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text>,
+        }}
+      />
+      <Stack.Screen
+        name="PasswordCode"
+        component={PasswordCodeScreen}
+        options={{
+          headerLeft: () => <BackButton text=" " />,
           headerTitle: () => <Text style={{ color: 'white', fontSize: height * 0.025, fontWeight: '500' }}>Promesas</Text>,
         }}
       />
