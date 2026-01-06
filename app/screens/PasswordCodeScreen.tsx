@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import 'react-native-reanimated';
 import { API_URL } from '../../constants/Config';
+import { useAuth } from '../context/AuthContext';
 import ScreenComponent from '../sharedComponents/ScreenComponent';
 import BackButton from '../VerseModule/BackButton';
 
@@ -41,6 +42,7 @@ const PasswordCodeScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProp>();
   const colorScheme = useColorScheme();
+  const { login } = useAuth();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
@@ -156,9 +158,16 @@ const PasswordCodeScreen: React.FC = () => {
         password: password.trim(),
         password_confirmation: passwordConfirmation.trim()
       });
-      // Navigate back to login on success
-      navigation.navigate('PasswordReset');
-      // You might want to show a success message here
+      
+      // Automatically sign the user in with the new password
+      const loginSuccess = await login(email, password.trim());
+      if (loginSuccess) {
+        // User is now signed in - navigation will be handled by AuthContext
+        // The app will automatically navigate to the authenticated screens
+      } else {
+        // If auto-login fails, show error but password was still updated
+        setPasswordError('Password updated successfully, but automatic login failed. Please log in manually.');
+      }
     } catch (error: any) {
       console.error('Password update failed', error);
       setPasswordError(error.response?.data?.error || 'Failed to update password. Please try again.');
@@ -326,7 +335,11 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     alignSelf: 'center',
-  }
+  },
+  bottomSectionInner: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  } as ViewStyle,
 });
 
 export default PasswordCodeScreen;
