@@ -223,8 +223,6 @@ const ConversationScreen: React.FC = () => {
           : response.data.verses || [];
         
         if (versesData.length > 0) {
-          // Use the first verse from the results
-          // setSelectedVerse(versesData[0]);
           setModuleComponentVisibility(true);
           setListComponentVisibility(false);
         } else {
@@ -346,113 +344,114 @@ const ConversationScreen: React.FC = () => {
   return (
     <ScreenComponent>
       {/* <Animated.View style={{ opacity: fadeAnim }}> */}
-        <View style={styles.topHeader}>
-          <View style={styles.headerContent}>
-            <Text style={styles.quoteText}>With</Text>
-            <Text style={styles.otherUserName}>{otherUserName}</Text>
-          </View>
-        </View>
-        <View style={styles.messagesArea}>
-          {listComponentVisibility && (
-            <View style={styles.messagesWrapper}>
-              <View style={styles.container}>
-                {/* Messages List */}
-                {verseResults.length === 0 &&
-                <View style={styles.messagesContainer}>
-                  <FlatList
-                    ref={flatListRef}
-                    data={messages}
-                    renderItem={renderMessage}
-                    keyExtractor={(item) => item.id.toString()}
-                    contentContainerStyle={styles.messagesList}
-                    inverted={false}
-                    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-                  />
-                </View>
-                }
-                 {/* Verse Search Results */}
-                 {inputText.trim().length >= 2 && verseResults.length > 0 && (
-                   <View style={styles.verseResultsContainer}>
-                     <FlatList
-                       data={verseResults}
-                       renderItem={({ item }) => (
-                         <TouchableOpacity
-                           style={styles.verseResultItem}
-                           onPress={() => handleVerseSelect(item)}
-                         >
-                           <Text style={styles.verseResultText}>
-                             {`${item.book} ${item.chapter}:${item.verse}`}
-                           </Text>
-                           <Text style={styles.verseResultBody} numberOfLines={2}>
-                             {item.text}
-                           </Text>
-                         </TouchableOpacity>
-                       )}
-                       keyExtractor={(item) => item.id.toString()}
-                       style={styles.verseResultsList}
-                       keyboardShouldPersistTaps="handled"
-                     />
-                   </View>
-                 )}
-
-                  {/* Input Area */}
-
-              </View>
+        <View style={{display: 'flex'}}>
+          <View style={styles.topHeader}>
+            <View style={styles.headerContent}>
+              <Text style={styles.quoteText}>With</Text>
+              <Text style={styles.otherUserName}>{otherUserName}</Text>
             </View>
-          )}
-        </View>
-        <View style={styles.bottomArea}>
-          {!moduleComponentVisibility && (
-            <>
-            <View style={styles.inputWrapper}>
-              <View style={styles.inputContainer}>
-                    <View style={styles.inputRow}>
-                      <View style={styles.inputFieldContainer}>
-                      <Input
-                        placeholder="Search for verses..."
-                        value={inputText}
-                        onChangeText={handleInputChange}
-                        placeholderTextColor={'white'}
-                        inputStyle={styles.inputText}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        leftIcon={{ 
-                          type: 'materialIcons', 
-                          name: 'search',
-                          color: '#ffffffff', 
-                          size: screenWidth * 0.064
-                        }}
-                        cursorColor={"#ffffff"}
-                        selectionColor={'white'}
-                        multiline={false}
+          </View>
+          <View style={styles.messagesArea}>
+            {listComponentVisibility && (
+              <View style={styles.messagesWrapper}>
+                <View style={styles.container}>
+                  {/* Messages List */}
+                  {verseResults.length === 0 &&
+                  <View style={styles.messagesContainer}>
+                    <FlatList
+                      ref={flatListRef}
+                      data={messages}
+                      renderItem={renderMessage}
+                      keyExtractor={(item) => item.id.toString()}
+                      contentContainerStyle={styles.messagesList}
+                      inverted={false}
+                      onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                    />
+                  </View>
+                  }
+                  {/* Verse Search Results */}
+                  {inputText.trim().length >= 2 && verseResults.length > 0 && (
+                    <View style={styles.verseResultsContainer}>
+                      <FlatList
+                        data={verseResults}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            style={styles.verseResultItem}
+                            onPress={() => handleVerseSelect(item)}
+                          >
+                            <Text style={styles.verseResultText}>
+                              {`${item.book} ${item.chapter}:${item.verse}`}
+                            </Text>
+                            <Text style={styles.verseResultBody} numberOfLines={2}>
+                              {item.text}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.id.toString()}
+                        style={styles.verseResultsList}
+                        keyboardShouldPersistTaps="handled"
                       />
-                      </View>
-                      <View style={styles.sendButtonContainer}>
-                        <TouchableOpacity
-                          onPress={handleSendMessage}
-                          style={[
-                            styles.sendIconButton,
-                            inputText.trim().length < 2 && styles.sendIconButtonDisabled
-                          ]}
-                          activeOpacity={0.7}
-                          disabled={inputText.trim().length < 2}
-                        >
-                          <Ionicons 
-                            name="send" 
-                            size={screenWidth * 0.075} 
-                            color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
-                          />
-                        </TouchableOpacity>
-                      </View>
                     </View>
-              </View>
-            </View>
-            </>
-            )}
-            <View style={styles.promesasContainer}>
-              <Text style={styles.promesasText}>Promesas</Text>
-            </View>
-          </View>
+                  )}
 
+                    {/* Input Area */}
+
+                </View>
+              </View>
+            )}
+          </View>
+          <View style={styles.bottomArea}>
+            {!moduleComponentVisibility && (
+              <>
+              <View style={styles.inputWrapper}>
+                <View style={styles.inputContainer}>
+                      <View style={styles.inputRow}>
+                        <View style={styles.inputFieldContainer}>
+                        <Input
+                          placeholder="Search for verses..."
+                          value={inputText}
+                          onChangeText={handleInputChange}
+                          placeholderTextColor={'white'}
+                          inputStyle={styles.inputText}
+                          inputContainerStyle={styles.inputContainerStyle}
+                          leftIcon={{ 
+                            type: 'materialIcons', 
+                            name: 'search',
+                            color: '#ffffffff', 
+                            size: screenWidth * 0.064
+                          }}
+                          cursorColor={"#ffffff"}
+                          selectionColor={'white'}
+                          multiline={false}
+                        />
+                        </View>
+                        <View style={styles.sendButtonContainer}>
+                          <TouchableOpacity
+                            onPress={handleSendMessage}
+                            style={[
+                              styles.sendIconButton,
+                              inputText.trim().length < 2 && styles.sendIconButtonDisabled
+                            ]}
+                            activeOpacity={0.7}
+                            disabled={inputText.trim().length < 2}
+                          >
+                            <Ionicons 
+                              name="send" 
+                              size={screenWidth * 0.075} 
+                              color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                </View>
+              </View>
+              </>
+              )}
+              <View style={styles.promesasContainer}>
+                <Text style={styles.promesasText}>Promesas</Text>
+              </View>
+          </View>
+        </View>
       {/* </Animated.View> */}
     </ScreenComponent>
   );
@@ -531,11 +530,11 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   messageText: {
     color: 'white',
-    fontSize: screenWidth * 0.038,
+    fontSize: screenWidth * 0.05,
     marginBottom: screenHeight * 0.005,
   },
   sentMessageText: {
-    color: '#333',
+    color: '#ac8861ff',
   },
   messageTime: {
     color: 'rgba(255, 255, 255, 0.6)',
@@ -543,7 +542,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   sentMessageTime: {
-    color: 'rgba(0, 0, 0, 0.6)',
+    color: '#ac8861ff',      
   },
   verseModuleContainer: {
     paddingTop: screenHeight * 0.062,

@@ -58,6 +58,7 @@ const Liked: React.FC = () => {
   const [listComponentVisibility, setListComponentVisibility] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
+  const moduleFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for VerseModule
 
   const fetchLikedVerses = async () => {
     try {
@@ -100,6 +101,37 @@ const Liked: React.FC = () => {
       useNativeDriver: true, // Use native driver for better performance
     }).start();
   }, [fadeAnim]);
+
+  // Fade-in animation for VerseModule when it becomes visible
+  useEffect(() => {
+    if (moduleComponentVisibility && selectedVerse) {
+      // Reset and animate in
+      moduleFadeAnim.setValue(0);
+      Animated.timing(moduleFadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      // Reset when hidden
+      moduleFadeAnim.setValue(0);
+    }
+  }, [moduleComponentVisibility, selectedVerse, moduleFadeAnim]);
+
+  // Fade-in animation every time the screen comes into focus (if module is visible)
+  useFocusEffect(
+    useCallback(() => {
+      if (moduleComponentVisibility && selectedVerse) {
+        // Reset and animate in when screen comes into focus
+        moduleFadeAnim.setValue(0);
+        Animated.timing(moduleFadeAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }).start();
+      }
+    }, [moduleComponentVisibility, selectedVerse, moduleFadeAnim])
+  );
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -195,11 +227,11 @@ const Liked: React.FC = () => {
             )}
           </View>}
           {moduleComponentVisibility && selectedVerse && 
-          <View style={{ height: "100%" }}>
+          <Animated.View style={{ height: "100%", opacity: moduleFadeAnim }}>
             <View style={{ height: "60%" }}>
               <VerseModule data={[selectedVerse]} active={0} url={''} />
             </View>
-          </View>
+          </Animated.View>
           }
           </ScrollView>
         </View>

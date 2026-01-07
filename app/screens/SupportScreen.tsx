@@ -86,12 +86,8 @@ const SupportScreen: React.FC = () => {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
       
-      const conversationResponse = await axios.post(
-        `${API_URL}/conversation/new`,
-        { 
-          other_user_id: other_user_id, 
-          conversation_id: conversation_id || conversationData?.id || null 
-        },
+      const conversationResponse = await axios.get(
+        `${API_URL}/conversations/admin_conversation`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -347,7 +343,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   messageText: {
     color: 'white',
-    fontSize: screenWidth * 0.038,
+    fontSize: screenWidth * 0.05,
     marginBottom: screenHeight * 0.005,
   },
   sentMessageText: {
@@ -359,7 +355,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   sentMessageTime: {
-    color: 'rgba(0, 0, 0, 0.6)',
+    color: '#ac8861ff',
   },
   bottomArea: {
     height: screenHeight * 0.20,
