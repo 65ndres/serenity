@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     marginBottom: screenHeight * 0.005,
   },
   sentMessageText: {
-    color: '#333',
+    color: '#ac8861ff',
   },
   messageTime: {
     color: 'rgba(255, 255, 255, 0.6)',

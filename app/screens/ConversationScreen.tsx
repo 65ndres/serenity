@@ -262,10 +262,11 @@ const ConversationScreen: React.FC = () => {
 
   // Fetch verse by ID when verse_id is present in route params
   useEffect(() => {
+    debugger
     if (verse_id) {
       fetchVerseByInputText(inputText);
     }
-  }, [inputText, fetchVerseByInputText]);
+  }, [inputText, verse_id, fetchVerseByInputText]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {
