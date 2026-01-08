@@ -6,12 +6,11 @@ import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Animated,
   Dimensions,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   ViewStyle
 } from 'react-native';
@@ -59,6 +58,8 @@ const Liked: React.FC = () => {
   const [selectedVerse, setSelectedVerse] = useState<Verse | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
   const moduleFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for VerseModule
+  const listFadeAnim = useRef(new Animated.Value(1)).current; // Fade animation for list content
+  const contentFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for content when loaded
 
   const fetchLikedVerses = async () => {
     try {
@@ -89,8 +90,10 @@ const Liked: React.FC = () => {
     useCallback(() => {
       if (listComponentVisibility) {
         fetchLikedVerses();
+        // Reset list fade animation when screen comes into focus
+        listFadeAnim.setValue(1);
       }
-    }, [listComponentVisibility])
+    }, [listComponentVisibility, listFadeAnim])
   );
 
   // Fade-in animation on component mount
@@ -101,6 +104,18 @@ const Liked: React.FC = () => {
       useNativeDriver: true, // Use native driver for better performance
     }).start();
   }, [fadeAnim]);
+
+  // Fade-in content when data has loaded
+  useEffect(() => {
+    if (!loading && !error) {
+      contentFadeAnim.setValue(0);
+      Animated.timing(contentFadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, error, contentFadeAnim]);
 
   // Fade-in animation for VerseModule when it becomes visible
   useEffect(() => {
@@ -143,9 +158,16 @@ const Liked: React.FC = () => {
     const foundVerse = verses.find(verse => verse.id === verseId);
     
     if (foundVerse) {
-      setSelectedVerse(foundVerse);
-      setModuleComponentVisibility(true);
-      setListComponentVisibility(false);
+      // Fade out the list content before showing the module
+      Animated.timing(listFadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        setSelectedVerse(foundVerse);
+        setModuleComponentVisibility(true);
+        setListComponentVisibility(false);
+      });
     } else {
       console.warn('Verse not found with id:', verseId);
     }
@@ -160,6 +182,13 @@ const Liked: React.FC = () => {
       setModuleComponentVisibility(false);
       setListComponentVisibility(true);
       setSelectedVerse(null);
+      // Fade in the list content when going back
+      listFadeAnim.setValue(0);
+      Animated.timing(listFadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
     }
   };
 
@@ -186,46 +215,45 @@ const Liked: React.FC = () => {
               height: '100%',
             }}
           >
-            {listComponentVisibility && <View style={styles.container}>
-            {loading ? (
-              <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            ) : error ? (
-              <View style={styles.centerContainer}>
+            {listComponentVisibility && 
+            <Animated.View style={[styles.container, { opacity: listFadeAnim }]}>
+            {loading ? null : error ? (
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.errorText}>{error}</Text>
-              </View>
+              </Animated.View>
             ) : verses.length === 0 ? (
-              <View style={styles.centerContainer}>
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.emptyText}>No liked verses yet</Text>
-              </View>
+              </Animated.View>
             ) : (
-              verses.map((item) => (
-                <TouchableOpacity 
-                  key={item.id}
-                  onPress={() => showModule(item.id)}
-                >
-                  <View style={styles.lineItemContainer}>
-                    <View style={styles.conversationInfo}>
-                      <Text style={styles.conversationName}>
-                        {`${item.book} ${item.chapter}:${item.verse}`}
-                      </Text>
-                      {item.text ? (
-                        <Text style={styles.lastMessage}>
-                          {(() => {
-                            const sliceLimit = Math.floor(screenWidth * 0.093);
-                            return item.text.length > sliceLimit
-                              ? item.text.slice(0, sliceLimit) + '...'
-                              : item.text;
-                          })()}
+              <Animated.View style={{ opacity: contentFadeAnim }}>
+                {verses.map((item) => (
+                  <TouchableWithoutFeedback 
+                    key={item.id}
+                    onPress={() => showModule(item.id)}
+                  >
+                    <View style={styles.lineItemContainer}>
+                      <View style={styles.conversationInfo}>
+                        <Text style={styles.conversationName}>
+                          {`${item.book} ${item.chapter}:${item.verse}`}
                         </Text>
-                      ) : null}
+                        {item.text ? (
+                          <Text style={styles.lastMessage}>
+                            {(() => {
+                              const sliceLimit = Math.floor(screenWidth * 0.093);
+                              return item.text.length > sliceLimit
+                                ? item.text.slice(0, sliceLimit) + '...'
+                                : item.text;
+                            })()}
+                          </Text>
+                        ) : null}
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
+                  </TouchableWithoutFeedback>
+                ))}
+              </Animated.View>
             )}
-          </View>}
+          </Animated.View>}
           {moduleComponentVisibility && selectedVerse && 
           <Animated.View style={{ height: "100%", opacity: moduleFadeAnim }}>
             <View style={{ height: "60%" }}>
