@@ -1,13 +1,12 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@rneui/themed';
 import axios from 'axios';
 import { useFonts } from 'expo-font';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Animated,
   StyleSheet,
   Text,
@@ -66,16 +65,21 @@ const NewConversationScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const contentFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for content when loaded
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Fade-in animation on component mount
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+  // Fade-in animation every time the screen is seen
+  useFocusEffect(
+    useCallback(() => {
+      // Reset and fade in content every time screen comes into focus
+      fadeAnim.setValue(0);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 700,
+        useNativeDriver: true,
+      }).start();
+    }, [fadeAnim])
+  );
 
   // Debounced search
   useEffect(() => {
@@ -90,6 +94,8 @@ const NewConversationScreen: React.FC = () => {
     } else {
       setUsers([]);
       setError(null);
+      // Reset fade animation when clearing search
+      contentFadeAnim.setValue(0);
     }
 
     return () => {
@@ -97,7 +103,19 @@ const NewConversationScreen: React.FC = () => {
         clearTimeout(searchTimeoutRef.current);
       }
     };
-  }, [searchQuery]);
+  }, [searchQuery, contentFadeAnim]);
+
+  // Fade-in content when data has loaded
+  useEffect(() => {
+    if (!loading && !error) {
+      contentFadeAnim.setValue(0);
+      Animated.timing(contentFadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, error, contentFadeAnim]);
 
   const searchUsers = async (query: string) => {
     try {
@@ -128,6 +146,7 @@ const NewConversationScreen: React.FC = () => {
   };
 
   const handleUserSelect = (user: User) => {
+    debugger;
     // Navigate to conversation screen with the other_user_id and verse_id if present
     navigation.navigate('Conversation', {
       other_user_id: user.id,
@@ -169,42 +188,40 @@ const NewConversationScreen: React.FC = () => {
             }}
           >
             <View style={styles.container}>
-            {loading ? (
-              <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            ) : error ? (
-              <View style={styles.centerContainer}>
+            {loading ? null : error ? (
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.errorText}>{error}</Text>
-              </View>
+              </Animated.View>
             ) : searchQuery.trim().length < 2 ? (
-              <View style={styles.centerContainer}>
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.emptyText}>Type at least 2 characters to search</Text>
-              </View>
+              </Animated.View>
             ) : users.length === 0 && !loading ? (
-              <View style={styles.centerContainer}>
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.emptyText}>No users found</Text>
-              </View>
+              </Animated.View>
             ) : (
-              users.map((user) => (
-                <TouchableOpacity 
-                  key={user.id}
-                  onPress={() => handleUserSelect(user)}
-                >
-                  <View style={styles.lineItemContainer}>
-                    <View style={styles.userInfo}>
-                      <Text style={styles.userName}>
-                        {user.username || user.email}
-                      </Text>
-                      {user.first_name && user.last_name && (
-                        <Text style={styles.userEmail}>
-                          {`${user.first_name} ${user.last_name}`}
+              <Animated.View style={{ opacity: contentFadeAnim }}>
+                {users.map((user) => (
+                  <TouchableOpacity 
+                    key={user.id}
+                    onPress={() => handleUserSelect(user)}
+                  >
+                    <View style={styles.lineItemContainer}>
+                      <View style={styles.userInfo}>
+                        <Text style={styles.userName}>
+                          {user.username || user.email}
                         </Text>
-                      )}
+                        {user.first_name && user.last_name && (
+                          <Text style={styles.userEmail}>
+                            {`${user.first_name} ${user.last_name}`}
+                          </Text>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
+                  </TouchableOpacity>
+                ))}
+              </Animated.View>
             )}
           </View>
           </ScrollView>

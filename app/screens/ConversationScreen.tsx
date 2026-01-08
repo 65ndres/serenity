@@ -100,7 +100,7 @@ const ConversationScreen: React.FC = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      
+      // debugger;
       const conversationResponse = await axios.post(
         `${API_URL}/conversation/new`,
         { 
@@ -115,6 +115,7 @@ const ConversationScreen: React.FC = () => {
         setCurrentUserId(conversationResponse.data.current_user_id);
         setConversationData(conversationResponse.data);
         setMessages(conversationResponse.data.messages || []);
+        // navigation.setParams({ verse_id: undefined });
       }
     } catch (e) {
       console.error('Failed to fetch conversation data', e);
@@ -474,7 +475,7 @@ const ConversationScreen: React.FC = () => {
                             <Ionicons 
                               name="send" 
                               size={screenWidth * 0.075} 
-                              color={inputText.trim().length >= 2 ? "#ac8861ff" : "rgba(172, 134, 97, 0.4)"} 
+                              color={inputText.trim().length >= 2 ? "white" : "rgba(172, 134, 97, 0.4)"} 
                             />
                           </TouchableOpacity>
                         </View>

@@ -124,7 +124,15 @@ const ConversationsScreen: React.FC = () => {
   }
 
   const handleNewConversation = () => {
-    navigation.navigate('NewConversation');
+    // Fade out the content before navigation
+    Animated.timing(contentFadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      // Navigate after fade-out completes
+      navigation.navigate('NewConversation');
+    });
   };
 
   const handleConversationPress = (conversationId: number) => {
@@ -215,8 +223,8 @@ const ConversationsScreen: React.FC = () => {
                                     ? body.split('\n')[0] 
                                     : body;
                                   // Truncate at 30 characters if needed
-                                  if (textBeforeNewline.length > 15) {
-                                    return textBeforeNewline.slice(0, 15) + '...';
+                                  if (textBeforeNewline.length > 20) {
+                                    return textBeforeNewline.slice(0, 20) + '...';
                                   }
                                   return textBeforeNewline;
                                 })()}
@@ -294,7 +302,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: screenWidth * 0.027,
+    // padding: screenWidth * 0.027,
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     paddingBottom: screenHeight * 0.025,
@@ -376,6 +384,7 @@ const styles = StyleSheet.create({
   },
   bottomArea: {
     height: screenHeight * 0.20,
+    paddingTop: 30,
   } as ViewStyle,
   buttonContainer: {
     paddingHorizontal: screenWidth * 0.133,
