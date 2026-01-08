@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
   },
   bottomArea: {
     height: screenHeight * 0.20,
+    paddingTop: 30
   } as ViewStyle,
   inputWrapper: {
     flex: 1,

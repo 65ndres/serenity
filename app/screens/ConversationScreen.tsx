@@ -130,6 +130,16 @@ const ConversationScreen: React.FC = () => {
     }, [listComponentVisibility, fetchConversationData])
   );
 
+  // Scroll to bottom when messages are loaded or updated
+  useEffect(() => {
+    if (messages.length > 0 && flatListRef.current && listComponentVisibility) {
+      // Use setTimeout to ensure the FlatList has rendered
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: false });
+      }, 100);
+    }
+  }, [messages, listComponentVisibility]);
+
   // Fade-in animation on component mount
   // useEffect(() => {
   //   Animated.timing(fadeAnim, {
@@ -319,10 +329,7 @@ const ConversationScreen: React.FC = () => {
   const renderMessage = ({ item }: { item: typeof messages[0] }) => {
     const isSent = item.sender_id === currentUserId;
     return (
-      <TouchableOpacity
-        onPress={() => fetchVerseByAddress(item.body)}
-        activeOpacity={0.7}
-      >
+
         <View
           style={[
             styles.messageContainer,
@@ -346,7 +353,6 @@ const ConversationScreen: React.FC = () => {
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
     );
   };
 
@@ -497,7 +503,7 @@ const styles = StyleSheet.create({
   },
   topHeader: {
     height: screenHeight * 0.15,
-    // paddingTop: 10,
+    paddingBottom: 30
   } as ViewStyle,
   headerContent: {
     flex: 1,
@@ -600,6 +606,7 @@ const styles = StyleSheet.create({
   },
   bottomArea: {
     height: screenHeight * 0.20,
+    paddingTop: 30
   } as ViewStyle,
   inputWrapper: {
     flex: 1,
@@ -627,7 +634,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   } as ViewStyle,
   sendIconButton: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     borderRadius: screenWidth * 0.053,
     padding: screenWidth * 0.027,
     justifyContent: 'center',
