@@ -251,31 +251,28 @@ const ConversationScreen: React.FC = () => {
     }
   };
 
-  const fetchVerseByInputText = useCallback(async (address: string) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+  // const fetchVerseByInputText = useCallback(async (address: string) => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
       
-      const response = await axios.get(`${API_URL}/verses/search_by_address`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { q: address },
-      });
+  //     const response = await axios.get(`${API_URL}/verses/search_by_address`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //       params: { q: address },
+  //     });
 
-      if (response.data) {
-        const verses = response.data.verses || response.data;
-        if (verses.length > 0) {
-          // Set the verse address in the input
-          const verse = verses[0];
-          const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`;
-          setInputText(verseAddress);
-          // setSeletedVerseId(verse.id);
-          // setReadyToSend(true);
-        }
-      }
-    } catch (e) {
-      console.error('Fetch verse by input text failed', e);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //     if (response.data) {
+  //       const verses = response.data.verses || response.data;
+  //       if (verses.length > 0) {
+  //         const verse = verses[0];
+  //         const verseAddress = `${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`;
+  //         setInputText(verseAddress);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.error('Fetch verse by input text failed', e);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const fetchVerseById = async (verse_id: number) => {
     try {

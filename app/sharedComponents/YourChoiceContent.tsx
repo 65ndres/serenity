@@ -34,14 +34,11 @@ const YourChoiceContent: React.FC = () => {
   }
 
   const handleChevronPress = () => {
-    // Trigger dropdown by focusing it programmatically
     if (dropdownRef.current) {
-      // Try to open the dropdown - the ref might have different methods
       // If open() doesn't work, we can use a workaround
       try {
         dropdownRef.current.open?.();
       } catch (e) {
-        // Alternative: focus the dropdown input
         dropdownRef.current.focus?.();
       }
     }
