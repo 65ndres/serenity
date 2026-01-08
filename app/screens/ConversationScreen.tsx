@@ -50,6 +50,7 @@ type RouteProp = {
 interface ConversationData {
   id: number;
   conversation_name?: string;
+  other_user_id?: number;
   messages: Array<{
     id: number;
     body: string;
@@ -100,12 +101,12 @@ const ConversationScreen: React.FC = () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      // debugger;
+
       const conversationResponse = await axios.post(
         `${API_URL}/conversation/new`,
         { 
-          other_user_id: other_user_id || null, 
-          conversation_id: conversation_id || conversationData?.id || null 
+          other_user_id: route.params.other_user_id || null, 
+          conversation_id: conversation_id || null 
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -122,7 +123,7 @@ const ConversationScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [other_user_id, conversation_id, conversationData?.id]);
+  }, [conversation_id, route.params]);
 
   useFocusEffect(
     useCallback(() => {
