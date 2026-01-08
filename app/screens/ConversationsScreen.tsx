@@ -8,12 +8,11 @@ import axios from 'axios';
 import { useFonts } from 'expo-font';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Animated,
   Dimensions,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   ViewStyle
 } from 'react-native';
@@ -62,7 +61,7 @@ const ConversationsScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value
-  const contentFadeAnim = useRef(new Animated.Value(1)).current; // Content opacity for fade-out
+  const contentFadeAnim = useRef(new Animated.Value(0)).current; // Content opacity for fade-in/out
 
   const fetchConversations = async () => {
     try {
@@ -94,7 +93,7 @@ const ConversationsScreen: React.FC = () => {
     useCallback(() => {
       fetchConversations();
       // Reset content fade animation when screen comes into focus
-      contentFadeAnim.setValue(1);
+      contentFadeAnim.setValue(0);
     }, [contentFadeAnim])
   );
 
@@ -106,6 +105,18 @@ const ConversationsScreen: React.FC = () => {
       useNativeDriver: true, // Use native driver for better performance
     }).start();
   }, [fadeAnim]);
+
+  // Fade-in content when data has loaded
+  useEffect(() => {
+    if (!loading && !error) {
+      contentFadeAnim.setValue(0);
+      Animated.timing(contentFadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, error, contentFadeAnim]);
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -147,80 +158,82 @@ const ConversationsScreen: React.FC = () => {
           <Animated.View style={[styles.contentFadeContainer, { opacity: contentFadeAnim }]}>
             <ScrollView style={styles.scrollView}>
               <View style={styles.container}>
-            {loading ? (
-              <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            ) : error ? (
-              <View style={styles.centerContainer}>
+            {loading ? null : error ? (
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.errorText}>{error}</Text>
-              </View>
+              </Animated.View>
             ) : conversations.length === 0 ? (
-              <View style={styles.centerContainer}>
+              <Animated.View style={[styles.centerContainer, { opacity: contentFadeAnim }]}>
                 <Text style={styles.emptyText}>No conversations yet</Text>
-              </View>
+              </Animated.View>
             ) : (
-              conversations.map((item) => (
-                <TouchableOpacity 
-                  key={item.id}
-                  onPress={() => {
-                    // Navigate to conversation screen with other_user_id
-                    if (item.id) {
-                      handleConversationPress(item.id);
-                    }
-                  }}
-                >
-                  <View style={styles.lineItemContainer}>
-                    <View style={styles.conversationInfo}>
-                      <View style={styles.conversationHeader}>
-                        {item.read === false && (
-                          <View style={styles.unreadIndicator} />
-                        )}
-                        <Text style={[
-                          styles.conversationName,
-                          item.read === false && styles.unreadConversationName
-                        ]}>
-                          {item.conversation_name}
-                        </Text>
-                        <Ionicons 
-                          name="chevron-forward" 
-                          size={screenWidth * 0.053} 
-                          color="white" 
-                          style={styles.chevronIcon}
-                        />
-                      </View>
-                      {item.last_message && (
-                        <View style={styles.messageContainer}>
-                          <View style={styles.messageRow}>
-                            <Text style={[
-                              styles.lastMessage,
-                              item.last_message.read === false && styles.unreadMessage
-                            ]}>
-                              {(() => {
-                                const body = item.last_message.body;
-                                // Get text before newline if it exists
-                                const textBeforeNewline = body.includes('\n') 
-                                  ? body.split('\n')[0] 
-                                  : body;
-                                // Truncate at 30 characters if needed
-                                if (textBeforeNewline.length > 15) {
-                                  return textBeforeNewline.slice(0, 15) + '...';
-                                }
-                                return textBeforeNewline;
-                              })()}
-                            </Text>
-                            {item.last_message.time && (
-                              <Text style={styles.lastMessageTime}>
-                                {item.last_message.time}
-                              </Text>
-                            )}
+              <Animated.View style={{ opacity: contentFadeAnim }}>
+                {conversations.map((item) => (
+                  <TouchableWithoutFeedback 
+                    key={item.id}
+                    onPress={() => {
+                      // Navigate to conversation screen with other_user_id
+                      if (item.id) {
+                        handleConversationPress(item.id);
+                      }
+                    }}
+                  >
+                    <View style={styles.lineItemContainer}>
+                      <View style={styles.conversationInfo}>
+                        <View style={styles.conversationHeader}>
+                          {item.read === false && (
+                            <View style={styles.unreadIndicator} />
+                          )}
+                          <Text style={[
+                            styles.conversationName,
+                            item.read === false && styles.unreadConversationName
+                          ]}>
+                            {item.conversation_name}
+                          </Text>
+                          <View style={{display: 'flex'}}>
+                            <View style={{width: '100%', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                              <Ionicons 
+                                name="chevron-forward" 
+                                size={screenWidth * 0.053} 
+                                color="white" 
+                                style={styles.chevronIcon}
+                              />
+                            </View>
                           </View>
                         </View>
-                      )}
+                        {item.last_message && (
+                          <View style={styles.messageContainer}>
+                            <View style={styles.messageRow}>
+                              <Text style={[
+                                styles.lastMessage,
+                                item.last_message.read === false && styles.unreadMessage
+                              ]}>
+                                {(() => {
+                                  const body = item.last_message.body;
+                                  // Get text before newline if it exists
+                                  const textBeforeNewline = body.includes('\n') 
+                                    ? body.split('\n')[0] 
+                                    : body;
+                                  // Truncate at 30 characters if needed
+                                  if (textBeforeNewline.length > 15) {
+                                    return textBeforeNewline.slice(0, 15) + '...';
+                                  }
+                                  return textBeforeNewline;
+                                })()}
+                              </Text>
+                              {item.last_message.time && (
+                                <Text style={styles.lastMessageTime}>
+                                  {item.last_message.time}
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
+                  </TouchableWithoutFeedback>
+                ))}
+              </Animated.View>
             )}
               </View>
             </ScrollView>
@@ -313,6 +326,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   chevronIcon: {
     marginLeft: screenWidth * 0.021,
+    paddingRight: 0
   },
   unreadCountBadge: {
     backgroundColor: 'white',

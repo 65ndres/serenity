@@ -85,6 +85,7 @@ const ConversationScreen: React.FC = () => {
   // const [readyToSend, setReadyToSend] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const messagesFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for messages list
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flatListRef = useRef<FlatList>(null);
   // const [seletedVerseId, setSeletedVerseId] = useState<number | null>(null);
@@ -140,16 +141,20 @@ const ConversationScreen: React.FC = () => {
     }
   }, [messages, listComponentVisibility]);
 
-  // Fade-in animation on component mount
-  // useEffect(() => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 500,
-  //     useNativeDriver: true,
-  //   }).start();
-  // }, [fadeAnim]);
+  // Fade-in animation for messages list when data has been rendered
+  useEffect(() => {
+    if (!loading && messages.length > 0 && listComponentVisibility) {
+      // Reset and fade in messages
+      messagesFadeAnim.setValue(0);
+      Animated.timing(messagesFadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, messages.length, listComponentVisibility, messagesFadeAnim]);
 
-  // Debounced verse search - search as user types
+
   const handleInputChange = (text: string) => {
     setInputText(text);
     // setReadyToSend(false); // Reset readyToSend when user types
@@ -191,10 +196,7 @@ const ConversationScreen: React.FC = () => {
 
   const handleVerseSelect = async (verse: Verse) => {
     setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`);
-    // setSeletedVerseId(verse.id);
     setVerseResults([]);
-    // setReadyToSend(true);
-    // setInputText("");
   };
 
   const handleSendMessage = async () => {
@@ -365,7 +367,7 @@ const ConversationScreen: React.FC = () => {
     return (
       <ScreenComponent>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading conversation...</Text>
+          <Text style={styles.loadingText}></Text>
         </View>
       </ScreenComponent>
     );
@@ -387,7 +389,7 @@ const ConversationScreen: React.FC = () => {
                 <View style={styles.container}>
                   {/* Messages List */}
                   {verseResults.length === 0 &&
-                  <View style={styles.messagesContainer}>
+                  <Animated.View style={[styles.messagesContainer, { opacity: messagesFadeAnim }]}>
                     <FlatList
                       ref={flatListRef}
                       data={messages}
@@ -395,9 +397,9 @@ const ConversationScreen: React.FC = () => {
                       keyExtractor={(item) => item.id.toString()}
                       contentContainerStyle={styles.messagesList}
                       inverted={false}
-                      onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                      onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
                     />
-                  </View>
+                  </Animated.View>
                   }
                   {/* Verse Search Results */}
                   {inputText.trim().length >= 2 && verseResults.length > 0 && (
@@ -502,7 +504,7 @@ const styles = StyleSheet.create({
     fontSize: screenWidth * 0.042,
   },
   topHeader: {
-    height: screenHeight * 0.15,
+    height: screenHeight * 0.2,
     paddingBottom: 30
   } as ViewStyle,
   headerContent: {
@@ -525,7 +527,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   messagesArea: {
-    height: screenHeight * 0.60,
+    height: screenHeight * 0.55,
   } as ViewStyle,
   messagesWrapper: {
     flex: 1,
