@@ -11,6 +11,8 @@ import {
   Animated,
   Dimensions,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -202,6 +204,7 @@ const ConversationScreen: React.FC = () => {
         fetchConversationData();
         // fetchConversationData(conversationData.id);
         setInputText("");
+        setVerseIdLoaded(false);
       }
     } catch (e) {
       console.error('Send message failed', e);
@@ -260,13 +263,33 @@ const ConversationScreen: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchVerseById = async (verse_id: number) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/verses/search_by_id?id=${verse_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.verse) {
+        const verse = response.data.verse;
+        setInputText(`${verse.book} ${verse.chapter}:${verse.verse} \n${verse.text}`);
+        setVerseIdLoaded(true);
+      }
+    } catch (e) {
+      console.error('Fetch verse by id failed', e);
+    }
+    finally {
+      setVerseIdLoaded(true);
+    }
+  };
+
   // Fetch verse by ID when verse_id is present in route params
   useEffect(() => {
-    debugger
-    if (verse_id) {
-      fetchVerseByInputText(inputText);
+    if (verse_id && !verseIdLoaded) {
+      fetchVerseById(verse_id);
+      // Clear verse_id from params after fetching to prevent re-triggering
+      navigation.setParams({ verse_id: undefined });
     }
-  }, [inputText, verse_id, fetchVerseByInputText]);
+  }, [verse_id, verseIdLoaded, fetchVerseById, navigation]);
 
   const handleBackPress = () => {
     if (listComponentVisibility) {
@@ -401,7 +424,11 @@ const ConversationScreen: React.FC = () => {
               </View>
             )}
           </View>
-          <View style={styles.bottomArea}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.bottomArea}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+          >
             {!moduleComponentVisibility && (
               <>
               <View style={styles.inputWrapper}>
@@ -451,7 +478,7 @@ const ConversationScreen: React.FC = () => {
               <View style={styles.promesasContainer}>
                 <Text style={styles.promesasText}>Promesas</Text>
               </View>
-          </View>
+            </KeyboardAvoidingView>
         </View>
       {/* </Animated.View> */}
     </ScreenComponent>

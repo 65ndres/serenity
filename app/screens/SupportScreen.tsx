@@ -11,6 +11,8 @@ import {
   Animated,
   Dimensions,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -226,7 +228,11 @@ const SupportScreen: React.FC = () => {
           </View>
         </View>
       </View>
-      <View style={styles.bottomArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.bottomArea}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
         <View style={styles.inputWrapper}>
           <View style={styles.inputContainer}>
             <View style={styles.inputRow}>
@@ -266,7 +272,7 @@ const SupportScreen: React.FC = () => {
         <View style={styles.promesasContainer}>
           <Text style={styles.promesasText}>Promesas</Text>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ScreenComponent>
   );
 };
