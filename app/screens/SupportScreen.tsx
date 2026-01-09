@@ -80,6 +80,7 @@ const SupportScreen: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const contentFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for main content
   const flatListRef = useRef<FlatList>(null);
   
   // Fetch conversation data and current user ID
@@ -119,6 +120,18 @@ const SupportScreen: React.FC = () => {
       }, 100);
     }
   }, [messages]);
+
+  // Fade-in animation for main content only after data has been loaded
+  useEffect(() => {
+    if (!loading && conversationData) {
+      contentFadeAnim.setValue(0);
+      Animated.timing(contentFadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading, conversationData, contentFadeAnim]);
 
   // Handle input change - free form text
   const handleInputChange = (text: string) => {
@@ -204,13 +217,14 @@ const SupportScreen: React.FC = () => {
 
   return (
     <ScreenComponent>
-      <View style={styles.topHeader}>
-        <View style={styles.headerContent}>
-          <Text style={styles.quoteText}>With</Text>
-          <Text style={styles.otherUserName}>{otherUserName}</Text>
+      <Animated.View style={{opacity: contentFadeAnim }}>
+        <View style={styles.topHeader}>
+          <View style={styles.headerContent}>
+            <Text style={styles.quoteText}>With</Text>
+            <Text style={styles.otherUserName}>{otherUserName}</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.messagesArea}>
+        <View style={styles.messagesArea}>
         <View style={styles.messagesWrapper}>
           <View style={styles.container}>
             {/* Messages List */}
@@ -273,6 +287,7 @@ const SupportScreen: React.FC = () => {
           <Text style={styles.promesasText}>Promesas</Text>
         </View>
       </KeyboardAvoidingView>
+      </Animated.View>
     </ScreenComponent>
   );
 };

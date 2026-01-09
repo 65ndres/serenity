@@ -303,15 +303,15 @@ const ConversationScreen: React.FC = () => {
   }, [verse_id, verseIdLoaded, fetchVerseById, navigation]);
 
   const handleBackPress = () => {
-    if (listComponentVisibility) {
+    // if (listComponentVisibility) {
       // If showing the list, navigate back to previous screen
       navigation.goBack();
-    } else {
-      // If showing the module, go back to the list
-      setModuleComponentVisibility(false);
-      setListComponentVisibility(true);
-      // setSelectedVerse(null);
-    }
+    // } else {
+    //   // If showing the module, go back to the list
+    //   setModuleComponentVisibility(false);
+    //   setListComponentVisibility(true);
+    //   // setSelectedVerse(null);
+    // }
   };
 
   // Set header options dynamically based on listComponentVisibility
@@ -320,7 +320,7 @@ const ConversationScreen: React.FC = () => {
       headerLeft: () => (
         <BackButton 
           text="" 
-          onPress={() => navigation.navigate('Conversations')}
+          onPress={() => handleBackPress()}
         />
       ),
     });

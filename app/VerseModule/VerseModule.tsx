@@ -5,8 +5,8 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import * as Haptics from 'expo-haptics';
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel';
 import Carousel from 'react-native-reanimated-carousel';
 import { API_URL } from '../../constants/Config';
@@ -56,7 +56,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
   const [isInitialLoad, setIsInitialLoad] = useState(true) // Track if this is the first load
 
   const ref = React.useRef<ICarouselInstance>(null);
-  const contentFadeAnim = useRef(new Animated.Value(0)).current; // Fade animation for content
 
   const toggleLike = async (index: number) => {
     const verse = verses[index];
@@ -161,18 +160,6 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
     }
   }, [url])
 
-  // Fade-in animation for content when verses are loaded
-  useEffect(() => {
-    if (!loading && verses.length > 0) {
-      contentFadeAnim.setValue(0);
-      Animated.timing(contentFadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [loading, verses.length, contentFadeAnim]);
-
   const onChange = (index: number) => {
     // Update current index as user scrolls
     setCurrentIndex(index);
@@ -202,7 +189,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
             </View>
         </View>
         ) : (
-          <Animated.View style={{ flex: 1, opacity: contentFadeAnim }}>
+          <View style={{ flex: 1 }}>
           <Carousel
             ref={ref}
             width={width * 0.84} // scales with screen width (~84% of screen width, equivalent to width - 60 on 375px screen)
@@ -268,7 +255,7 @@ const VerseModule: React.FC<VerseModuleProps> = ({ data, active, url }) => {
               </View>
             )}
           />
-          </Animated.View>
+          </View>
         )}
     </View>
   );
